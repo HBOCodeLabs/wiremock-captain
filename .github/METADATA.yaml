@@ -1,0 +1,11 @@
+# This file contains standardized meta data used across all
+# HBO git repositories
+#
+# For more detailed information about this file and how it is used:
+# go to https://wiki.hbo.com/pages/viewpage.action?spaceKey=EOVS&title=Github+Repository+Management
+#
+repository:
+
+  # the type of repository must be one documented in the link above.
+  type: Internal_Tool
+  description: The wiremock-captain NPM package for testing Node.js services
