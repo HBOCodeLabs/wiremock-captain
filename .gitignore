@@ -1,0 +1,40 @@
+### Typescript ###
+dist/
+.buildcache
+
+### Unit test and Coverage reports ###
+coverage/
+reports/
+### Generator initialization files ###
+.init
+
+### Env files ###
+.env
+.env.test
+
+### IDEs ###
+*~
+.idea/
+*.iml
+*.swp
+Session.vim
+.vscode/
+*.sublime-workspace
+.history
+
+### Node ###
+node_modules*/
+# Logs
+logs
+*.log
+npm-debug.log*
+
+### OS ###
+# Mac
+.DS_Store
+
+# Windows
+*.lnk
+[Dd]esktop.ini
+
+# For more .gitignore needs as your project grows, check out: https://www.gitignore.io

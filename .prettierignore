@@ -1,0 +1,64 @@
+#-------------------------------------------------------------------------------------------------------------------
+# Keep this section in sync with .gitignore
+#-------------------------------------------------------------------------------------------------------------------
+
+### Typescript ###
+dist/
+.buildcache
+
+### Unit test and Coverage reports ###
+coverage/
+reports/
+### Generator initialization files ###
+.init
+
+### Env files ###
+.env
+.env.test
+
+### IDEs ###
+*~
+.idea/
+*.iml
+*.swp
+Session.vim
+.vscode/
+*.sublime-workspace
+.history
+
+### Node ###
+node_modules*/
+# Logs
+logs
+*.log
+npm-debug.log*
+
+### OS ###
+# Mac
+.DS_Store
+
+# Windows
+*.lnk
+[Dd]esktop.ini
+
+# For more .gitignore needs as your project grows, check out: https://www.gitignore.io
+
+#-------------------------------------------------------------------------------------------------------------------
+# Prettier-specific overrides
+#-------------------------------------------------------------------------------------------------------------------
+
+# Package manager files
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+shrinkwrap.json
+
+# This file usually has a CODEOWNERS policy
+.github/METADATA.yaml
+
+# Build outputs
+dist
+lib
+
+# Prettier reformats code blocks inside Markdown, which affects rendered output
+*.md
