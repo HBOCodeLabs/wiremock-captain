@@ -7,5 +7,5 @@
 repository:
 
   # the type of repository must be one documented in the link above.
-  type: Internal_Tool
+  type: Open_Source
   description: The wiremock-captain NPM package for testing Node.js services
