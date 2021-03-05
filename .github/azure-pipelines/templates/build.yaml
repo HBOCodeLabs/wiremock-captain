@@ -19,6 +19,9 @@ steps:
     - script: 'npm run test'
       displayName: 'Test: wiremock-captain'
 
+    - script: 'make integration-test'
+      displayName: 'Test: wiremock-captain'
+
     - script: 'npm install'
       displayName: 'Install: express-app demo project'
       workingDirectory: examples/express-app
