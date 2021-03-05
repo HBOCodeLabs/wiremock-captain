@@ -183,6 +183,36 @@ await mock.register(mockedRequest, mockedResponseHighPriority, featuresHighPrior
 await mock.register(mockedRequest, mockedResponseLowPriority, featuresLowPriority);
 ```
 
+### Using jest
+Traditional `expect` works well with `WireMock` and can used for various kinds of checks
+```typescript
+const requestBody = {
+    key: 'value'
+};
+const mockedRequest: IWireMockRequest = { 
+    method: 'POST',
+    endpoint: '/test',
+    body: requestBody,
+};
+const mockedResponse: IWireMockResponse = { status: 200 };
+await mock.register(mockedRequest, mockedResponse);
+
+const response = await fetch(wiremockUrl + '/test', {
+    method: 'POST',
+    body: JSON.stringify(requestBody),
+});
+const body = await response.json();
+const calls = await mock.requests('POST', testEndpoint);
+const jestMock = jest.fn();
+
+calls.forEach((request: unknown) => {
+    jestMock(request);
+});
+expect(jestMock).toHaveBeenCalledWith(
+    expect.objectContaining({ body: requestBody }),
+);
+```
+
 ## Debugging
 - open terminal and run `docker attach mocked-service`
 - run the tests in separate terminal

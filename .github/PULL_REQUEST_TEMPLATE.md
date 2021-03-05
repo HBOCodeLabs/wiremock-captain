@@ -9,6 +9,3 @@ _Please add any additional context or documentation for reviewers and maintainer
 ### TESTING
 - [ ] Unit test exist to cover the code you are changing and validated.
 - [ ] Integration tests exist to cover the code you are changing and validated.
-
-### PIC
-![Embed something funny here](https://giphy.com/trending-gifs)
