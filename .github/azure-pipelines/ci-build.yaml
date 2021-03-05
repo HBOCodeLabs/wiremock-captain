@@ -11,9 +11,9 @@ pool:
 
 steps:
 - task: NodeTool@0
-  displayName: 'Use Node $(NodeVersion).x'
+  displayName: 'Use Node 12'
   inputs:
-    versionSpec: '$(NodeVersion).x'
+    versionSpec: '12.x'
     checkLatest: true
 
 - script: 'git config --local user.email dpreleasebot@hbo.com'
