@@ -183,8 +183,8 @@ await mock.register(mockedRequest, mockedResponseHighPriority, featuresHighPrior
 await mock.register(mockedRequest, mockedResponseLowPriority, featuresLowPriority);
 ```
 
-### Using jest
-Traditional `expect` works well with `WireMock` and can used for various kinds of checks
+### Using with jest
+Jest `expect` works well with `WireMock` and can used for various kinds of checks
 ```typescript
 const requestBody = {
     key: 'value'
