@@ -17,10 +17,10 @@ steps:
       displayName: 'Build: wiremock-captain'
 
     - script: 'npm run test'
-      displayName: 'Test: wiremock-captain'
+      displayName: 'Unit Test: wiremock-captain'
 
     - script: 'make integration-test'
-      displayName: 'Test: wiremock-captain'
+      displayName: 'Integration Test: wiremock-captain'
 
     - script: 'npm install'
       displayName: 'Install: express-app demo project'
