@@ -6,7 +6,6 @@
 
 ![npm](https://img.shields.io/npm/v/wiremock-captain)
 ![Azure DevOps builds](https://img.shields.io/azure-devops/build/HBODigitalProducts/e6cee603-ddc7-43e3-b1a8-e2d6b3f6173c/37)
-![Dependencies](https://img.shields.io/david/HBOCodeLabs/wiremock-captain)
 
 *A better way to use the WireMock API simulator to test your Node.js services*
 
