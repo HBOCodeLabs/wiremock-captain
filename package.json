@@ -20,9 +20,6 @@
         "make-package-updates": "ncu -u",
         "precommit": "pretty-quick --staged"
     },
-    "files": [
-        "dist"
-    ],
     "precommit": [
         "precommit"
     ],

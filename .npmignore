@@ -13,3 +13,21 @@
 !dist/**/*.js
 !dist/**/*.d.ts
 !dist/**/*.map
+
+# Include this as a code sample
+!Makefile
+
+# Include the example app
+!examples
+!examples/express-app
+!examples/express-app/.eslintignore
+!examples/express-app/.eslintrc.json
+!examples/express-app/.gitignore
+!examples/express-app/.nvmrc
+!examples/express-app/.prettierrc
+!examples/express-app/jest.config.js
+!examples/express-app/package.json
+!examples/express-app/README.md
+!examples/express-app/tsconfig.json
+!examples/express-app/src/**/*.ts
+!examples/express-app/test/**/*.ts
