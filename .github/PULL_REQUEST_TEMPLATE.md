@@ -3,7 +3,7 @@
 _Add a brief summary of the changes if it's not obvious from the issue titles._
 
 ### DETAILS
-Documentation updated (`api.md`,`read.me`, etc)
+
 _Please add any additional context or documentation for reviewers and maintainers of this change, including links to relevant peer review documents._
 
 ### TESTING
