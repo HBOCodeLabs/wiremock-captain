@@ -1,0 +1,35 @@
+# This file defines the CI build steps for this repo.
+#
+# Documentation for this file format is here:
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
+
+variables:
+  FORCE_COLOR: 1
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: NodeTool@0
+  displayName: 'Use Node $(NodeVersion).x'
+  inputs:
+    versionSpec: '$(NodeVersion).x'
+    checkLatest: true
+
+- script: 'git config --local user.email dpreleasebot@hbo.com'
+  displayName: 'git config email'
+- script: 'git config --local user.name hbo-github-bot'
+  displayName: 'git config name'
+
+- script: 'npm install'
+  displayName: 'npm install'
+
+- script: 'Build: wiremock-captain'
+  displayName: 'npm run build'
+
+- script: 'Test: wiremock-captain'
+  displayName: 'npm run build'
+
+- script: 'Build: express-app demo project'
+  displayName: 'npm run build'
+  workingDirectory: examples/express-app
