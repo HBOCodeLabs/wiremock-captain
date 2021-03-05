@@ -8,6 +8,7 @@
         "type": "git",
         "url": "https://github.com/HBOCodeLabs/wiremock-captain.git"
     },
+    "license": "MIT",
     "scripts": {
         "build": "npm run clean && tsc -p tsconfig.json && eslint .",
         "clean": "rimraf coverage dist tmp .buildcache",
