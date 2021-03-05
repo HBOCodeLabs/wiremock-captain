@@ -10,7 +10,7 @@ steps:
     - script: 'git config --local user.name hbo-github-bot'
       displayName: 'git config name'
 
-    - script: 'npm install'
+    - script: 'npm ci'
       displayName: 'Install: wiremock-captain'
 
     - script: 'npm run build'
