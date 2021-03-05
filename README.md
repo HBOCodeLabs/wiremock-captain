@@ -1,6 +1,6 @@
 <div>
   <br />
-    <img width="300" src="./docs/images/wmc-logo.svg?raw=true">
+    <img width="300" src="https://github.com/HBOCodeLabs/wiremock-captain/blob/master/docs/images/wmc-logo.svg?raw=true">
   <p />
 </div>
 
@@ -31,7 +31,7 @@ A typical flow goes like this:
 
 <div>
   <br />
-    <img width="700" src="./docs/images/wmc-block-diagram.svg?raw=true">
+    <img width="700" src="https://github.com/HBOCodeLabs/wiremock-captain/blob/master/docs/images/wmc-block-diagram.svg?raw=true">
   <p />
 </div>
 
