@@ -28,7 +28,7 @@ steps:
 - script: 'npm run build'
   displayName: 'Build: wiremock-captain'
 
-- script: 'npm run build'
+- script: 'npm run test'
   displayName: 'Test: wiremock-captain'
 
 - script: 'npm install'
