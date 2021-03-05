@@ -1,0 +1,25 @@
+# This file defines the CI build steps for this repo.
+#
+# Documentation for this file format is here:
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
+
+variables:
+    FORCE_COLOR: 1
+
+pool:
+    vmImage: ubuntu-latest
+
+steps:
+    - task: NodeTool@0
+      displayName: 'Use Node 12'
+      inputs:
+          versionSpec: '12.x'
+          checkLatest: true
+
+    - template: templates/build.yaml
+
+    - task: Npm@1
+      displayName: 'Publish: wiremock-captain'
+      inputs:
+          command: publish
+          publishEndpoint: 'HBO Public NPM Publishing'
