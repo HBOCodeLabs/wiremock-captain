@@ -35,6 +35,6 @@ steps:
   displayName: 'Install: express-app demo project'
   workingDirectory: examples/express-app
 
-  - script: 'npm run build'
+- script: 'npm run build'
   displayName: 'Build: express-app demo project'
   workingDirectory: examples/express-app
