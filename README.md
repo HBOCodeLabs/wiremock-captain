@@ -4,6 +4,9 @@
   <p />
 </div>
 
+![npm](https://img.shields.io/npm/v/wiremock-captain)
+![Azure DevOps builds](https://img.shields.io/azure-devops/build/HBODigitalProducts/e6cee603-ddc7-43e3-b1a8-e2d6b3f6173c/37)
+
 *A better way to use the WireMock API simulator to test your Node.js services*
 
 <br />
@@ -178,6 +181,36 @@ const featuresLowPriority: IWireMockFeatures = { stubPriority: 2 };
 const featuresHighPriority: IWireMockFeatures = { stubPriority: 1 };
 await mock.register(mockedRequest, mockedResponseHighPriority, featuresHighPriority);
 await mock.register(mockedRequest, mockedResponseLowPriority, featuresLowPriority);
+```
+
+### Using with jest
+Jest `expect` works well with `WireMock` and can used for various kinds of checks
+```typescript
+const requestBody = {
+    key: 'value'
+};
+const mockedRequest: IWireMockRequest = { 
+    method: 'POST',
+    endpoint: '/test',
+    body: requestBody,
+};
+const mockedResponse: IWireMockResponse = { status: 200 };
+await mock.register(mockedRequest, mockedResponse);
+
+const response = await fetch(wiremockUrl + '/test', {
+    method: 'POST',
+    body: JSON.stringify(requestBody),
+});
+const body = await response.json();
+const calls = await mock.requests('POST', testEndpoint);
+const jestMock = jest.fn();
+
+calls.forEach((request: unknown) => {
+    jestMock(request);
+});
+expect(jestMock).toHaveBeenCalledWith(
+    expect.objectContaining({ body: requestBody }),
+);
 ```
 
 ## Debugging
