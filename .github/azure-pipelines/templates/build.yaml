@@ -16,7 +16,7 @@ steps:
     - script: 'npm run build'
       displayName: 'Build: wiremock-captain'
 
-    - script: 'npm run test'
+    - script: 'npm run coverage'
       displayName: 'Unit Test: wiremock-captain'
 
     - script: 'make integration-test'
