@@ -49,7 +49,7 @@ describe('Integration with WireMock', () => {
                 calls.forEach((request: unknown) => {
                     jestMock(request);
                 });
-                expect(jestMock).toHaveBeenCalledWith(
+                expect(jestMock).not.toHaveBeenCalledWith(
                     expect.objectContaining({ body: requestBody }),
                 );
             });
