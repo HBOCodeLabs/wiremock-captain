@@ -8,5 +8,5 @@ _Please add any additional context or documentation for reviewers and maintainer
 
 ### CHECKLIST
 - [ ] Documentation updated (if needed)
-- [ ] Unit tests exist to cover the code you are changing and validated.
-- [ ] Integration tests exist to cover the code you are changing and validated.
+- [ ] Unit tests exist to cover the code you are changing and validated
+- [ ] Integration tests exist to cover the code you are changing and validated
