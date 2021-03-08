@@ -92,6 +92,11 @@ failed.
 
 
 ## Authoring your own tests
+Assuming the wiremock docker instance is already running using the following command:
+
+```bash
+docker run -itd --rm --name wiremock-container -p 8080:8080 rodolpheche/wiremock:2.27.2 --record-mappings --verbose
+```
 
 Typical usage looks like this:
 

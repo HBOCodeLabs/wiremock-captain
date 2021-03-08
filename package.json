@@ -9,6 +9,16 @@
         "url": "https://github.com/HBOCodeLabs/wiremock-captain.git"
     },
     "license": "MIT",
+    "keywords": [
+        "api",
+        "captain",
+        "integration",
+        "jest",
+        "test",
+        "testing",
+        "typescript",
+        "wiremock"
+    ],
     "scripts": {
         "build": "npm run clean && tsc -p tsconfig.json && eslint .",
         "clean": "rimraf coverage dist tmp .buildcache",
