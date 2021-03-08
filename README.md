@@ -4,8 +4,10 @@
   <p />
 </div>
 
-![npm](https://img.shields.io/npm/v/wiremock-captain)
-![Azure DevOps builds](https://img.shields.io/azure-devops/build/HBODigitalProducts/e6cee603-ddc7-43e3-b1a8-e2d6b3f6173c/37)
+[![npm](https://img.shields.io/npm/v/wiremock-captain)](https://www.npmjs.com/package/wiremock-captain)
+[![npm](https://img.shields.io/npm/dw/wiremock-captain)](https://www.npmjs.com/package/wiremock-captain)
+[![Azure DevOps builds](https://img.shields.io/azure-devops/build/HBODigitalProducts/e6cee603-ddc7-43e3-b1a8-e2d6b3f6173c/37)](https://dev.azure.com/HBODigitalProducts/OSS/_build?definitionId=37&branchFilter=1388%2C1388%2C1388%2C1388%2C1388%2C1388%2C1388%2C1388)
+[![GitHub](https://img.shields.io/github/license/HBOCodeLabs/wiremock-captain)](https://github.com/HBOCodeLabs/wiremock-captain/blob/master/LICENSE)
 
 *A better way to use the WireMock API simulator to test your Node.js services*
 
@@ -92,6 +94,11 @@ failed.
 
 
 ## Authoring your own tests
+Assuming the wiremock docker instance is already running using the following command:
+
+```bash
+docker run -itd --rm --name wiremock-container -p 8080:8080 rodolpheche/wiremock:2.27.2 --record-mappings --verbose
+```
 
 Typical usage looks like this:
 
@@ -181,6 +188,36 @@ const featuresLowPriority: IWireMockFeatures = { stubPriority: 2 };
 const featuresHighPriority: IWireMockFeatures = { stubPriority: 1 };
 await mock.register(mockedRequest, mockedResponseHighPriority, featuresHighPriority);
 await mock.register(mockedRequest, mockedResponseLowPriority, featuresLowPriority);
+```
+
+### Using with jest
+Jest `expect` works well with `WireMock` and can used for various kinds of checks
+```typescript
+const requestBody = {
+    key: 'value'
+};
+const mockedRequest: IWireMockRequest = { 
+    method: 'POST',
+    endpoint: '/test',
+    body: requestBody,
+};
+const mockedResponse: IWireMockResponse = { status: 200 };
+await mock.register(mockedRequest, mockedResponse);
+
+const response = await fetch(wiremockUrl + '/test', {
+    method: 'POST',
+    body: JSON.stringify(requestBody),
+});
+const body = await response.json();
+const calls = await mock.requests('POST', testEndpoint);
+const jestMock = jest.fn();
+
+calls.forEach((request: unknown) => {
+    jestMock(request);
+});
+expect(jestMock).toHaveBeenCalledWith(
+    expect.objectContaining({ body: requestBody }),
+);
 ```
 
 ## Debugging

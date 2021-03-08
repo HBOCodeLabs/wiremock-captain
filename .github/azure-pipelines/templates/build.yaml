@@ -10,14 +10,17 @@ steps:
     - script: 'git config --local user.name hbo-github-bot'
       displayName: 'git config name'
 
-    - script: 'npm install'
+    - script: 'npm ci'
       displayName: 'Install: wiremock-captain'
 
     - script: 'npm run build'
       displayName: 'Build: wiremock-captain'
 
-    - script: 'npm run test'
-      displayName: 'Test: wiremock-captain'
+    - script: 'npm run coverage'
+      displayName: 'Unit Test: wiremock-captain'
+
+    - script: 'make integration-test'
+      displayName: 'Integration Test: wiremock-captain'
 
     - script: 'npm install'
       displayName: 'Install: express-app demo project'
