@@ -56,13 +56,13 @@ export class WireMock {
      * Removes all the existing stubs and logs of incoming requests
      */
     public clearAll(): Promise<Response[]> {
-        return Promise.all([this.clearMappings(), this.clearRequests()]);
+        return Promise.all([this.clearAllMappings(), this.clearAllRequests()]);
     }
 
     /**
      * Removes all existing stubs
      */
-    public async clearMappings(): Promise<Response> {
+    public async clearAllMappings(): Promise<Response> {
         return await fetch(this.makeUrl(WIREMOCK_MAPPINGS_URL), {
             method: 'DELETE',
         });
@@ -71,7 +71,7 @@ export class WireMock {
     /**
      * Removes log of all past incoming requests
      */
-    public async clearRequests(): Promise<Response> {
+    public async clearAllRequests(): Promise<Response> {
         return await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL), {
             method: 'DELETE',
         });
@@ -100,6 +100,17 @@ export class WireMock {
     }
 
     /**
+     * @returns List of all requests made to the mocked instance
+     */
+    public async getAllRequests(): Promise<unknown[]> {
+        const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL), {
+            method: 'GET',
+        });
+        const body = await response.json();
+        return body.requests;
+    }
+
+    /**
      * Returns information about the mocked request and response corresponding to the `id`
      * @param id Mapping ID to get the mapping info for
      * @returns Single object mapping corresponding to the input `id`
@@ -117,38 +128,24 @@ export class WireMock {
      * @param endpointUrl URL to get the request(s) made against
      * @returns List of wiremock requests made to the endpoint with given method
      */
-    public async requests(method: string, endpointUrl: string): Promise<IWireMockRequest[]> {
+    public async getRequestsForAPI(method: string, endpointUrl: string): Promise<unknown[]> {
         const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL), {
             method: 'GET',
         });
         const body = await response.json();
         return (
             body.requests
-                .filter(
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    (request: any) =>
-                        request.request.method === method && request.request.url === endpointUrl,
-                )
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                .map((request: any) => {
-                    const parsedRequestBody = parseBody(request.request.body);
-                    if (parsedRequestBody) {
-                        return {
-                            endpoint: request.request.url,
-                            method: request.request.method,
-                            body: parsedRequestBody,
-                            headers: request.request.headers,
-                            queryParams: request.request.queryParams,
-                        };
-                    }
-                    return {
-                        endpoint: request.request.url,
-                        method: request.request.method,
-                        headers: request.request.headers,
-                        queryParams: request.request.queryParams,
-                    };
-                })
+                .filter((r: any) => filterRequest(method, endpointUrl, r))
         );
+    }
+
+    public async getUnmatchedRequests(): Promise<unknown[]> {
+        const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL + '/unmatched'), {
+            method: 'GET',
+        });
+        const body = await response.json();
+        return body.requests;
     }
 
     private makeUrl(endpoint: string) {
@@ -156,10 +153,7 @@ export class WireMock {
     }
 }
 
-function parseBody(body: string) {
-    try {
-        return JSON.parse(body);
-    } catch {
-        return;
-    }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function filterRequest(method: string, endpointUrl: string, request: any): boolean {
+    return request.request.method === method && request.request.url === endpointUrl;
 }

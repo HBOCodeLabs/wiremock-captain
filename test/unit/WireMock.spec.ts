@@ -23,8 +23,8 @@ describe('WireMock', () => {
         jest.clearAllMocks();
     });
 
-    describe('clearAll', () => {
-        it('clears all mapping', async () => {
+    describe('clear', () => {
+        it('clears all', async () => {
             const wireMock = require('../../src/WireMock');
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
@@ -69,6 +69,29 @@ describe('WireMock', () => {
             await mock.getMapping('test-mapping-id');
             expect(mockNodeFetch.default).toHaveBeenCalledWith(
                 wireMockUrl + '__admin/mappings/test-mapping-id',
+                { method: 'GET' },
+            );
+        });
+    });
+
+    describe('getRequest', () => {
+        it('getAllRequests', async () => {
+            const wireMock = require('../../src/WireMock');
+            const wireMockUrl = 'https://testservice/';
+            const mock = new wireMock.WireMock(wireMockUrl);
+            await mock.getAllRequests();
+            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/requests', {
+                method: 'GET',
+            });
+        });
+
+        it('getUnmatchedRequests', async () => {
+            const wireMock = require('../../src/WireMock');
+            const wireMockUrl = 'https://testservice/';
+            const mock = new wireMock.WireMock(wireMockUrl);
+            await mock.getUnmatchedRequests();
+            expect(mockNodeFetch.default).toHaveBeenCalledWith(
+                wireMockUrl + '__admin/requests/unmatched',
                 { method: 'GET' },
             );
         });
@@ -142,31 +165,17 @@ describe('WireMock', () => {
                     },
                 ],
             };
-            const calls = await mock.requests('POST', '/testEndpoint');
+            const calls = await mock.getRequestsForAPI('POST', '/testEndpoint');
             expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/requests', {
                 method: 'GET',
             });
             expect(calls.length).toEqual(1);
-            expect(calls[0]).toEqual({
-                endpoint: '/testEndpoint',
-                method: 'POST',
-                headers: {},
-                body: requestBody,
-                queryParams: {},
-            });
 
-            const getCalls = await mock.requests('GET', '/testEndpoint');
+            const getCalls = await mock.getRequestsForAPI('GET', '/testEndpoint');
             expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/requests', {
                 method: 'GET',
             });
             expect(getCalls.length).toEqual(1);
-            expect(getCalls[0]).toEqual({
-                endpoint: '/testEndpoint',
-                method: 'GET',
-                headers: {},
-                body: undefined,
-                queryParams: {},
-            });
         });
     });
 });
