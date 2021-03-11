@@ -140,6 +140,10 @@ export class WireMock {
         );
     }
 
+    /**
+     * Returns list of unmatched request(s)
+     * @returns List of wiremock requests made that did not match any mapping
+     */
     public async getUnmatchedRequests(): Promise<unknown[]> {
         const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL + '/unmatched'), {
             method: 'GET',
