@@ -9,6 +9,11 @@ Template for next unreleased block, should not be visible in github ui.
 ### Fixed
 --->
 
+## [1.2.0] - 2021-03-12
+
+- Add `getAllRequests`, `getUnmatchedRequests`
+- Modify `clearMappings`, `clearRequests`, `requests`
+
 ## [1.1.1] - 2021-03-08
 
 - Update `package.json`
