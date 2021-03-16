@@ -237,5 +237,71 @@ describe('Integration with WireMock', () => {
                 expect(await mock.getUnmatchedRequests()).toHaveLength(5);
             });
         });
+
+        describe('getScenarios', () => {
+            it('should return scenarios', async () => {
+                const testEndpoint = '/testEndpoint';
+                expect(await mock.getAllScenarios()).toHaveLength(0);
+                await mock.register({ method: 'GET', endpoint: testEndpoint }, { status: 400 });
+                expect(await mock.getAllScenarios()).toHaveLength(0);
+                await mock.register(
+                    { method: 'GET', endpoint: testEndpoint },
+                    { status: 200 },
+                    {
+                        scenario: {
+                            scenarioName: 'test-scenario',
+                            requiredScenarioState: 'Started',
+                        },
+                    },
+                );
+                expect(await mock.getAllScenarios()).toHaveLength(1);
+            });
+        });
+
+        describe('resetScenarios', () => {
+            it('should return scenarios', async () => {
+                const testEndpoint = '/testEndpoint';
+                await mock.register(
+                    { method: 'GET', endpoint: testEndpoint },
+                    { status: 200 },
+                    {
+                        scenario: {
+                            scenarioName: 'test-scenario',
+                            requiredScenarioState: 'Started',
+                            newScenarioState: 'test-state',
+                        },
+                    },
+                );
+                await mock.register(
+                    { method: 'GET', endpoint: testEndpoint },
+                    { status: 201 },
+                    {
+                        scenario: {
+                            scenarioName: 'test-scenario',
+                            requiredScenarioState: 'test-state',
+                        },
+                    },
+                );
+
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                expect((await mock.getAllScenarios())[0].state).toEqual('Started');
+                let resp = await fetch(wiremockUrl + testEndpoint, {
+                    method: 'GET',
+                });
+                expect(resp.status).toEqual(200);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                expect((await mock.getAllScenarios())[0].state).toEqual('test-state');
+                resp = await fetch(wiremockUrl + testEndpoint, {
+                    method: 'GET',
+                });
+                expect(resp.status).toEqual(201);
+                await mock.resetAllScenarios();
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                expect((await mock.getAllScenarios())[0].state).toEqual('Started');
+            });
+        });
     });
 });

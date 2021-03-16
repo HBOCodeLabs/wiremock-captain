@@ -119,19 +119,21 @@ describe('Integration with WireMock', () => {
         it('mocks downstream service', async () => {
             const requestBody = {
                 objectKey: {
-                    intKey: 5, stringKey: 'stringKey',
+                    intKey: 5,
+                    stringKey: 'stringKey',
                 },
             };
             const testEndpoint = '/testEndpoint';
             const responseBody = { test: 'testValue' };
-            await mock.register({ method: 'POST', endpoint: testEndpoint, body: requestBody },
-                                { status: 200, body: responseBody });
+            await mock.register(
+                { method: 'POST', endpoint: testEndpoint, body: requestBody },
+                { status: 200, body: responseBody },
+            );
 
             // rest of the test
         });
     });
 });
-
 ```
 
 ## More examples
@@ -158,7 +160,12 @@ await mock.register(mockedRequest, mockedResponse, features);
 const headers = { Accept: 'json', Authorization: 'test-auth' };
 const mockedRequest: IWireMockRequest = { method: 'GET', endpoint: '/test', headers };
 const mockedResponse: IWireMockResponse = { status: 200 };
-const features: IWireMockFeatures = { requestHeaderFeature: { Accept: MatchingAttributes.EqualTo, Authorization: MatchingAttributes.DoesNotMatch } };
+const features: IWireMockFeatures = {
+    requestHeaderFeature: {
+        Accept: MatchingAttributes.EqualTo,
+        Authorization: MatchingAttributes.DoesNotMatch,
+    },
+};
 await mock.register(mockedRequest, mockedResponse, features);
 ```
 
@@ -168,7 +175,9 @@ By default, `cookies`, `headers`, and `queryParameters` use equality checks. So 
 const headers = { Accept: 'json', Authorization: 'test-auth' };
 const mockedRequest: IWireMockRequest = { method: 'GET', endpoint: '/test', headers };
 const mockedResponse: IWireMockResponse = { status: 200 };
-const features: IWireMockFeatures = { requestHeaderFeature: { Authorization: MatchingAttributes.DoesNotMatch } };
+const features: IWireMockFeatures = {
+    requestHeaderFeature: { Authorization: MatchingAttributes.DoesNotMatch },
+};
 await mock.register(mockedRequest, mockedResponse, features);
 ```
 
@@ -189,6 +198,39 @@ const featuresHighPriority: IWireMockFeatures = { stubPriority: 1 };
 await mock.register(mockedRequest, mockedResponseHighPriority, featuresHighPriority);
 await mock.register(mockedRequest, mockedResponseLowPriority, featuresLowPriority);
 ```
+
+### Stateful mocks
+
+`Scenario` can be leveraged to allow stateful mocks. To do so, provide `scenario` in
+`IWireMockFeatures` while building the mock. The starting state will always be `Started`.
+Example:
+
+```typescript
+await mock.register(
+    { method: 'GET', endpoint: '/test' },
+    { status: 201 },
+    {
+        scenario: {
+            scenarioName: 'test-scenario',
+            requiredScenarioState: 'Started',
+            newScenarioState: 'test-state',
+        },
+    },
+);
+await mock.register(
+    { method: 'GET', endpoint: '/test' },
+    { status: 200 },
+    {
+        scenario: {
+            scenarioName: 'test-scenario',
+            requiredScenarioState: 'test-state',
+        },
+    },
+);
+```
+
+In the above example, the first request made will respond with status code `201` while
+the second and all subsequent requests will respond with status `200`.
 
 ### Using with jest
 Jest `expect` works well with `WireMock` and can used for various kinds of checks

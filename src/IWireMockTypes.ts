@@ -24,3 +24,9 @@ export interface IWireMockMockedRequestResponse {
     response: IResponseMock;
     priority?: number;
 }
+
+export interface IWireMockScenario {
+    scenarioName: string;
+    requiredScenarioState: 'Started' | string;
+    newScenarioState?: string;
+}

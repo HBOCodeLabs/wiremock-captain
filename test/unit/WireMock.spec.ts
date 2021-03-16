@@ -97,8 +97,20 @@ describe('WireMock', () => {
         });
     });
 
+    describe('getScenario', () => {
+        it('getAllScenarios', async () => {
+            const wireMock = require('../../src/WireMock');
+            const wireMockUrl = 'https://testservice/';
+            const mock = new wireMock.WireMock(wireMockUrl);
+            await mock.getAllScenarios();
+            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/scenarios', {
+                method: 'GET',
+            });
+        });
+    });
+
     describe('register', () => {
-        it('should return empty response w/ priority', async () => {
+        it('should return empty response w/ priority and scenario', async () => {
             jest.mock('../../src/RequestModel', () => ({
                 createWireMockRequest: jest.fn().mockName('mockedGetRequest'),
             }));
@@ -108,15 +120,26 @@ describe('WireMock', () => {
             const wireMock = require('../../src/WireMock');
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
-            const resp = await mock.register({}, {}, { stubPriority: 1 });
+            const resp = await mock.register(
+                {},
+                {},
+                {
+                    stubPriority: 1,
+                    scenario: { scenarioName: 'test-scenario', requiredScenarioState: 'Started' },
+                },
+            );
             expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings', {
                 method: 'POST',
                 body: expect.stringContaining('priority'),
             });
+            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings', {
+                method: 'POST',
+                body: expect.stringContaining('scenario'),
+            });
             expect(resp).toEqual({});
         });
 
-        it('should return empty response w/o priority', async () => {
+        it('should return empty response w/o priority and scenario', async () => {
             jest.mock('../../src/RequestModel', () => ({
                 createWireMockRequest: jest.fn().mockName('mockedGetRequest'),
             }));
@@ -128,6 +151,21 @@ describe('WireMock', () => {
             const mock = new wireMock.WireMock(wireMockUrl);
             const resp = await mock.register({}, {});
             expect(resp).toEqual({});
+        });
+    });
+
+    describe('resetScenario', () => {
+        it('resetAllScenarios', async () => {
+            const wireMock = require('../../src/WireMock');
+            const wireMockUrl = 'https://testservice/';
+            const mock = new wireMock.WireMock(wireMockUrl);
+            await mock.resetAllScenarios();
+            expect(mockNodeFetch.default).toHaveBeenCalledWith(
+                wireMockUrl + '__admin/scenarios/reset',
+                {
+                    method: 'POST',
+                },
+            );
         });
     });
 

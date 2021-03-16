@@ -5,7 +5,7 @@ import fetch, { Response } from 'node-fetch';
 import { IWireMockFeatures } from './IWireMockFeatures';
 import { IWireMockRequest } from './IWireMockRequest';
 import { IWireMockResponse } from './IWireMockResponse';
-import { IWireMockMockedRequestResponse } from './IWireMockTypes';
+import { IRequestMock, IResponseMock, IWireMockMockedRequestResponse } from './IWireMockTypes';
 import { createWireMockRequest } from './RequestModel';
 import { createWireMockResponse } from './ResponseModel';
 
@@ -13,6 +13,8 @@ import { createWireMockResponse } from './ResponseModel';
 const WIREMOCK_MAPPINGS_URL = '__admin/mappings';
 // endpoint that records all the incoming requests
 const WIREMOCK_REQUESTS_URL = '__admin/requests';
+// endpoint that records all the scenario information
+const WIREMOCK_SCENARIO_URL = '__admin/scenarios';
 
 export class WireMock {
     private readonly baseUrl: string;
@@ -35,16 +37,19 @@ export class WireMock {
     ): Promise<IWireMockMockedRequestResponse> {
         const mockedRequest = createWireMockRequest(request, features);
         const mockedResponse = createWireMockResponse(response, features);
-        const mock = features?.stubPriority
-            ? {
-                  priority: features.stubPriority,
-                  request: mockedRequest,
-                  response: mockedResponse,
-              }
-            : {
-                  request: mockedRequest,
-                  response: mockedResponse,
-              };
+        let mock: mockType = {
+            request: mockedRequest,
+            response: mockedResponse,
+        };
+
+        if (features?.stubPriority) {
+            mock.priority = features.stubPriority;
+        }
+
+        if (features?.scenario) {
+            mock = { ...mock, ...features.scenario };
+        }
+
         const wiremockResponse = await fetch(this.makeUrl(WIREMOCK_MAPPINGS_URL), {
             method: 'POST',
             body: JSON.stringify(mock),
@@ -111,6 +116,17 @@ export class WireMock {
     }
 
     /**
+     * @returns List of all scenarios in place for the mocked instance
+     */
+    public async getAllScenarios(): Promise<unknown[]> {
+        const response = await fetch(this.makeUrl(WIREMOCK_SCENARIO_URL), {
+            method: 'GET',
+        });
+        const body = await response.json();
+        return body.scenarios;
+    }
+
+    /**
      * Returns information about the mocked request and response corresponding to the `id`
      * @param id Mapping ID to get the mapping info for
      * @returns Single object mapping corresponding to the input `id`
@@ -152,6 +168,15 @@ export class WireMock {
         return body.requests;
     }
 
+    /**
+     * Resets all the scenarios to the original state
+     */
+    public async resetAllScenarios(): Promise<Response> {
+        return await fetch(this.makeUrl(WIREMOCK_SCENARIO_URL + '/reset'), {
+            method: 'POST',
+        });
+    }
+
     private makeUrl(endpoint: string) {
         return new URL(endpoint, this.baseUrl).href;
     }
@@ -161,3 +186,12 @@ export class WireMock {
 function filterRequest(method: string, endpointUrl: string, request: any): boolean {
     return request.request.method === method && request.request.url === endpointUrl;
 }
+
+type mockType = {
+    request: IRequestMock;
+    response: IResponseMock;
+    priority?: number;
+    scenarioName?: string;
+    requiredScenarioState?: string;
+    newScenarioState?: string;
+};
