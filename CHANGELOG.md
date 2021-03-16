@@ -9,6 +9,10 @@ Template for next unreleased block, should not be visible in github ui.
 ### Fixed
 --->
 
+## [1.3.0] - 2021-03-16
+
+- Add WireMock `scenario` support
+
 ## [1.2.0] - 2021-03-12
 
 - Add `getAllRequests`, `getUnmatchedRequests`
