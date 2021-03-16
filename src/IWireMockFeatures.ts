@@ -1,6 +1,8 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
+import { IWireMockScenario } from './IWireMockTypes';
+
 /**
  * Specifies all possible attributes that can be assigned to mocked request or response.
  * Be default, all matches happen on equality but this extends the functionality.
@@ -14,6 +16,10 @@ export interface IWireMockFeatures {
     requestHeaderFeatures?: Record<string, MatchingAttributes>;
     requestQueryParamFeatures?: Record<string, MatchingAttributes>;
     responseBodyType?: BodyType;
+    /**
+     * All the scenarios start from state `Started`
+     */
+    scenario?: IWireMockScenario;
     /**
      * Lower the value, higher the priority
      */

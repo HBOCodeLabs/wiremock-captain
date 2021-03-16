@@ -190,6 +190,39 @@ await mock.register(mockedRequest, mockedResponseHighPriority, featuresHighPrior
 await mock.register(mockedRequest, mockedResponseLowPriority, featuresLowPriority);
 ```
 
+### Stateful mocks
+
+`Scenario` can be leveraged to allow stateful mocks. To do so, provide `scenario` in
+`IWireMockFeatures` while building the mock. The starting state will always be `Started`.
+Example:
+
+```typescript
+await mock.register(
+    { method: 'GET', endpoint: '/test' },
+    { status: 201 },
+    {
+        scenario: {
+            scenarioName: 'test-scenario',
+            requiredScenarioState: 'Started',
+            newScenarioState: 'test-state',
+        },
+    },
+);
+await mock.register(
+    { method: 'GET', endpoint: '/test' },
+    { status: 200 },
+    {
+        scenario: {
+            scenarioName: 'test-scenario',
+            requiredScenarioState: 'test-state',
+        },
+    },
+);
+```
+
+In the above example, the first request made will respond with status code `201` while
+the second and all subsequent requests will respond with status `200`.
+
 ### Using with jest
 Jest `expect` works well with `WireMock` and can used for various kinds of checks
 ```typescript
