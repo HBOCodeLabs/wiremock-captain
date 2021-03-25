@@ -7,6 +7,8 @@
 [![npm](https://img.shields.io/npm/v/wiremock-captain)](https://www.npmjs.com/package/wiremock-captain)
 [![npm](https://img.shields.io/npm/dw/wiremock-captain)](https://www.npmjs.com/package/wiremock-captain)
 [![Azure DevOps builds](https://img.shields.io/azure-devops/build/HBODigitalProducts/e6cee603-ddc7-43e3-b1a8-e2d6b3f6173c/37)](https://dev.azure.com/HBODigitalProducts/OSS/_build?definitionId=37&branchFilter=1388%2C1388%2C1388%2C1388%2C1388%2C1388%2C1388%2C1388)
+[![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/HBODigitalProducts/OSS/37)](https://dev.azure.com/HBODigitalProducts/OSS/_build?definitionId=37&branchFilter=1388%2C1388%2C1388%2C1388%2C1388%2C1388%2C1388%2C1388)
+[![David](https://img.shields.io/david/HBOCodeLabs/wiremock-captain)](https://david-dm.org/HBOCodeLabs/wiremock-captain)
 [![GitHub](https://img.shields.io/github/license/HBOCodeLabs/wiremock-captain)](https://github.com/HBOCodeLabs/wiremock-captain/blob/master/LICENSE)
 
 *A better way to use the WireMock API simulator to test your Node.js services*
