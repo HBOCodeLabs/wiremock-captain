@@ -6,7 +6,7 @@ export type Method = 'ANY' | 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD' | 'TRACE
 export type KeyValue = boolean | number | string;
 
 export interface IRequestMock {
-    method: string;
+    method: Method;
 
     [key: string]: unknown;
 }

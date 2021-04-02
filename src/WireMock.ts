@@ -5,7 +5,12 @@ import fetch, { Response } from 'node-fetch';
 import { IWireMockFeatures } from './IWireMockFeatures';
 import { IWireMockRequest } from './IWireMockRequest';
 import { IWireMockResponse } from './IWireMockResponse';
-import { IRequestMock, IResponseMock, IWireMockMockedRequestResponse } from './IWireMockTypes';
+import {
+    IRequestMock,
+    IResponseMock,
+    IWireMockMockedRequestResponse,
+    Method,
+} from './IWireMockTypes';
 import { createWireMockRequest } from './RequestModel';
 import { createWireMockResponse } from './ResponseModel';
 
@@ -144,7 +149,7 @@ export class WireMock {
      * @param endpointUrl URL to get the request(s) made against
      * @returns List of wiremock requests made to the endpoint with given method
      */
-    public async getRequestsForAPI(method: string, endpointUrl: string): Promise<unknown[]> {
+    public async getRequestsForAPI(method: Method, endpointUrl: string): Promise<unknown[]> {
         const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL), {
             method: 'GET',
         });
@@ -183,7 +188,7 @@ export class WireMock {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function filterRequest(method: string, endpointUrl: string, request: any): boolean {
+function filterRequest(method: Method, endpointUrl: string, request: any): boolean {
     return request.request.method === method && request.request.url === endpointUrl;
 }
 
