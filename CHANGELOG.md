@@ -9,6 +9,11 @@ Template for next unreleased block, should not be visible in github ui.
 ### Fixed
 --->
 
+## [1.3.1] - 2021-04-02
+
+- Remove `examples/` from npm package
+- Update `method` references to be of type `Method`
+
 ## [1.3.0] - 2021-03-16
 
 - Add WireMock `scenario` support
