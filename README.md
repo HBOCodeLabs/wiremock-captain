@@ -86,7 +86,10 @@ Here's how to set up WireMock Captain.  The demo project can be copy+pasted as a
    # Start the WireMock simulator
    $ docker run -itd --rm -p 8080:8080 --name mocked-service rodolpheche/wiremock:2.27.2
 
-   # Run the test
+   # Start the service in development mode
+   $ npm run dev
+
+   # Open another terminal instance and run the test
    $ npm run test
    ```
 
