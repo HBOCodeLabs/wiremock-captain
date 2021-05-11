@@ -9,6 +9,10 @@ Template for next unreleased block, should not be visible in github ui.
 ### Fixed
 --->
 
+## [1.4.0] - 2021-05-11
+
+- Update `Method` to have `PATCH` and `CONNECT` options
+
 ## [1.3.1] - 2021-04-02
 
 - Remove `examples/` from npm package
