@@ -2,15 +2,15 @@
 // See the LICENSE file for license information.
 
 import fetch, { Response } from 'node-fetch';
-import { IWireMockFeatures } from './IWireMockFeatures';
-import { IWireMockRequest } from './IWireMockRequest';
-import { IWireMockResponse } from './IWireMockResponse';
 import {
     IRequestMock,
     IResponseMock,
+    IWireMockRequest,
+    IWireMockResponse,
+    IWireMockFeatures,
     IWireMockMockedRequestResponse,
     Method,
-} from './IWireMockTypes';
+} from '.';
 import { createWireMockRequest } from './RequestModel';
 import { createWireMockResponse } from './ResponseModel';
 
@@ -22,7 +22,7 @@ const WIREMOCK_REQUESTS_URL = '__admin/requests';
 const WIREMOCK_SCENARIO_URL = '__admin/scenarios';
 
 export class WireMock {
-    private readonly baseUrl: string;
+    protected readonly baseUrl: string;
 
     public constructor(baseUrl: string) {
         this.baseUrl = baseUrl;
@@ -182,7 +182,7 @@ export class WireMock {
         });
     }
 
-    private makeUrl(endpoint: string) {
+    protected makeUrl(endpoint: string) {
         return new URL(endpoint, this.baseUrl).href;
     }
 }
