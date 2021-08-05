@@ -16,7 +16,7 @@ describe('Integration with WireMock', () => {
         await mock.clearAll();
     });
 
-    describe('WireMock', () => {
+    describe('WireMockAPI', () => {
         describe('register', () => {
             it('sets up a stub mapping in wiremock server and expects mapping to be called', async () => {
                 const requestBody = {
