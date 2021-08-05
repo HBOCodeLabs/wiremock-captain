@@ -1,3 +1,6 @@
+// Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
+// See the LICENSE file for license information.
+
 import { IWireMockRequest, IWireMockResponse, IWireMockFeatures } from '.';
 import { IWireMockMockedRequestResponse, Method } from './IWireMockTypes';
 import { WireMock } from './WireMock';
@@ -6,7 +9,6 @@ export class WireMockAPI extends WireMock {
     protected readonly endpoint: string;
     protected readonly method: Method;
     protected readonly features?: IWireMockFeatures;
-    protected readonly contract?: any;
 
     public constructor(
         baseUrl: string,
