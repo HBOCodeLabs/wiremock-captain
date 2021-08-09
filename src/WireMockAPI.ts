@@ -41,6 +41,12 @@ export class WireMockAPI extends WireMock {
         );
     }
 
+    /**
+     * Creates a new default stub with desired response
+     * @param response Response object for the stub mapping
+     * @param features Additional options to be used for creation of stub mapping
+     * @returns Created wiremock stub mapping. Contains `id` which is needed to delete a mapping
+     */
     public async registerDefaultResponse(
         response: IWireMockResponse,
         features?: IWireMockFeatures,
