@@ -71,7 +71,9 @@ describe('WireMockAPI', () => {
         it('verify calls', async () => {
             const wireMockApi = require('../../src/WireMockAPI');
             const wireMockUrl = 'https://testservice/';
-            const mock = new wireMockApi.WireMockAPI(wireMockUrl, '/testEndpoint', 'POST');
+            const wireMockEndpoint = '/test-endpoint';
+            const wireMockMethod = 'POST';
+            const mock = new wireMockApi.WireMockAPI(wireMockUrl, wireMockEndpoint, wireMockMethod);
 
             const requestBody = {
                 objectKey: {
@@ -85,7 +87,7 @@ describe('WireMockAPI', () => {
                     {
                         request: {
                             method: 'POST',
-                            url: '/testEndpoint',
+                            url: '/test-endpoint',
                             body: JSON.stringify(requestBody),
                             queryParams: {},
                             headers: {},

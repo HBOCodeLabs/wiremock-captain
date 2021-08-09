@@ -187,7 +187,7 @@ describe('WireMock', () => {
                     {
                         request: {
                             method: 'POST',
-                            url: '/testEndpoint',
+                            url: '/test-endpoint',
                             body: JSON.stringify(requestBody),
                             queryParams: {},
                             headers: {},
@@ -196,20 +196,20 @@ describe('WireMock', () => {
                     {
                         request: {
                             method: 'GET',
-                            url: '/testEndpoint',
+                            url: '/test-endpoint',
                             queryParams: {},
                             headers: {},
                         },
                     },
                 ],
             };
-            const calls = await mock.getRequestsForAPI('POST', '/testEndpoint');
+            const calls = await mock.getRequestsForAPI('POST', '/test-endpoint');
             expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/requests', {
                 method: 'GET',
             });
             expect(calls.length).toEqual(1);
 
-            const getCalls = await mock.getRequestsForAPI('GET', '/testEndpoint');
+            const getCalls = await mock.getRequestsForAPI('GET', '/test-endpoint');
             expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/requests', {
                 method: 'GET',
             });

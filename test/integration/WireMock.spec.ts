@@ -23,7 +23,7 @@ describe('Integration with WireMock', () => {
                         stringKey: 'stringKey',
                     },
                 };
-                const testEndpoint = '/testEndpoint';
+                const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
                 await mock.register(
                     {
@@ -56,7 +56,7 @@ describe('Integration with WireMock', () => {
             });
 
             it('sets up a stub mapping in wiremock server without body', async () => {
-                const testEndpoint = '/testEndpoint';
+                const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
                 await mock.register(
                     {
@@ -84,7 +84,7 @@ describe('Integration with WireMock', () => {
                         stringKey: 'stringKey',
                     },
                 };
-                const testEndpoint = '/testEndpoint';
+                const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
                 const mockedStub = await mock.register(
                     {
@@ -124,7 +124,7 @@ describe('Integration with WireMock', () => {
                         stringKey: 'stringKey',
                     },
                 };
-                const testEndpoint = '/testEndpoint';
+                const testEndpoint = '/test-endpoint';
                 const responseBodyLowPriority = { test: 'testValue' };
                 const responseBodyHighPriority = { test: 'biggerTestValue' };
                 await mock.register(
@@ -172,7 +172,7 @@ describe('Integration with WireMock', () => {
 
         describe('deleteMapping', () => {
             it('sets up a stub mapping and deletes it', async () => {
-                const testEndpoint = '/testEndpoint';
+                const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
 
                 expect(await mock.getAllMappings()).toHaveLength(0);
@@ -194,7 +194,7 @@ describe('Integration with WireMock', () => {
 
         describe('getMapping', () => {
             it('sets up a stub mapping and returns it with get mappings', async () => {
-                const testEndpoint = '/testEndpoint';
+                const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
 
                 expect(await mock.getAllMappings()).toHaveLength(0);
@@ -214,7 +214,7 @@ describe('Integration with WireMock', () => {
 
         describe('getRequests', () => {
             it('returns number of requests made', async () => {
-                const testEndpoint = '/testEndpoint';
+                const testEndpoint = '/test-endpoint';
                 await mock.register({ method: 'GET', endpoint: testEndpoint }, { status: 200 });
 
                 for (let i = 0; i < 5; i++) {
@@ -226,7 +226,7 @@ describe('Integration with WireMock', () => {
             });
 
             it('returns number of unmatched requests', async () => {
-                const testEndpoint = '/testEndpoint';
+                const testEndpoint = '/test-endpoint';
                 await mock.register({ method: 'GET', endpoint: testEndpoint }, { status: 200 });
 
                 for (let i = 0; i < 5; i++) {
@@ -240,7 +240,7 @@ describe('Integration with WireMock', () => {
 
         describe('getScenarios', () => {
             it('should return scenarios', async () => {
-                const testEndpoint = '/testEndpoint';
+                const testEndpoint = '/test-endpoint';
                 expect(await mock.getAllScenarios()).toHaveLength(0);
                 await mock.register({ method: 'GET', endpoint: testEndpoint }, { status: 400 });
                 expect(await mock.getAllScenarios()).toHaveLength(0);
@@ -260,7 +260,7 @@ describe('Integration with WireMock', () => {
 
         describe('resetScenarios', () => {
             it('should return scenarios', async () => {
-                const testEndpoint = '/testEndpoint';
+                const testEndpoint = '/test-endpoint';
                 await mock.register(
                     { method: 'GET', endpoint: testEndpoint },
                     { status: 200 },
