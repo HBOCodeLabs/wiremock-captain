@@ -144,7 +144,7 @@ export class WireMock {
     }
 
     /**
-     * Returns list of request(s) made to the WireMock instance
+     * Returns list of request(s) made to the WireMock API
      * @param method Method to match the request(s) made against
      * @param endpointUrl URL to get the request(s) made against
      * @returns List of wiremock requests made to the endpoint with given method

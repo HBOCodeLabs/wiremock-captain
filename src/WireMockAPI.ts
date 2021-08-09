@@ -55,7 +55,7 @@ export class WireMockAPI extends WireMock {
     }
 
     /**
-     * Returns list of request(s) made to the WireMock instance
+     * Returns list of request(s) made to the WireMock API
      * @returns List of wiremock requests made to the endpoint with given method
      */
     public async getRequestsForAPI(): Promise<unknown[]> {
