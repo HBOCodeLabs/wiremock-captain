@@ -2,6 +2,7 @@
 // See the LICENSE file for license information.
 
 export * from './WireMock';
+export * from './WireMockAPI';
 export * from './IWireMockFeatures';
 export * from './IWireMockRequest';
 export * from './IWireMockResponse';

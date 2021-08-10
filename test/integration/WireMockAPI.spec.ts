@@ -3,18 +3,20 @@
 
 import { afterAll, describe, expect, it } from '@jest/globals';
 import fetch from 'node-fetch';
-import { WireMock } from '../../src';
+import { WireMockAPI } from '../../src';
 
 describe('Integration with WireMock', () => {
     // tslint:disable-next-line: no-http-string
     const wiremockUrl = 'http://localhost:8080';
-    const mock = new WireMock(wiremockUrl);
+    const testEndpoint = '/test-endpoint';
+    const testMethod = 'POST';
+    const mock = new WireMockAPI(wiremockUrl, testEndpoint, testMethod);
 
     beforeEach(async () => {
         await mock.clearAll();
     });
 
-    describe('WireMock', () => {
+    describe('WireMockAPI', () => {
         describe('register', () => {
             it('sets up a stub mapping in wiremock server and expects mapping to be called', async () => {
                 const requestBody = {
@@ -23,12 +25,9 @@ describe('Integration with WireMock', () => {
                         stringKey: 'stringKey',
                     },
                 };
-                const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
                 await mock.register(
                     {
-                        method: 'POST',
-                        endpoint: testEndpoint,
                         body: requestBody,
                     },
                     {
@@ -43,7 +42,7 @@ describe('Integration with WireMock', () => {
                 });
                 const body = await response.json();
                 expect(body).toEqual(responseBody);
-                const calls = await mock.getRequestsForAPI('POST', testEndpoint);
+                const calls = await mock.getRequestsForAPI();
 
                 const jestMock = jest.fn();
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,13 +55,9 @@ describe('Integration with WireMock', () => {
             });
 
             it('sets up a stub mapping in wiremock server without body', async () => {
-                const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
                 await mock.register(
-                    {
-                        method: 'POST',
-                        endpoint: testEndpoint,
-                    },
+                    {},
                     {
                         status: 200,
                         body: responseBody,
@@ -74,7 +69,7 @@ describe('Integration with WireMock', () => {
                 });
                 const body = await response.json();
                 expect(body).toEqual(responseBody);
-                await mock.getRequestsForAPI('POST', testEndpoint);
+                await mock.getRequestsForAPI();
             });
 
             it('sets up a stub mapping in wiremock server with priority', async () => {
@@ -84,12 +79,9 @@ describe('Integration with WireMock', () => {
                         stringKey: 'stringKey',
                     },
                 };
-                const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
                 const mockedStub = await mock.register(
                     {
-                        method: 'POST',
-                        endpoint: testEndpoint,
                         body: requestBody,
                     },
                     {
@@ -105,7 +97,7 @@ describe('Integration with WireMock', () => {
                 });
                 const body = await response.json();
                 expect(body).toEqual(responseBody);
-                const calls = await mock.getRequestsForAPI('POST', testEndpoint);
+                const calls = await mock.getRequestsForAPI();
 
                 const jestMock = jest.fn();
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -124,13 +116,10 @@ describe('Integration with WireMock', () => {
                         stringKey: 'stringKey',
                     },
                 };
-                const testEndpoint = '/test-endpoint';
                 const responseBodyLowPriority = { test: 'testValue' };
                 const responseBodyHighPriority = { test: 'biggerTestValue' };
                 await mock.register(
                     {
-                        method: 'POST',
-                        endpoint: testEndpoint,
                         body: requestBody,
                     },
                     {
@@ -141,8 +130,6 @@ describe('Integration with WireMock', () => {
                 );
                 await mock.register(
                     {
-                        method: 'POST',
-                        endpoint: testEndpoint,
                         body: requestBody,
                     },
                     {
@@ -157,7 +144,7 @@ describe('Integration with WireMock', () => {
                 });
                 const body = await response.json();
                 expect(body).toEqual(responseBodyHighPriority);
-                const calls = await mock.getRequestsForAPI('POST', testEndpoint);
+                const calls = await mock.getRequestsForAPI();
 
                 const jestMock = jest.fn();
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -172,15 +159,11 @@ describe('Integration with WireMock', () => {
 
         describe('deleteMapping', () => {
             it('sets up a stub mapping and deletes it', async () => {
-                const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
 
                 expect(await mock.getAllMappings()).toHaveLength(0);
                 const { id } = await mock.register(
-                    {
-                        method: 'POST',
-                        endpoint: testEndpoint,
-                    },
+                    {},
                     {
                         status: 200,
                         body: responseBody,
@@ -194,15 +177,11 @@ describe('Integration with WireMock', () => {
 
         describe('getMapping', () => {
             it('sets up a stub mapping and returns it with get mappings', async () => {
-                const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
 
                 expect(await mock.getAllMappings()).toHaveLength(0);
                 await mock.register(
-                    {
-                        method: 'POST',
-                        endpoint: testEndpoint,
-                    },
+                    {},
                     {
                         status: 200,
                         body: responseBody,
@@ -213,25 +192,12 @@ describe('Integration with WireMock', () => {
         });
 
         describe('getRequests', () => {
-            it('returns number of requests made', async () => {
-                const testEndpoint = '/test-endpoint';
-                await mock.register({ method: 'GET', endpoint: testEndpoint }, { status: 200 });
+            it('returns number of unmatched requests', async () => {
+                await mock.register({}, { status: 200 });
 
                 for (let i = 0; i < 5; i++) {
                     await fetch(wiremockUrl + testEndpoint, {
                         method: 'GET',
-                    });
-                }
-                expect(await mock.getAllRequests()).toHaveLength(5);
-            });
-
-            it('returns number of unmatched requests', async () => {
-                const testEndpoint = '/test-endpoint';
-                await mock.register({ method: 'GET', endpoint: testEndpoint }, { status: 200 });
-
-                for (let i = 0; i < 5; i++) {
-                    await fetch(wiremockUrl + testEndpoint, {
-                        method: 'POST',
                     });
                 }
                 expect(await mock.getUnmatchedRequests()).toHaveLength(5);
@@ -240,12 +206,11 @@ describe('Integration with WireMock', () => {
 
         describe('getScenarios', () => {
             it('should return scenarios', async () => {
-                const testEndpoint = '/test-endpoint';
                 expect(await mock.getAllScenarios()).toHaveLength(0);
-                await mock.register({ method: 'GET', endpoint: testEndpoint }, { status: 400 });
+                await mock.register({}, { status: 400 });
                 expect(await mock.getAllScenarios()).toHaveLength(0);
                 await mock.register(
-                    { method: 'GET', endpoint: testEndpoint },
+                    {},
                     { status: 200 },
                     {
                         scenario: {
@@ -260,9 +225,8 @@ describe('Integration with WireMock', () => {
 
         describe('resetScenarios', () => {
             it('should return scenarios', async () => {
-                const testEndpoint = '/test-endpoint';
                 await mock.register(
-                    { method: 'GET', endpoint: testEndpoint },
+                    {},
                     { status: 200 },
                     {
                         scenario: {
@@ -273,7 +237,7 @@ describe('Integration with WireMock', () => {
                     },
                 );
                 await mock.register(
-                    { method: 'GET', endpoint: testEndpoint },
+                    {},
                     { status: 201 },
                     {
                         scenario: {
@@ -287,14 +251,14 @@ describe('Integration with WireMock', () => {
                 // @ts-ignore
                 expect((await mock.getAllScenarios())[0].state).toEqual('Started');
                 let resp = await fetch(wiremockUrl + testEndpoint, {
-                    method: 'GET',
+                    method: 'POST',
                 });
                 expect(resp.status).toEqual(200);
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 expect((await mock.getAllScenarios())[0].state).toEqual('test-state');
                 resp = await fetch(wiremockUrl + testEndpoint, {
-                    method: 'GET',
+                    method: 'POST',
                 });
                 expect(resp.status).toEqual(201);
                 await mock.resetAllScenarios();

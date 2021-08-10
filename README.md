@@ -108,7 +108,6 @@ docker run -itd --rm --name wiremock-container -p 8080:8080 rodolpheche/wiremock
 Typical usage looks like this:
 
 ```typescript
-// Import the package
 import { WireMock } from 'wiremock-captain';
 
 describe('Integration with WireMock', () => {
@@ -128,10 +127,46 @@ describe('Integration with WireMock', () => {
                     stringKey: 'stringKey',
                 },
             };
-            const testEndpoint = '/testEndpoint';
+            const testEndpoint = '/test-endpoint';
             const responseBody = { test: 'testValue' };
             await mock.register(
                 { method: 'POST', endpoint: testEndpoint, body: requestBody },
+                { status: 200, body: responseBody },
+            );
+
+            // rest of the test
+        });
+    });
+});
+```
+
+If the purpose is to only mock a single API over and over, `WireMockAPI` would be the better option.
+Usage would look like:
+```typescript
+import { WireMockAPI } from 'wiremock-captain';
+
+describe('Integration with WireMock', () => {
+    // Connect to WireMock
+    const downstreamWireMockUrl = 'http://localhost:8080';
+    const downstreamWireMockEndpoint = '/test-endpoint';
+    const downstreamWireMockMethod = 'POST';
+    const mock = new WireMockAPI(downstreamWireMockUrl, downstreamWireMockEndpoint, downstreamWireMockMethod);
+
+    afterAll(async () => {
+        await mock.clearAll();
+    });
+
+    describe('happy path', () => {
+        it('mocks downstream service', async () => {
+            const requestBody = {
+                objectKey: {
+                    intKey: 5,
+                    stringKey: 'stringKey',
+                },
+            };
+            const responseBody = { test: 'testValue' };
+            await mock.register(
+                { body: requestBody },
                 { status: 200, body: responseBody },
             );
 
