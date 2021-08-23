@@ -1,6 +1,6 @@
 <div>
   <br />
-    <img width="300" src="https://github.com/HBOCodeLabs/wiremock-captain/blob/master/docs/images/wmc-logo.svg?raw=true">
+    <img width="300" src="https://github.com/HBOCodeLabs/wiremock-captain/blob/main/docs/images/wmc-logo.svg?raw=true">
   <p />
 </div>
 
@@ -9,7 +9,7 @@
 [![Azure DevOps builds](https://img.shields.io/azure-devops/build/HBODigitalProducts/e6cee603-ddc7-43e3-b1a8-e2d6b3f6173c/37)](https://dev.azure.com/HBODigitalProducts/OSS/_build?definitionId=37&branchFilter=1388%2C1388%2C1388%2C1388%2C1388%2C1388%2C1388%2C1388)
 [![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/HBODigitalProducts/OSS/37)](https://dev.azure.com/HBODigitalProducts/OSS/_build?definitionId=37&branchFilter=1388%2C1388%2C1388%2C1388%2C1388%2C1388%2C1388%2C1388)
 [![David](https://img.shields.io/david/HBOCodeLabs/wiremock-captain)](https://david-dm.org/HBOCodeLabs/wiremock-captain)
-[![GitHub](https://img.shields.io/github/license/HBOCodeLabs/wiremock-captain)](https://github.com/HBOCodeLabs/wiremock-captain/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/HBOCodeLabs/wiremock-captain)](https://github.com/HBOCodeLabs/wiremock-captain/blob/main/LICENSE)
 
 *A better way to use the WireMock API simulator to test your Node.js services*
 
@@ -38,7 +38,7 @@ A typical flow goes like this:
 
 <div>
   <br />
-    <img width="700" src="https://github.com/HBOCodeLabs/wiremock-captain/blob/master/docs/images/wmc-block-diagram.svg?raw=true">
+    <img width="700" src="https://github.com/HBOCodeLabs/wiremock-captain/blob/main/docs/images/wmc-block-diagram.svg?raw=true">
   <p />
 </div>
 
@@ -278,7 +278,7 @@ Jest `expect` works well with `WireMock` and can used for various kinds of check
 const requestBody = {
     key: 'value'
 };
-const mockedRequest: IWireMockRequest = { 
+const mockedRequest: IWireMockRequest = {
     method: 'POST',
     endpoint: '/test',
     body: requestBody,
