@@ -23,7 +23,7 @@
         "build": "npm run clean && tsc -p tsconfig.json && eslint .",
         "clean": "rimraf coverage dist tmp .buildcache",
         "test": "JEST_JUNIT_OUTPUT_NAME=unit-test.xml jest ./test/unit",
-        "integration-test": "JEST_JUNIT_OUTPUT_NAME=integration-test.xml jest ./test/integration/ --runInBand",
+        "integration-test": "JEST_JUNIT_OUTPUT_NAME=integration-test.xml jest ./test/integration/ --runInBand ",
         "coverage": "npm run test -- --coverage",
         "static-analysis": "eslint .",
         "lint-fix": "eslint --fix .",
