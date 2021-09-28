@@ -59,7 +59,7 @@ export class WireMock {
             method: 'POST',
             body: JSON.stringify(mock),
         });
-        return await wiremockResponse.json();
+        return (await wiremockResponse.json()) as IWireMockMockedRequestResponse;
     }
 
     /**
@@ -105,7 +105,7 @@ export class WireMock {
         const response = await fetch(this.makeUrl(WIREMOCK_MAPPINGS_URL), {
             method: 'GET',
         });
-        const responseJson = await response.json();
+        const responseJson = (await response.json()) as IMappingGetResponse;
         return responseJson.mappings;
     }
 
@@ -116,7 +116,7 @@ export class WireMock {
         const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL), {
             method: 'GET',
         });
-        const body = await response.json();
+        const body = (await response.json()) as IRequestGetResponse;
         return body.requests;
     }
 
@@ -127,7 +127,7 @@ export class WireMock {
         const response = await fetch(this.makeUrl(WIREMOCK_SCENARIO_URL), {
             method: 'GET',
         });
-        const body = await response.json();
+        const body = (await response.json()) as IScenarioGetResponse;
         return body.scenarios;
     }
 
@@ -153,7 +153,7 @@ export class WireMock {
         const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL), {
             method: 'GET',
         });
-        const body = await response.json();
+        const body = (await response.json()) as IRequestGetResponse;
         return (
             body.requests
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -169,7 +169,7 @@ export class WireMock {
         const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL + '/unmatched'), {
             method: 'GET',
         });
-        const body = await response.json();
+        const body = (await response.json()) as IRequestGetResponse;
         return body.requests;
     }
 
@@ -182,7 +182,7 @@ export class WireMock {
         });
     }
 
-    protected makeUrl(endpoint: string) {
+    protected makeUrl(endpoint: string): string {
         return new URL(endpoint, this.baseUrl).href;
     }
 }
@@ -200,3 +200,15 @@ type mockType = {
     requiredScenarioState?: string;
     newScenarioState?: string;
 };
+
+interface IMappingGetResponse {
+    mappings: Array<unknown>;
+}
+
+interface IRequestGetResponse {
+    requests: Array<unknown>;
+}
+
+interface IScenarioGetResponse {
+    scenarios: Array<unknown>;
+}
