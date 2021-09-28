@@ -1,16 +1,16 @@
 {
-    "compilerOptions": {
-        "alwaysStrict": true,
-        "outDir": "dist",
-        "target": "es2019",
-        "module": "commonjs",
-        "declaration": true,
-        "declarationMap": true,
-        "strict": true,
-        "incremental": true,
-        "pretty": true,
-        "sourceMap": true,
-        "tsBuildInfoFile": "./.buildcache"
-    },
-    "include": ["src/**/*"]
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "outDir": "dist",
+    "target": "es2019",
+    "module": "commonjs",
+    "declaration": true,
+    "declarationMap": true,
+    "strict": true,
+    "incremental": true,
+    "pretty": true,
+    "sourceMap": true,
+    "tsBuildInfoFile": "./.buildcache"
+  },
+  "include": ["src/**/*"]
 }

@@ -29,7 +29,8 @@
     "lint-fix": "eslint --fix .",
     "check-package-updates": "ncu",
     "make-package-updates": "ncu -u",
-    "precommit": "pretty-quick --staged"
+    "precommit": "pretty-quick --staged",
+    "prettier": "prettier --write --loglevel silent ."
   },
   "precommit": [
     "precommit"
