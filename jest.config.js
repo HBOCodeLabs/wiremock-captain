@@ -13,4 +13,5 @@ module.exports = {
     preset: 'ts-jest',
     reporters: ['default', ['jest-junit', { outputDirectory: 'reports' }]],
     testEnvironment: 'node',
+    testPathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/examples/'],
 };
