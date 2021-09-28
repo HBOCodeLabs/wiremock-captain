@@ -2,13 +2,14 @@
 // See the LICENSE file for license information.
 
 import fetch, { Response } from 'node-fetch';
+
 import {
     IRequestMock,
     IResponseMock,
-    IWireMockRequest,
-    IWireMockResponse,
     IWireMockFeatures,
     IWireMockMockedRequestResponse,
+    IWireMockRequest,
+    IWireMockResponse,
     Method,
 } from '.';
 import { createWireMockRequest } from './RequestModel';

@@ -1,64 +1,68 @@
 {
-    "name": "wiremock-captain",
-    "version": "1.5.1",
-    "description": "A better way to use the WireMock API simulator to test your Node.js services",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/HBOCodeLabs/wiremock-captain.git"
-    },
-    "license": "MIT",
-    "keywords": [
-        "api",
-        "captain",
-        "integration",
-        "jest",
-        "test",
-        "testing",
-        "typescript",
-        "wiremock"
-    ],
-    "scripts": {
-        "build": "npm run clean && tsc -p tsconfig.json && eslint .",
-        "clean": "rimraf coverage dist tmp .buildcache",
-        "test": "JEST_JUNIT_OUTPUT_NAME=unit-test.xml jest ./test/unit",
-        "integration-test": "JEST_JUNIT_OUTPUT_NAME=integration-test.xml jest ./test/integration/ --runInBand",
-        "coverage": "npm run test -- --coverage",
-        "static-analysis": "eslint .",
-        "lint-fix": "eslint --fix .",
-        "check-package-updates": "ncu",
-        "make-package-updates": "ncu -u",
-        "precommit": "pretty-quick --staged"
-    },
-    "precommit": [
-        "precommit"
-    ],
-    "engines": {
-        "node": ">=12.22.6",
-        "npm": ">=6.14.5"
-    },
-    "dependencies": {
-        "node-fetch": "3.0.0"
-    },
-    "devDependencies": {
-        "@types/jest": "27.0.2",
-        "@types/node": "16.10.1",
-        "@types/node-fetch": "3.0.2",
-        "@typescript-eslint/eslint-plugin": "4.32.0",
-        "@typescript-eslint/parser": "4.32.0",
-        "eslint": "7.32.0",
-        "eslint-config-prettier": "8.3.0",
-        "eslint-plugin-jest": "24.4.2",
-        "jest": "27.2.2",
-        "jest-junit": "12.3.0",
-        "npm-check-updates": "11.8.5",
-        "pre-commit": "1.2.2",
-        "prettier": "2.4.1",
-        "pretty-quick": "3.1.1",
-        "rimraf": "3.0.2",
-        "ts-jest": "27.0.5",
-        "tslib": "2.3.1",
-        "typescript": "4.4.3"
-    }
+  "name": "wiremock-captain",
+  "version": "1.5.1",
+  "description": "A better way to use the WireMock API simulator to test your Node.js services",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HBOCodeLabs/wiremock-captain.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "api",
+    "captain",
+    "integration",
+    "jest",
+    "test",
+    "testing",
+    "typescript",
+    "wiremock"
+  ],
+  "scripts": {
+    "build": "npm run clean && tsc -p tsconfig.json && eslint .",
+    "clean": "rimraf coverage dist tmp .buildcache",
+    "test": "JEST_JUNIT_OUTPUT_NAME=unit-test.xml jest ./test/unit",
+    "integration-test": "JEST_JUNIT_OUTPUT_NAME=integration-test.xml jest ./test/integration/ --runInBand",
+    "coverage": "npm run test -- --coverage",
+    "static-analysis": "eslint .",
+    "lint-fix": "eslint --fix .",
+    "check-package-updates": "ncu",
+    "make-package-updates": "ncu -u",
+    "precommit": "pretty-quick --staged"
+  },
+  "precommit": [
+    "precommit"
+  ],
+  "engines": {
+    "node": ">=12.22.6",
+    "npm": ">=6.14.5"
+  },
+  "dependencies": {
+    "node-fetch": "3.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "27.0.2",
+    "@types/node": "16.10.1",
+    "@types/node-fetch": "3.0.2",
+    "@typescript-eslint/eslint-plugin": "4.32.0",
+    "@typescript-eslint/parser": "4.32.0",
+    "eslint": "7.32.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-import": "2.24.2",
+    "eslint-plugin-jest": "24.4.2",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-simple-import-sort": "7.0.0",
+    "eslint-plugin-unused-imports": "1.1.5",
+    "jest": "27.2.3",
+    "jest-junit": "12.3.0",
+    "npm-check-updates": "11.8.5",
+    "pre-commit": "1.2.2",
+    "prettier": "2.4.1",
+    "pretty-quick": "3.1.1",
+    "rimraf": "3.0.2",
+    "ts-jest": "27.0.5",
+    "tslib": "2.3.1",
+    "typescript": "4.4.3"
+  }
 }

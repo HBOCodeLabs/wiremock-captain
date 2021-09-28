@@ -3,6 +3,7 @@
 
 import { describe, expect, it } from '@jest/globals';
 import fetch from 'node-fetch';
+
 import { WireMockAPI } from '../../src';
 
 describe('Integration with WireMock', () => {
