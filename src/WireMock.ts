@@ -16,11 +16,11 @@ import { createWireMockRequest } from './RequestModel';
 import { createWireMockResponse } from './ResponseModel';
 
 // endpoint where wiremock stores mocks
-const WIREMOCK_MAPPINGS_URL = '__admin/mappings';
+const WIREMOCK_MAPPINGS_URL: string = '__admin/mappings';
 // endpoint that records all the incoming requests
-const WIREMOCK_REQUESTS_URL = '__admin/requests';
+const WIREMOCK_REQUESTS_URL: string = '__admin/requests';
 // endpoint that records all the scenario information
-const WIREMOCK_SCENARIO_URL = '__admin/scenarios';
+const WIREMOCK_SCENARIO_URL: string = '__admin/scenarios';
 
 export class WireMock {
     protected readonly baseUrl: string;
@@ -43,7 +43,7 @@ export class WireMock {
     ): Promise<IWireMockMockedRequestResponse> {
         const mockedRequest = createWireMockRequest(request, features);
         const mockedResponse = createWireMockResponse(response, features);
-        let mock: mockType = {
+        let mock: IMockType = {
             request: mockedRequest,
             response: mockedResponse,
         };
@@ -193,14 +193,14 @@ function filterRequest(method: Method, endpointUrl: string, request: any): boole
     return request.request.method === method && request.request.url === endpointUrl;
 }
 
-type mockType = {
+interface IMockType {
     request: IRequestMock;
     response: IResponseMock;
     priority?: number;
     scenarioName?: string;
     requiredScenarioState?: string;
     newScenarioState?: string;
-};
+}
 
 interface IMappingGetResponse {
     mappings: Array<unknown>;
