@@ -2,6 +2,7 @@
 // See the LICENSE file for license information.
 
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+
 import { BodyType } from '../../src';
 
 describe('ResponseModel', () => {

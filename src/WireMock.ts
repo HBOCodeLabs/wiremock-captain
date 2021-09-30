@@ -2,24 +2,25 @@
 // See the LICENSE file for license information.
 
 import fetch, { Response } from 'node-fetch';
+
 import {
     IRequestMock,
     IResponseMock,
-    IWireMockRequest,
-    IWireMockResponse,
     IWireMockFeatures,
     IWireMockMockedRequestResponse,
+    IWireMockRequest,
+    IWireMockResponse,
     Method,
 } from '.';
 import { createWireMockRequest } from './RequestModel';
 import { createWireMockResponse } from './ResponseModel';
 
 // endpoint where wiremock stores mocks
-const WIREMOCK_MAPPINGS_URL = '__admin/mappings';
+const WIREMOCK_MAPPINGS_URL: string = '__admin/mappings';
 // endpoint that records all the incoming requests
-const WIREMOCK_REQUESTS_URL = '__admin/requests';
+const WIREMOCK_REQUESTS_URL: string = '__admin/requests';
 // endpoint that records all the scenario information
-const WIREMOCK_SCENARIO_URL = '__admin/scenarios';
+const WIREMOCK_SCENARIO_URL: string = '__admin/scenarios';
 
 export class WireMock {
     protected readonly baseUrl: string;
@@ -42,7 +43,7 @@ export class WireMock {
     ): Promise<IWireMockMockedRequestResponse> {
         const mockedRequest = createWireMockRequest(request, features);
         const mockedResponse = createWireMockResponse(response, features);
-        let mock: mockType = {
+        let mock: IMockType = {
             request: mockedRequest,
             response: mockedResponse,
         };
@@ -59,7 +60,7 @@ export class WireMock {
             method: 'POST',
             body: JSON.stringify(mock),
         });
-        return await wiremockResponse.json();
+        return (await wiremockResponse.json()) as IWireMockMockedRequestResponse;
     }
 
     /**
@@ -105,7 +106,7 @@ export class WireMock {
         const response = await fetch(this.makeUrl(WIREMOCK_MAPPINGS_URL), {
             method: 'GET',
         });
-        const responseJson = await response.json();
+        const responseJson = (await response.json()) as IMappingGetResponse;
         return responseJson.mappings;
     }
 
@@ -116,7 +117,7 @@ export class WireMock {
         const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL), {
             method: 'GET',
         });
-        const body = await response.json();
+        const body = (await response.json()) as IRequestGetResponse;
         return body.requests;
     }
 
@@ -127,7 +128,7 @@ export class WireMock {
         const response = await fetch(this.makeUrl(WIREMOCK_SCENARIO_URL), {
             method: 'GET',
         });
-        const body = await response.json();
+        const body = (await response.json()) as IScenarioGetResponse;
         return body.scenarios;
     }
 
@@ -153,7 +154,7 @@ export class WireMock {
         const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL), {
             method: 'GET',
         });
-        const body = await response.json();
+        const body = (await response.json()) as IRequestGetResponse;
         return (
             body.requests
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -169,7 +170,7 @@ export class WireMock {
         const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL + '/unmatched'), {
             method: 'GET',
         });
-        const body = await response.json();
+        const body = (await response.json()) as IRequestGetResponse;
         return body.requests;
     }
 
@@ -182,7 +183,7 @@ export class WireMock {
         });
     }
 
-    protected makeUrl(endpoint: string) {
+    protected makeUrl(endpoint: string): string {
         return new URL(endpoint, this.baseUrl).href;
     }
 }
@@ -192,11 +193,23 @@ function filterRequest(method: Method, endpointUrl: string, request: any): boole
     return request.request.method === method && request.request.url === endpointUrl;
 }
 
-type mockType = {
+interface IMockType {
     request: IRequestMock;
     response: IResponseMock;
     priority?: number;
     scenarioName?: string;
     requiredScenarioState?: string;
     newScenarioState?: string;
-};
+}
+
+interface IMappingGetResponse {
+    mappings: Array<unknown>;
+}
+
+interface IRequestGetResponse {
+    requests: Array<unknown>;
+}
+
+interface IScenarioGetResponse {
+    scenarios: Array<unknown>;
+}

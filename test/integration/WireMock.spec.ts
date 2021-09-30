@@ -1,8 +1,9 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { afterAll, describe, expect, it } from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 import fetch from 'node-fetch';
+
 import { WireMock } from '../../src';
 
 describe('Integration with WireMock', () => {

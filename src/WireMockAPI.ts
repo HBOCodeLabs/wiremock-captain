@@ -1,7 +1,7 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { IWireMockRequest, IWireMockResponse, IWireMockFeatures } from '.';
+import { IWireMockFeatures, IWireMockRequest, IWireMockResponse } from '.';
 import { IWireMockMockedRequestResponse, Method } from './IWireMockTypes';
 import { WireMock } from './WireMock';
 

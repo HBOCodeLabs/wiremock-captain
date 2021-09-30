@@ -51,7 +51,7 @@ export function createWireMockRequest(
 function getMockedObject(
     dict: Record<string, KeyValue>,
     dictMatchingAttributes?: Record<string, MatchingAttributes>,
-) {
+): Record<string, unknown> {
     const mockObject: { [key: string]: unknown } = {};
     for (const key of Object.keys(dict)) {
         mockObject[key] = mapPropertyToAttribute(
@@ -62,7 +62,10 @@ function getMockedObject(
     return mockObject;
 }
 
-function mapPropertyToAttribute(value: KeyValue, attribute: MatchingAttributes) {
+function mapPropertyToAttribute(
+    value: KeyValue,
+    attribute: MatchingAttributes,
+): Record<string, KeyValue> {
     return {
         [attribute]: value,
     };

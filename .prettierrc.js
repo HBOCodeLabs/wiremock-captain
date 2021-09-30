@@ -6,4 +6,26 @@ module.exports = {
     singleQuote: true,
     trailingComma: 'all',
     bracketSpacing: true,
+    overrides: [
+        {
+            files: '*.ts',
+            options: {
+                parser: 'typescript',
+            },
+        },
+        {
+            files: '*.json',
+            options: {
+                printWidth: 80,
+                tabWidth: 4,
+            },
+        },
+        {
+            files: '*.yml',
+            options: {
+                printWidth: 80,
+                tabWidth: 2,
+            },
+        },
+    ],
 };
