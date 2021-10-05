@@ -1,3 +1,5 @@
+#TEST
+
 SHELL := /bin/bash
 
 BLACK        := $(shell printf "\033[30m")
