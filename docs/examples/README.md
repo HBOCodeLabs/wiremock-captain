@@ -1,3 +1,5 @@
+## Examples
+
 If the purpose is to only mock a single API over and over, `WireMockAPI` would be the better option over `WireMock`.
 
 In that case, the usage would look like:

@@ -142,7 +142,7 @@ describe('Integration with WireMock', () => {
 
 ## Examples
 
-For more examples, look at [docs](https://github.com/HBOCodeLabs/wiremock-captain/tree/main/docs/examples)
+For more examples, look [here](https://github.com/HBOCodeLabs/wiremock-captain/tree/main/docs/examples)
 
 ## Debugging
 - open terminal and run `docker attach mocked-service`
