@@ -161,6 +161,7 @@ Make use of `--network-alias` docker flag to make better testing endpoints over 
 inside each test if necessary using `stubPriority` from `IWireMockFeatures`.
 - To avoid mocked stubs overriding each other, run the tests synchronously (e.g. using flag
   `--runInBand` with `jest`)
+- Use `getUnmatchedRequests` to make sure there are no unmatched mocks at the end of each of the tests
 
 ## WireMock
 
