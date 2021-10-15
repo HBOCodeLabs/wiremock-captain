@@ -25,7 +25,6 @@
 
 - **A strategy that works.**  WireMock Captain is actively used to test many microservices that support a major commercial product.
 
-
 ## How it works
 
 A typical flow goes like this:
