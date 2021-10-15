@@ -3,6 +3,7 @@
     <img width="300" src="https://github.com/HBOCodeLabs/wiremock-captain/blob/main/docs/images/wmc-logo.svg?raw=true">
   <p />
 </div>
+<!-- TEST -->
 
 [![npm](https://img.shields.io/npm/v/wiremock-captain)](https://www.npmjs.com/package/wiremock-captain)
 [![npm](https://img.shields.io/npm/dw/wiremock-captain)](https://www.npmjs.com/package/wiremock-captain)
