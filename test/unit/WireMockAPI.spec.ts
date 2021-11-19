@@ -7,6 +7,7 @@ describe('WireMockAPI', () => {
         default: jest.fn().mockReturnValue({
             json: jest.fn().mockImplementation(() => Promise.resolve(mockJson.body)),
         }),
+        Headers: jest.fn().mockReturnValue({}),
     };
 
     beforeEach(() => {
@@ -38,6 +39,7 @@ describe('WireMockAPI', () => {
             expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings', {
                 method: 'POST',
                 body: JSON.stringify({}),
+                headers: {},
             });
             expect(resp).toEqual({});
         });
@@ -62,6 +64,7 @@ describe('WireMockAPI', () => {
             expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings', {
                 method: 'POST',
                 body: JSON.stringify({}),
+                headers: {},
             });
             expect(resp).toEqual({});
         });

@@ -1,7 +1,7 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import fetch, { Response } from 'node-fetch';
+import fetch, { Headers, Response } from 'node-fetch';
 
 import {
     IRequestMock,
@@ -21,6 +21,8 @@ const WIREMOCK_MAPPINGS_URL: string = '__admin/mappings';
 const WIREMOCK_REQUESTS_URL: string = '__admin/requests';
 // endpoint that records all the scenario information
 const WIREMOCK_SCENARIO_URL: string = '__admin/scenarios';
+
+const HEADERS: Headers = new Headers({ 'Content-Type': 'application/json' });
 
 export class WireMock {
     protected readonly baseUrl: string;
@@ -58,7 +60,8 @@ export class WireMock {
 
         const wiremockResponse = await fetch(this.makeUrl(WIREMOCK_MAPPINGS_URL), {
             method: 'POST',
-            body: JSON.stringify(mock),
+            body: JSON.stringify(mock, undefined, 2),
+            headers: HEADERS,
         });
         return (await wiremockResponse.json()) as IWireMockMockedRequestResponse;
     }

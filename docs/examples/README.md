@@ -91,6 +91,34 @@ const features: IWireMockFeatures = {
 await mock.register(mockedRequest, mockedResponse, features);
 ```
 
+### Return binary data (e.g. API with protobuf support)
+
+```typescript
+const mockedRequest: IWireMockRequest = {
+    endpoint: 'test',
+    method: 'GET',
+};
+
+const responseBody: Uint8Array = getBinaryResponseBody();
+const responseBase64 = Buffer.from(responseBody).toString('base64');
+
+const mockedResponse: IWireMockResponse = {
+    status: 200,
+    body: responseBase64,
+    headers: {
+        'Content-Type': 'application/octet-stream; charset=UTF-8',
+    },
+};
+const features: IWireMockFeatures = {
+    responseBodyType: BodyType.Base64Body,
+};
+await mock.register(
+    mockedRequest,
+    mockedResponse,
+    features,
+);
+```
+
 ### Override a mapping
 
 By default, if a request matches to two different stub mappings, the one created more recently will be
