@@ -18,6 +18,6 @@ npm run dev
 Running the tests:
 
 ```bash
-docker run -itd --rm -p 8080:8080 --name mocked-service rodolpheche/wiremock:2.27.2
+docker run -itd --rm -p 8080:8080 --name mocked-service rodolpheche/wiremock:2.27.2 --verbose
 npm run test
 ```
