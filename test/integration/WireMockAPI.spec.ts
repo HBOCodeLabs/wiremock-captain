@@ -2,7 +2,7 @@
 // See the LICENSE file for license information.
 
 import { describe, expect, it } from '@jest/globals';
-import fetch from 'node-fetch';
+import axios from 'axios';
 
 import { WireMockAPI } from '../../src';
 
@@ -37,11 +37,8 @@ describe('Integration with WireMock', () => {
                     },
                 );
 
-                const response = await fetch(wiremockUrl + testEndpoint, {
-                    method: 'POST',
-                    body: JSON.stringify(requestBody),
-                });
-                const body = await response.json();
+                const response = await axios.post(wiremockUrl + testEndpoint, requestBody);
+                const body = response.data;
                 expect(body).toEqual(responseBody);
                 const calls = await mock.getRequestsForAPI();
 
@@ -65,10 +62,8 @@ describe('Integration with WireMock', () => {
                     },
                 );
 
-                const response = await fetch(wiremockUrl + testEndpoint, {
-                    method: 'POST',
-                });
-                const body = await response.json();
+                const response = await axios.post(wiremockUrl + testEndpoint);
+                const body = response.data;
                 expect(body).toEqual(responseBody);
                 await mock.getRequestsForAPI();
             });
@@ -92,11 +87,8 @@ describe('Integration with WireMock', () => {
                     { stubPriority: 1 },
                 );
                 expect(mockedStub.priority).toEqual(1);
-                const response = await fetch(wiremockUrl + testEndpoint, {
-                    method: 'POST',
-                    body: JSON.stringify(requestBody),
-                });
-                const body = await response.json();
+                const response = await axios.post(wiremockUrl + testEndpoint, requestBody);
+                const body = response.data;
                 expect(body).toEqual(responseBody);
                 const calls = await mock.getRequestsForAPI();
 
@@ -139,11 +131,8 @@ describe('Integration with WireMock', () => {
                     },
                     { stubPriority: 2 },
                 );
-                const response = await fetch(wiremockUrl + testEndpoint, {
-                    method: 'POST',
-                    body: JSON.stringify(requestBody),
-                });
-                const body = await response.json();
+                const response = await axios.post(wiremockUrl + testEndpoint, requestBody);
+                const body = response.data;
                 expect(body).toEqual(responseBodyHighPriority);
                 const calls = await mock.getRequestsForAPI();
 
@@ -197,9 +186,9 @@ describe('Integration with WireMock', () => {
                 await mock.register({}, { status: 200 });
 
                 for (let i = 0; i < 5; i++) {
-                    await fetch(wiremockUrl + testEndpoint, {
-                        method: 'GET',
-                    });
+                    try {
+                        await axios.get(wiremockUrl + testEndpoint);
+                    } catch (error) {}
                 }
                 expect(await mock.getUnmatchedRequests()).toHaveLength(5);
             });
@@ -251,16 +240,12 @@ describe('Integration with WireMock', () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 expect((await mock.getAllScenarios())[0].state).toEqual('Started');
-                let resp = await fetch(wiremockUrl + testEndpoint, {
-                    method: 'POST',
-                });
+                let resp = await axios.post(wiremockUrl + testEndpoint);
                 expect(resp.status).toEqual(200);
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 expect((await mock.getAllScenarios())[0].state).toEqual('test-state');
-                resp = await fetch(wiremockUrl + testEndpoint, {
-                    method: 'POST',
-                });
+                resp = await axios.post(wiremockUrl + testEndpoint);
                 expect(resp.status).toEqual(201);
                 await mock.resetAllScenarios();
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

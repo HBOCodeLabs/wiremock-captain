@@ -4,17 +4,21 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
 describe('WireMock', () => {
-    const mockJson = { body: {} };
-    const mockNodeFetch = {
-        default: jest.fn().mockReturnValue({
-            json: jest.fn().mockImplementation(() => Promise.resolve(mockJson.body)),
-        }),
-        Headers: jest.fn().mockReturnValue({}),
+    const mockData = {
+        data: {},
+    };
+    const mockAxios = {
+        default: {
+            delete: jest.fn().mockResolvedValue(mockData as never),
+            get: jest.fn().mockResolvedValue(mockData as never),
+            post: jest.fn().mockResolvedValue(mockData as never),
+        },
+        AxiosRequestHeaders: jest.fn(),
+        AxiosResponse: jest.fn(),
     };
 
     beforeEach(() => {
-        mockJson.body = {};
-        jest.mock('node-fetch', () => mockNodeFetch);
+        jest.mock('axios', () => mockAxios);
     });
 
     afterEach(() => {
@@ -30,12 +34,8 @@ describe('WireMock', () => {
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
             await mock.clearAll();
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings', {
-                method: 'DELETE',
-            });
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/requests', {
-                method: 'DELETE',
-            });
+            expect(mockAxios.default.delete).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings');
+            expect(mockAxios.default.delete).toHaveBeenCalledWith(wireMockUrl + '__admin/requests');
         });
     });
 
@@ -45,9 +45,8 @@ describe('WireMock', () => {
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
             await mock.deleteMapping('test-id');
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(
+            expect(mockAxios.default.delete).toHaveBeenCalledWith(
                 wireMockUrl + '__admin/mappings/test-id',
-                { method: 'DELETE' },
             );
         });
     });
@@ -58,9 +57,7 @@ describe('WireMock', () => {
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
             await mock.getAllMappings();
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings', {
-                method: 'GET',
-            });
+            expect(mockAxios.default.get).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings');
         });
 
         it('should get a single mapping', async () => {
@@ -68,9 +65,8 @@ describe('WireMock', () => {
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
             await mock.getMapping('test-mapping-id');
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(
+            expect(mockAxios.default.get).toHaveBeenCalledWith(
                 wireMockUrl + '__admin/mappings/test-mapping-id',
-                { method: 'GET' },
             );
         });
     });
@@ -81,9 +77,7 @@ describe('WireMock', () => {
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
             await mock.getAllRequests();
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/requests', {
-                method: 'GET',
-            });
+            expect(mockAxios.default.get).toHaveBeenCalledWith(wireMockUrl + '__admin/requests');
         });
 
         it('getUnmatchedRequests', async () => {
@@ -91,9 +85,8 @@ describe('WireMock', () => {
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
             await mock.getUnmatchedRequests();
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(
+            expect(mockAxios.default.get).toHaveBeenCalledWith(
                 wireMockUrl + '__admin/requests/unmatched',
-                { method: 'GET' },
             );
         });
     });
@@ -104,9 +97,7 @@ describe('WireMock', () => {
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
             await mock.getAllScenarios();
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/scenarios', {
-                method: 'GET',
-            });
+            expect(mockAxios.default.get).toHaveBeenCalledWith(wireMockUrl + '__admin/scenarios');
         });
     });
 
@@ -129,16 +120,20 @@ describe('WireMock', () => {
                     scenario: { scenarioName: 'test-scenario', requiredScenarioState: 'Started' },
                 },
             );
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings', {
-                method: 'POST',
-                body: expect.stringContaining('priority'),
-                headers: {},
-            });
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings', {
-                method: 'POST',
-                body: expect.stringContaining('scenario'),
-                headers: {},
-            });
+            expect(mockAxios.default.post).toHaveBeenCalledWith(
+                wireMockUrl + '__admin/mappings',
+                expect.objectContaining({ priority: 1 }),
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                },
+            );
+            expect(mockAxios.default.post).toHaveBeenCalledWith(
+                wireMockUrl + '__admin/mappings',
+                expect.objectContaining({ scenarioName: 'test-scenario' }),
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                },
+            );
             expect(resp).toEqual({});
         });
 
@@ -163,11 +158,8 @@ describe('WireMock', () => {
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
             await mock.resetAllScenarios();
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(
+            expect(mockAxios.default.post).toHaveBeenCalledWith(
                 wireMockUrl + '__admin/scenarios/reset',
-                {
-                    method: 'POST',
-                },
             );
         });
     });
@@ -185,7 +177,7 @@ describe('WireMock', () => {
                 },
             };
 
-            mockJson.body = {
+            mockData.data = {
                 requests: [
                     {
                         request: {
@@ -207,15 +199,11 @@ describe('WireMock', () => {
                 ],
             };
             const calls = await mock.getRequestsForAPI('POST', '/test-endpoint');
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/requests', {
-                method: 'GET',
-            });
+            expect(mockAxios.default.get).toHaveBeenCalledWith(wireMockUrl + '__admin/requests');
             expect(calls.length).toEqual(1);
 
             const getCalls = await mock.getRequestsForAPI('GET', '/test-endpoint');
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/requests', {
-                method: 'GET',
-            });
+            expect(mockAxios.default.get).toHaveBeenCalledWith(wireMockUrl + '__admin/requests');
             expect(getCalls.length).toEqual(1);
         });
     });

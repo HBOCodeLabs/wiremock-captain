@@ -30,9 +30,13 @@ export interface IResponseMock {
 
 export interface IWireMockMockedRequestResponse {
     id: string;
-    request: IRequestMock;
-    response: IResponseMock;
+    newScenarioState?: string;
     priority?: number;
+    request: IRequestMock;
+    requiredScenarioState?: string;
+    response: IResponseMock;
+    scenarioName?: string;
+    uuid: number;
 }
 
 export interface IWireMockScenario {

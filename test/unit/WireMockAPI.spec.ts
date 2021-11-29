@@ -2,17 +2,21 @@
 // See the LICENSE file for license information.
 
 describe('WireMockAPI', () => {
-    const mockJson = { body: {} };
-    const mockNodeFetch = {
-        default: jest.fn().mockReturnValue({
-            json: jest.fn().mockImplementation(() => Promise.resolve(mockJson.body)),
-        }),
-        Headers: jest.fn().mockReturnValue({}),
+    const mockData = {
+        data: {},
+    };
+    const mockAxios = {
+        default: {
+            delete: jest.fn().mockResolvedValue(mockData as never),
+            get: jest.fn().mockResolvedValue(mockData as never),
+            post: jest.fn().mockResolvedValue(mockData as never),
+        },
+        AxiosRequestHeaders: jest.fn(),
+        AxiosResponse: jest.fn(),
     };
 
     beforeEach(() => {
-        mockJson.body = {};
-        jest.mock('node-fetch', () => mockNodeFetch);
+        jest.mock('axios', () => mockAxios);
     });
 
     afterEach(() => {
@@ -36,11 +40,11 @@ describe('WireMockAPI', () => {
             const wireMockMethod = 'GET';
             const mock = new wireMockApi.WireMockAPI(wireMockUrl, wireMockEndpoint, wireMockMethod);
             const resp = await mock.register({}, {});
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings', {
-                method: 'POST',
-                body: JSON.stringify({}),
-                headers: {},
-            });
+            expect(mockAxios.default.post).toHaveBeenCalledWith(
+                wireMockUrl + '__admin/mappings',
+                {},
+                { headers: { 'Content-Type': 'application/json' } },
+            );
             expect(resp).toEqual({});
         });
     });
@@ -61,11 +65,11 @@ describe('WireMockAPI', () => {
             const resp = await mock.registerDefaultResponse({
                 body: {},
             });
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings', {
-                method: 'POST',
-                body: JSON.stringify({}),
-                headers: {},
-            });
+            expect(mockAxios.default.post).toHaveBeenCalledWith(
+                wireMockUrl + '__admin/mappings',
+                {},
+                { headers: { 'Content-Type': 'application/json' } },
+            );
             expect(resp).toEqual({});
         });
     });
@@ -85,7 +89,7 @@ describe('WireMockAPI', () => {
                 },
             };
 
-            mockJson.body = {
+            mockData.data = {
                 requests: [
                     {
                         request: {
@@ -99,9 +103,7 @@ describe('WireMockAPI', () => {
                 ],
             };
             const calls = await mock.getRequestsForAPI();
-            expect(mockNodeFetch.default).toHaveBeenCalledWith(wireMockUrl + '__admin/requests', {
-                method: 'GET',
-            });
+            expect(mockAxios.default.get).toHaveBeenCalledWith(wireMockUrl + '__admin/requests');
             expect(calls.length).toEqual(1);
         });
     });
