@@ -24,7 +24,7 @@ OK = @echo ${TIME}${GREEN}$1${CNone}${SPACE}
 INFO = echo ${TIME}${BLUE}$1${CNone}${SPACE}
 
 start-wiremock:
-	@docker run -itd --rm --name wiremock-container -p 8080:8080 rodolpheche/wiremock:2.27.2 --record-mappings --verbose
+	@docker run -itd --rm --name wiremock-container -p 8080:8080 wiremock/wiremock:2.31.0 --record-mappings --verbose
 	$(call OK, start-wiremock complete...)
 
 start-dependencies:
