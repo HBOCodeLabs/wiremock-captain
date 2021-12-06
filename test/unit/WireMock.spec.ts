@@ -164,6 +164,18 @@ describe('WireMock', () => {
         });
     });
 
+    describe('resetMapping', () => {
+        it('should reset mappings', async () => {
+            const wireMock = require('../../src/WireMock');
+            const wireMockUrl = 'https://testservice/';
+            const mock = new wireMock.WireMock(wireMockUrl);
+            await mock.resetMappings();
+            expect(mockAxios.default.post).toHaveBeenCalledWith(
+                wireMockUrl + '__admin/mappings/reset',
+            );
+        });
+    });
+
     describe('verify', () => {
         it('verify calls', async () => {
             const wireMock = require('../../src/WireMock');

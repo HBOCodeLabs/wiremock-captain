@@ -165,6 +165,13 @@ export class WireMock {
         return await axios.post(this.makeUrl(WIREMOCK_SCENARIO_URL + '/reset'));
     }
 
+    /**
+     * Restores stub mappings to the defaults defined back in the backing store
+     */
+    public async resetMappings(): Promise<AxiosResponse> {
+        return await axios.post(this.makeUrl(WIREMOCK_MAPPINGS_URL + '/reset'));
+    }
+
     protected makeUrl(endpoint: string): string {
         return new URL(endpoint, this.baseUrl).href;
     }
