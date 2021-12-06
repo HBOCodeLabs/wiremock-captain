@@ -73,6 +73,13 @@ export class WireMock {
     }
 
     /**
+     * Removes all the existing mappings not defined in backing store and logs of incoming requests
+     */
+    public clearAllExceptDefault(): Promise<AxiosResponse[]> {
+        return Promise.all([this.resetMappings(), this.clearAllRequests()]);
+    }
+
+    /**
      * Removes all existing stubs
      */
     public async clearAllMappings(): Promise<AxiosResponse> {

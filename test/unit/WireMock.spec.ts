@@ -37,6 +37,17 @@ describe('WireMock', () => {
             expect(mockAxios.default.delete).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings');
             expect(mockAxios.default.delete).toHaveBeenCalledWith(wireMockUrl + '__admin/requests');
         });
+
+        it('clears all except default', async () => {
+            const wireMock = require('../../src/WireMock');
+            const wireMockUrl = 'https://testservice/';
+            const mock = new wireMock.WireMock(wireMockUrl);
+            await mock.clearAllExceptDefault();
+            expect(mockAxios.default.post).toHaveBeenCalledWith(
+                wireMockUrl + '__admin/mappings/reset',
+            );
+            expect(mockAxios.default.delete).toHaveBeenCalledWith(wireMockUrl + '__admin/requests');
+        });
     });
 
     describe('deleteMapping', () => {
