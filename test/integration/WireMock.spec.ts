@@ -252,7 +252,7 @@ describe('Integration with WireMock', () => {
                 const responseBody = { test: 'testValue' };
 
                 expect(await mock.getAllMappings()).toHaveLength(0);
-                const { id } = await mock.register(
+                await mock.register(
                     {
                         method: 'POST',
                         endpoint: testEndpoint,
