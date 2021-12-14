@@ -246,6 +246,28 @@ describe('Integration with WireMock', () => {
             });
         });
 
+        describe('resetMappings', () => {
+            it('sets up a stub mapping and deletes it', async () => {
+                const testEndpoint = '/test-endpoint';
+                const responseBody = { test: 'testValue' };
+
+                expect(await mock.getAllMappings()).toHaveLength(0);
+                await mock.register(
+                    {
+                        method: 'POST',
+                        endpoint: testEndpoint,
+                    },
+                    {
+                        status: 200,
+                        body: responseBody,
+                    },
+                );
+                expect(await mock.getAllMappings()).toHaveLength(1);
+                await mock.resetMappings();
+                expect(await mock.getAllMappings()).toHaveLength(0);
+            });
+        });
+
         describe('resetScenarios', () => {
             it('should return scenarios', async () => {
                 const testEndpoint = '/test-endpoint';

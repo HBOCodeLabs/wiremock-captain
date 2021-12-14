@@ -73,6 +73,14 @@ export class WireMock {
     }
 
     /**
+     * Removes all the non-default mappings (not defined in backing store)
+     * and logs of incoming requests
+     */
+    public clearAllExceptDefault(): Promise<AxiosResponse[]> {
+        return Promise.all([this.resetMappings(), this.clearAllRequests()]);
+    }
+
+    /**
      * Removes all existing stubs
      */
     public async clearAllMappings(): Promise<AxiosResponse> {
@@ -163,6 +171,13 @@ export class WireMock {
      */
     public async resetAllScenarios(): Promise<AxiosResponse> {
         return await axios.post(this.makeUrl(WIREMOCK_SCENARIO_URL + '/reset'));
+    }
+
+    /**
+     * Restores stub mappings to the defaults defined back in the backing store
+     */
+    public async resetMappings(): Promise<AxiosResponse> {
+        return await axios.post(this.makeUrl(WIREMOCK_MAPPINGS_URL + '/reset'));
     }
 
     protected makeUrl(endpoint: string): string {
