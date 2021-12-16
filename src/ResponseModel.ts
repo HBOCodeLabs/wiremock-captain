@@ -13,14 +13,19 @@ export function createWireMockResponse(
     const mockedResponse: IResponseMock = {
         status,
     };
+    const bodyType: string = features?.responseBodyType ?? BodyType.Default;
 
     if (body) {
-        const bodyType: string = features?.responseBodyType || BodyType.Default;
         mockedResponse[bodyType] = body;
     }
 
     if (headers) {
-        mockedResponse.headers = headers;
+        mockedResponse.headers = {
+            ...(bodyType === BodyType.Default && {
+                'Content-Type': 'application/json; charset=utf-8',
+            }),
+            ...headers,
+        };
     }
 
     return mockedResponse;
