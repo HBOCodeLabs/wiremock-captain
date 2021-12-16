@@ -55,7 +55,7 @@ describe('ResponseModel', () => {
             });
             expect(mockedResponse).toEqual({
                 status: 200,
-                headers: { Accept: 'json' },
+                headers: { Accept: 'json', 'Content-Type': 'application/json; charset=utf-8' },
             });
         });
     });

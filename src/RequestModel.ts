@@ -10,7 +10,7 @@ export function createWireMockRequest(
     features?: IWireMockFeatures,
 ): IRequestMock {
     const { body, cookies, headers, method, queryParameters, endpoint } = request;
-    const endpointFeature: string = features?.requestEndpointFeature || EndpointFeature.Default;
+    const endpointFeature: string = features?.requestEndpointFeature ?? EndpointFeature.Default;
 
     const mock: IRequestMock = {
         method,
@@ -18,7 +18,7 @@ export function createWireMockRequest(
     mock[endpointFeature] = endpoint;
 
     if (body) {
-        const bodyFeature: string = features?.requestBodyFeature || MatchingAttributes.EqualToJson;
+        const bodyFeature: string = features?.requestBodyFeature ?? MatchingAttributes.EqualToJson;
         const mockBody: { [key: string]: unknown } = {};
         mockBody[bodyFeature] = body;
         mock.bodyPatterns = [mockBody];
@@ -56,7 +56,7 @@ function getMockedObject(
     for (const key of Object.keys(dict)) {
         mockObject[key] = mapPropertyToAttribute(
             dict[key],
-            dictMatchingAttributes?.[key] || MatchingAttributes.EqualTo,
+            dictMatchingAttributes?.[key] ?? MatchingAttributes.EqualTo,
         );
     }
     return mockObject;
