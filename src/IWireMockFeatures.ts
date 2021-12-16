@@ -26,13 +26,13 @@ export interface IWireMockFeatures {
     stubPriority?: number;
 }
 
-export enum BodyType {
+export const enum BodyType {
     Default = 'jsonBody',
     Body = 'body',
     Base64Body = 'base64Body',
 }
 
-export enum MatchingAttributes {
+export const enum MatchingAttributes {
     BinaryEqualTo = 'binaryEqualTo',
     Contains = 'contains',
     DoesNotMatch = 'doesNotMatch',
@@ -42,7 +42,7 @@ export enum MatchingAttributes {
     MatchesJsonPath = 'matchesJsonPath',
 }
 
-export enum EndpointFeature {
+export const enum EndpointFeature {
     Default = 'url',
     UrlPath = 'urlPath',
     UrlPathPattern = 'urlPathPattern',
