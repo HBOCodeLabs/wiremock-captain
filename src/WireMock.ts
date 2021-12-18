@@ -106,7 +106,7 @@ export class WireMock {
      * Returns all the request and response mappings attached to the wiremock instance
      * @returns Collection of all mappings for the wiremock instance
      */
-    public async getAllMappings(): Promise<unknown> {
+    public async getAllMappings(): Promise<unknown[]> {
         const response = await axios.get(this.makeUrl(WIREMOCK_MAPPINGS_URL));
         const responseJson = response.data as IMappingGetResponse;
         return responseJson.mappings;
