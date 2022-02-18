@@ -4,27 +4,27 @@
   "private": true,
   "description": "Lightweight typescript express app using wiremock for testing",
   "devDependencies": {
-    "wiremock-captain": "file:../../",
-    "@types/body-parser": "1.19.0",
-    "@types/express": "4.17.8",
-    "@types/jest": "26.0.15",
-    "@types/node": "12.12.70",
-    "@types/node-fetch": "2.5.7",
-    "@types/supertest": "2.0.10",
-    "@typescript-eslint/eslint-plugin": "~3.9.1",
-    "@typescript-eslint/parser": "~3.9.1",
-    "eslint": "~7.7.0",
-    "eslint-config-prettier": "~6.11.0",
-    "eslint-plugin-jest": "~23.20.0",
-    "jest": "~26.6.2",
-    "jest-cli": "~26.6.2",
-    "nodemon": "~2.0.6",
-    "prettier": "~2.0.5",
-    "rimraf": "~3.0.2",
-    "supertest": "~6.0.0",
-    "ts-jest": "~26.4.3",
-    "ts-node": "~9.0.0",
-    "typescript": "~3.9.7"
+    "@types/body-parser": "1.19.2",
+    "@types/express": "4.17.13",
+    "@types/jest": "27.4.0",
+    "@types/node": "17.0.18",
+    "@types/supertest": "2.0.11",
+    "@typescript-eslint/eslint-plugin": "5.12.0",
+    "@typescript-eslint/parser": "5.12.0",
+    "eslint": "8.9.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-jest": "26.1.1",
+    "jest": "27.5.1",
+    "jest-cli": "27.5.1",
+    "nodemon": "2.0.15",
+    "npm-check-updates": "12.3.1",
+    "prettier": "2.5.1",
+    "rimraf": "3.0.2",
+    "supertest": "6.2.2",
+    "ts-jest": "27.1.3",
+    "ts-node": "10.5.0",
+    "typescript": "4.5.5",
+    "wiremock-captain": "file:../../"
   },
   "scripts": {
     "dev": "npm run build && NODE_ENV=DEVELOPMENT nodemon ./dist/src/server.js",
@@ -32,11 +32,13 @@
     "clean": "rimraf coverage dist tmp",
     "build": "npm run clean && tsc && npm run lint",
     "lint": "eslint . --ext .ts,.tsx",
-    "test": "jest --runInBand --forceExit"
+    "test": "jest --runInBand --forceExit",
+    "check-package-updates": "ncu",
+    "make-package-updates": "ncu -u"
   },
   "dependencies": {
-    "body-parser": "~1.19.0",
-    "express": "~4.17.1",
-    "node-fetch": "~2.6.7"
+    "axios": "0.26.0",
+    "body-parser": "1.19.2",
+    "express": "4.17.3"
   }
 }
