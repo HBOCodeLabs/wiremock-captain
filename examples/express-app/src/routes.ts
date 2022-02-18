@@ -1,5 +1,5 @@
+import axios from 'axios';
 import { Request, Response } from 'express';
-import fetch from 'node-fetch';
 
 const ENV = process.env.NODE_ENV;
 const SERVICE_URL: Record<string, string> = {
@@ -22,13 +22,10 @@ export async function postProcessDataRoute(
   const { body } = request;
 
   try {
-    const resp = await fetch(url, {
-      method: 'post',
-      body: JSON.stringify(body),
+    const resp = await axios.post(url, body, {
       headers: { 'Content-Type': 'application/json' },
-      timeout: 1000,
     });
-    const json = await resp.json();
+    const json = resp.data;
     return response.send(json);
   } catch (e) {
     const { name, message } = e;
