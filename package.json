@@ -1,6 +1,6 @@
 {
     "name": "wiremock-captain",
-    "version": "2.2.1",
+    "version": "2.2.2",
     "description": "A better way to use the WireMock API simulator to test your Node.js services",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
