@@ -1,5 +1,5 @@
-import { WireMock } from 'wiremock-captain';
 import * as supertest from 'supertest';
+import { WireMock } from 'wiremock-captain';
 
 describe('postProcessData', () => {
   const serviceUrl = process.env.TEST_ENDPOINT || 'localhost:3000';

@@ -11,17 +11,17 @@
 [![David](https://img.shields.io/david/HBOCodeLabs/wiremock-captain)](https://david-dm.org/HBOCodeLabs/wiremock-captain)
 [![GitHub](https://img.shields.io/github/license/HBOCodeLabs/wiremock-captain)](https://github.com/HBOCodeLabs/wiremock-captain/blob/main/LICENSE)
 
-*A better way to use the WireMock API simulator to test your Node.js services*
+*A better way to use the WireMock API simulator to test your APIs*
 
 <br />
 
-**WireMock Captain** provides an easy interface for testing HTTP-based APIs.  Tests are implemented in TypeScript or JavaScript with the Node.js runtime.  Mocking is performed by the popular [WireMock](http://wiremock.org) simulator, which typically runs in a Docker container.
+**WireMock Captain** provides an easy interface for testing HTTP-based APIs. Tests are implemented in TypeScript or JavaScript with the Node.js runtime. Mocking is performed by the popular [WireMock](http://wiremock.org) simulator, which typically runs in a Docker container.
 
 - **Why not use in-process mocks?** Unit test mocks have their advantages, but they do not simulate real world API interactions very accurately.  They can be difficult to debug.  During development, you can't interact with them using familiar REST tools.
 
-- **Why not test using a non-production service instance?** Testing with a live service often requires nontrivial overhead, particularly if the service depends on other services.  It may be difficult to test all flows, for example the unhappy paths.  WireMock provides a fast, full-featured solution for testing services.
+- **Why not test using a non-production service instance?** Testing with a live service often requires nontrivial overhead, particularly if the service depends on other services. It may be difficult to test all flows, for example the unhappy paths. WireMock provides a fast, full-featured solution for testing services.
 
-- **Why not use WireMock directly?**  WireMock is designed for Java.  It does not interface directly with Node.js.  WireMock Captain provides an easy, familiar way for TypeScript or JavaScript tests to manage the WireMock simulator.  You don't need to install any Java tooling.
+- **Why not use WireMock directly?** WireMock is designed for Java. It does not interface directly with TypeScript or Javascript. WireMock Captain provides an easy, familiar way for TS/JS tests to manage the WireMock simulator.  You don't need to install any Java tooling.
 
 - **A strategy that works.**  WireMock Captain is actively used to test many microservices that support a major commercial product.
 
@@ -32,8 +32,8 @@ A typical flow goes like this:
 
 - A script launches the `WireMock` docker container, which will already be running when the Node.js project starts
 - A test uses `wiremock-captain` to configure WireMock with a mock definition (request-response schema)
-- When the Node.js process makes an HTTP request, it will call the mocked instance of the API
-- The mocked API response is used by the Node.js project to complete the operation being tested
+- When the API makes an HTTP request, it will call the mocked instance of the API
+- The mocked API response is used by the API to complete the operation being tested
 - `expect` can be used to check if requests were made to the API with matching schema
 
 <div>
@@ -111,32 +111,26 @@ Typical usage looks like this:
 import { WireMock } from 'wiremock-captain';
 
 describe('Integration with WireMock', () => {
-    // Connect to WireMock
-    const downstreamWireMockEndpoint = 'http://localhost:8080';
-    const mock = new WireMock(downstreamWireMockEndpoint);
+  // Connect to WireMock
+  const downstreamWireMockEndpoint = 'http://localhost:8080';
+  const mock = new WireMock(downstreamWireMockEndpoint);
 
-    afterAll(() => {
-        return mock.clearAll();
-    });
+  test('mocks downstream service', async () => {
+    const request: IWireMockRequest = {
+      method: 'POST',
+      endpoint: '/test-endpoint',
+      body: {
+        hello: 'world',
+      },
+    };
+    const mockedResponse: IWireMockResponse = {
+      status: 200,
+      body: { goodbye: 'world' },
+    };
+    await mock.register(request, mockedResponse);
 
-    describe('happy path', () => {
-        test('mocks downstream service', async () => {
-            const requestBody = {
-                objectKey: {
-                    intKey: 5,
-                    stringKey: 'stringKey',
-                },
-            };
-            const testEndpoint = '/test-endpoint';
-            const responseBody = { test: 'testValue' };
-            await mock.register(
-                { method: 'POST', endpoint: testEndpoint, body: requestBody },
-                { status: 200, body: responseBody },
-            );
-
-            // rest of the test
-        });
-    });
+    // rest of the test
+  });
 });
 ```
 
@@ -162,6 +156,7 @@ inside each test if necessary using `stubPriority` from `IWireMockFeatures`.
 - To avoid mocked stubs overriding each other, run the tests synchronously (e.g. using flag
   `--runInBand` with `jest`)
 - Use `getUnmatchedRequests` to make sure there are no unmatched mocks at the end of each of the tests
+- Use `clearAllExceptDefault` after each test to clear mocks set up during individual tests
 
 ## WireMock
 
