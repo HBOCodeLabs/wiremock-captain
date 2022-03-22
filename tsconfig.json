@@ -9,6 +9,7 @@
         "strict": true,
         "incremental": true,
         "pretty": true,
+        "removeComments": true,
         "sourceMap": true,
         "tsBuildInfoFile": "./.buildcache"
     },
