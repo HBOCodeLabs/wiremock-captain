@@ -4,7 +4,7 @@
 import { describe, expect, it } from '@jest/globals';
 import axios from 'axios';
 
-import { WireMock } from '../../src';
+import { DelayType, WireMock } from '../../src';
 
 describe('Integration with WireMock', () => {
     // tslint:disable-next-line: no-http-string
@@ -12,7 +12,7 @@ describe('Integration with WireMock', () => {
     const mock = new WireMock(wiremockUrl);
 
     beforeEach(async () => {
-        await mock.clearAll();
+        await mock.clearAllExceptDefault();
     });
 
     describe('WireMock', () => {
@@ -38,9 +38,11 @@ describe('Integration with WireMock', () => {
                     },
                 );
 
+                const start = Date.now();
                 const response = await axios.post(wiremockUrl + testEndpoint, requestBody);
                 const body = response.data;
                 expect(body).toEqual(responseBody);
+                expect(Date.now() - start).toBeLessThan(1000);
                 const calls = await mock.getRequestsForAPI('POST', testEndpoint);
 
                 const jestMock = jest.fn();
@@ -51,6 +53,39 @@ describe('Integration with WireMock', () => {
                 expect(jestMock).toHaveBeenCalledWith(
                     expect.objectContaining({ body: JSON.stringify(requestBody) }),
                 );
+            });
+            it('sets up a stub mapping in wiremock server and expects mapping to be called w/ delay', async () => {
+                const requestBody = {
+                    objectKey: {
+                        intKey: 5,
+                        stringKey: 'stringKey',
+                    },
+                };
+                const testEndpoint = '/test-endpoint';
+                const responseBody = { test: 'testValue' };
+                await mock.register(
+                    {
+                        method: 'POST',
+                        endpoint: testEndpoint,
+                        body: requestBody,
+                    },
+                    {
+                        status: 200,
+                        body: responseBody,
+                    },
+                    {
+                        responseDelay: {
+                            type: DelayType.FIXED,
+                            constantDelay: 1000,
+                        },
+                    },
+                );
+
+                const start = Date.now();
+                const response = await axios.post(wiremockUrl + testEndpoint, requestBody);
+                const body = response.data;
+                expect(body).toEqual(responseBody);
+                expect(Date.now() - start).toBeGreaterThanOrEqual(1000);
             });
 
             it('sets up a stub mapping in wiremock server without body', async () => {

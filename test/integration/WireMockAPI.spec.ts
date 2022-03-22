@@ -14,7 +14,7 @@ describe('Integration with WireMock', () => {
     const mock = new WireMockAPI(wiremockUrl, testEndpoint, testMethod);
 
     beforeEach(async () => {
-        await mock.clearAll();
+        await mock.clearAllExceptDefault();
     });
 
     describe('WireMockAPI', () => {
