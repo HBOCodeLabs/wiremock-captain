@@ -7,7 +7,6 @@ import axios from 'axios';
 import { WireMockAPI } from '../../src';
 
 describe('Integration with WireMock', () => {
-    // tslint:disable-next-line: no-http-string
     const wiremockUrl = 'http://localhost:8080';
     const testEndpoint = '/test-endpoint';
     const testMethod = 'POST';

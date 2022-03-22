@@ -23,17 +23,13 @@ TIME = ${WHITE}[$(shell date +%Y-%m-%d' '%H:%M:%S)]
 OK = @echo ${TIME}${GREEN}$1${CNone}${SPACE}
 INFO = echo ${TIME}${BLUE}$1${CNone}${SPACE}
 
-start-wiremock:
-	@docker run -itd --rm --name wiremock-container -p 8080:8080 wiremock/wiremock:2.31.0 --record-mappings --verbose
-	$(call OK, start-wiremock complete...)
 
 start-dependencies:
-	@make start-wiremock
-	@docker ps --filter "name=wiremock-container"
+	scripts/setup.sh
 	$(call OK, start-dependencies complete...)
 
 stop-dependencies:
-	@docker stop wiremock-container || $(call INFO, error while stopping wiremock-container...)
+	scripts/teardown.sh
 	$(call OK, stop-dependencies complete...)
 
 integration-test:
