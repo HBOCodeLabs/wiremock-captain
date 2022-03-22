@@ -9,8 +9,6 @@ import { DelayType, WireMock } from '../../src';
 describe('Integration with WireMock', () => {
     const wiremockUrl = 'http://localhost:8080';
     const mock = new WireMock(wiremockUrl);
-    const secondaryWiremockUrl = 'http://localhost:8081';
-    const secondaryMock = new WireMock(secondaryWiremockUrl);
 
     beforeEach(async () => {
         await mock.clearAllExceptDefault();
@@ -110,8 +108,8 @@ describe('Integration with WireMock', () => {
             });
 
             it('sets up a stub mapping in wiremock server w/ webhook', async () => {
-                // setup webhook instance
-                await secondaryMock.register(
+                // setup webhook mock
+                await mock.register(
                     {
                         method: 'GET',
                         endpoint: '/webhook-test-api',
@@ -133,7 +131,7 @@ describe('Integration with WireMock', () => {
                     {
                         webhook: {
                             method: 'GET',
-                            url: 'http://wiremock-container-two:8080/webhook-test-api',
+                            url: 'http://localhost:8080/webhook-test-api',
                         },
                     },
                 );
@@ -141,9 +139,7 @@ describe('Integration with WireMock', () => {
                 await axios.post(wiremockUrl + testEndpoint);
 
                 await sleep(1000);
-                expect(
-                    await secondaryMock.getRequestsForAPI('GET', '/webhook-test-api'),
-                ).toHaveLength(1);
+                expect(await mock.getRequestsForAPI('GET', '/webhook-test-api')).toHaveLength(1);
             });
 
             it('sets up a stub mapping in wiremock server with priority', async () => {
