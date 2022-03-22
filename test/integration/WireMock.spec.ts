@@ -54,6 +54,7 @@ describe('Integration with WireMock', () => {
                     expect.objectContaining({ body: JSON.stringify(requestBody) }),
                 );
             });
+
             it('sets up a stub mapping in wiremock server and expects mapping to be called w/ delay', async () => {
                 const requestBody = {
                     objectKey: {
