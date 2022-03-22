@@ -28,25 +28,31 @@ export function createWireMockResponse(
 
     const delay = features?.responseDelay;
 
-    if (delay?.type === DelayType.CHUNKED_DRIBBLE) {
-        mockedResponse.chunkedDribbleDelay = {
-            numberOfChunks: delay.numberOfChunks,
-            totalDuration: delay.totalDuration,
-        };
-    } else if (delay?.type === DelayType.FIXED) {
-        mockedResponse.fixedDelayMilliseconds = delay.constantDelay;
-    } else if (delay?.type === DelayType.LOG_NORMAL) {
-        mockedResponse.delayDistribution = {
-            type: 'lognormal',
-            median: delay.median,
-            sigma: delay.sigma,
-        };
-    } else if (delay?.type === DelayType.UNIFORM) {
-        mockedResponse.delayDistribution = {
-            type: 'uniform',
-            lower: delay.lower,
-            upper: delay.upper,
-        };
+    switch (delay?.type) {
+        case DelayType.CHUNKED_DRIBBLE:
+            mockedResponse.chunkedDribbleDelay = {
+                numberOfChunks: delay.numberOfChunks,
+                totalDuration: delay.totalDuration,
+            };
+            break;
+        case DelayType.FIXED:
+            mockedResponse.fixedDelayMilliseconds = delay.constantDelay;
+            break;
+        case DelayType.LOG_NORMAL:
+            mockedResponse.delayDistribution = {
+                type: 'lognormal',
+                median: delay.median,
+                sigma: delay.sigma,
+            };
+            break;
+        case DelayType.UNIFORM:
+            mockedResponse.delayDistribution = {
+                type: 'uniform',
+                lower: delay.lower,
+                upper: delay.upper,
+            };
+            break;
+        default:
     }
 
     return mockedResponse;
