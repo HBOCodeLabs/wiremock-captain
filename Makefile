@@ -33,7 +33,6 @@ stop-dependencies:
 	$(call OK, stop-dependencies complete...)
 
 integration-test:
-	@make stop-dependencies
 	@make start-dependencies
 	@npm run-script integration-test
 	@make stop-dependencies
