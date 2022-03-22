@@ -3,6 +3,8 @@
 
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
+import { DelayType } from '../../src';
+
 describe('WireMock', () => {
     const mockData = {
         data: {},
@@ -24,6 +26,7 @@ describe('WireMock', () => {
     afterEach(() => {
         jest.unmock('../../src/RequestModel');
         jest.unmock('../../src/ResponseModel');
+        jest.unmock('../../src/utils');
         jest.resetModules();
         jest.clearAllMocks();
     });
@@ -159,6 +162,56 @@ describe('WireMock', () => {
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
             const resp = await mock.register({}, {});
+            expect(resp).toEqual({});
+        });
+
+        it('should return empty response w/ webhook', async () => {
+            jest.mock('../../src/RequestModel', () => ({
+                createWireMockRequest: jest.fn().mockName('mockedGetRequest'),
+            }));
+            jest.mock('../../src/ResponseModel', () => ({
+                createWireMockResponse: jest.fn().mockName('mockedGetResponse'),
+            }));
+            jest.mock('../../src/utils', () => ({
+                getWebhookBody: jest.fn().mockReturnValue(JSON.stringify({ a: 1 })),
+                getWebhookDelayBody: jest.fn().mockReturnValue({ b: 2 }),
+            }));
+            const wireMock = require('../../src/WireMock');
+            const wireMockUrl = 'https://testservice/';
+            const mock = new wireMock.WireMock(wireMockUrl);
+            const resp = await mock.register(
+                {},
+                {},
+                {
+                    webhook: {
+                        method: 'POST',
+                        url: 'http://test-url',
+                        headers: { testHeaderKey: 'testHeaderValue' },
+                        body: { type: 'JSON', data: {} },
+                        delay: { type: DelayType.FIXED, constantDelay: 100 },
+                    },
+                },
+            );
+            expect(mockAxios.default.post).toHaveBeenCalledWith(
+                wireMockUrl + '__admin/mappings',
+                expect.objectContaining({
+                    postServeActions: [
+                        {
+                            name: 'webhook',
+                            parameters: {
+                                method: 'POST',
+                                url: 'http://test-url',
+                                headers: { testHeaderKey: 'testHeaderValue' },
+                                body: JSON.stringify({ a: 1 }),
+                                delay: { b: 2 },
+                            },
+                        },
+                    ],
+                }),
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                },
+            );
             expect(resp).toEqual({});
         });
     });

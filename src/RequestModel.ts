@@ -1,9 +1,10 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { EndpointFeature, IWireMockFeatures, MatchingAttributes } from './IWireMockFeatures';
+import { EndpointFeature, MatchingAttributes } from './externalTypes';
+import { IRequestMock, KeyValue } from './internalTypes';
+import { IWireMockFeatures } from './IWireMockFeatures';
 import { IWireMockRequest } from './IWireMockRequest';
-import { IRequestMock, KeyValue } from './IWireMockTypes';
 
 export function createWireMockRequest(
     request: IWireMockRequest,
