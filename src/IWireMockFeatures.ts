@@ -16,6 +16,7 @@ export interface IWireMockFeatures {
     requestHeaderFeatures?: Record<string, MatchingAttributes>;
     requestQueryParamFeatures?: Record<string, MatchingAttributes>;
     responseBodyType?: BodyType;
+    responseDelay?: Delay;
     /**
      * All the scenarios start from state `Started`
      */
@@ -48,3 +49,35 @@ export const enum EndpointFeature {
     UrlPathPattern = 'urlPathPattern',
     UrlPattern = 'urlPattern',
 }
+
+export const enum DelayType {
+    CHUNKED_DRIBBLE = 'CHUNKED_DRIBBLE',
+    FIXED = 'FIXED',
+    LOG_NORMAL = 'LOG_NORMAL',
+    UNIFORM = 'UNIFORM',
+}
+
+export interface IFixedDelay {
+    type: DelayType.FIXED;
+    constantDelay: number;
+}
+
+export interface ILogNormalDelay {
+    type: DelayType.LOG_NORMAL;
+    median: number;
+    sigma: number;
+}
+
+export interface IUniformDelay {
+    type: DelayType.UNIFORM;
+    lower: number;
+    upper: number;
+}
+
+export interface IChunkedDribbleDelay {
+    type: DelayType.CHUNKED_DRIBBLE;
+    numberOfChunks: number;
+    totalDuration: number;
+}
+
+export type Delay = IChunkedDribbleDelay | IFixedDelay | ILogNormalDelay | IUniformDelay;

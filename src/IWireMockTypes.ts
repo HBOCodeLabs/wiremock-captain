@@ -24,6 +24,9 @@ export interface IRequestMock {
 export interface IResponseMock {
     status: number;
     headers?: Record<string, KeyValue>;
+    fixedDelayMilliseconds?: number;
+    delayDistribution?: Record<string, number | string>;
+    chunkedDribbleDelay?: Record<string, number>;
 
     [key: string]: unknown;
 }
