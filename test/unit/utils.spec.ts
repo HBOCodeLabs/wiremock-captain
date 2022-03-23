@@ -25,7 +25,7 @@ describe('utils', () => {
         });
     });
 
-    describe('', () => {
+    describe('getWebhookDelayBody', () => {
         it('should return correct body for fixed delay', () => {
             const utils = require('../../src/utils');
             const resp = utils.getWebhookDelayBody({ type: DelayType.FIXED, constantDelay: 100 });
