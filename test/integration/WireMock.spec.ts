@@ -107,7 +107,7 @@ describe('Integration with WireMock', () => {
                 expect(body).toEqual(responseBody);
             });
 
-            it('sets up a stub mapping in wiremock server w/ webhook', async () => {
+            test('sets up a stub mapping in wiremock server w/ webhook', async () => {
                 // setup webhook mock
                 await mock.register(
                     {
@@ -138,8 +138,12 @@ describe('Integration with WireMock', () => {
 
                 await axios.post(wiremockUrl + testEndpoint);
 
-                await sleep(1000);
-                expect(await mock.getRequestsForAPI('GET', '/webhook-test-api')).toHaveLength(1);
+                setTimeout(async (done) => {
+                    expect(await mock.getRequestsForAPI('GET', '/webhook-test-api')).toHaveLength(
+                        1,
+                    );
+                    done();
+                }, 100);
             });
 
             it('sets up a stub mapping in wiremock server with priority', async () => {

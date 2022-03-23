@@ -212,7 +212,7 @@ await mock.register(
     {
         webhook: {
             method: 'GET',
-            url: 'http://test-service/webhook-api',
+            url: 'http://some-service/webhook-api',
         },
     },
 );
