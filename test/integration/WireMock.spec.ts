@@ -388,9 +388,3 @@ describe('Integration with WireMock', () => {
         });
     });
 });
-
-function sleep(ms: number): Promise<unknown> {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
