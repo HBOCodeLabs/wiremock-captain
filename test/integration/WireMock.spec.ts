@@ -145,8 +145,8 @@ describe('Integration with WireMock', () => {
                             expect(
                                 await mock.getRequestsForAPI('GET', '/webhook-test-api'),
                             ).toHaveLength(1);
-                            resolve();
                             clearInterval(interval);
+                            resolve();
                         }
                     }, 100);
                 });
