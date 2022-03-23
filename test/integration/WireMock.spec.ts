@@ -139,10 +139,13 @@ describe('Integration with WireMock', () => {
                 await axios.post(wiremockUrl + testEndpoint);
 
                 setTimeout(async (done) => {
-                    expect(await mock.getRequestsForAPI('GET', '/webhook-test-api')).toHaveLength(
-                        1,
-                    );
-                    done();
+                    const calls = await mock.getRequestsForAPI('GET', '/webhook-test-api');
+                    if (calls.length >= 1) {
+                        expect(
+                            await mock.getRequestsForAPI('GET', '/webhook-test-api'),
+                        ).toHaveLength(1);
+                        done();
+                    }
                 }, 100);
             });
 
