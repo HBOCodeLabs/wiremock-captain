@@ -218,6 +218,11 @@ await mock.register(
 );
 ```
 
+Webhook is not supported in default WireMock image instance. To get
+it to work, an additional webhook `.jar` extension is required to be available
+to the WireMock docker instance. Visit [here](https://wiremock.org/docs/docker/)
+or `<root>/scripts/setup.sh` for examples
+
 ### Usage with jest
 Jest `expect` works well with `WireMock-Captain` and can used for various kinds of checks
 ```typescript

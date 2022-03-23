@@ -1,6 +1,8 @@
 #!/bin/bash
 
-mkdir "$PWD"/extensions
+set -e
+
+mkdir -p "$PWD"/extensions
 
 curl -H "Accept: application/zip" https://repo1.maven.org/maven2/org/wiremock/wiremock-webhooks-extension/2.31.0/wiremock-webhooks-extension-2.31.0.jar -o "$PWD"/extensions/wiremock-webhooks-extension-2.31.0.jar
 
