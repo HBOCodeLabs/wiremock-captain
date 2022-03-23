@@ -197,7 +197,7 @@ await mock.register(
 
 ### Webhook and callback
 
-The following mock will make an HTTP GET call to `http://test-service/webhook-api`
+The following mock will make an HTTP GET call to `http://some-service/webhook-api`
 every time the given stub is matched
 
 ```typescript
