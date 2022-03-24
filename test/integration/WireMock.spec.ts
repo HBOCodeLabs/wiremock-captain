@@ -35,7 +35,6 @@ describe('Integration with WireMock', () => {
     beforeAll((done) => {
         // Create webhook server. This will be used by wiremock.
         const app = express();
-        // app.use(bodyParser.json());
         app.use(express.json());
         app.get('/webhook', webhookGetHandler);
         app.post('/webhook', webhookPostHandler);
@@ -160,14 +159,6 @@ describe('Integration with WireMock', () => {
                     webhookPromiseResolve = resolve;
                 });
 
-                // setup webhook mock
-                await mock.register(
-                    {
-                        method: 'GET',
-                        endpoint: '/webhook-test-api',
-                    },
-                    { status: 200 },
-                );
                 const timestamp = Date.now();
                 const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
@@ -204,14 +195,6 @@ describe('Integration with WireMock', () => {
                     webhookPromiseResolve = resolve;
                 });
 
-                // setup webhook mock
-                await mock.register(
-                    {
-                        method: 'GET',
-                        endpoint: '/webhook-test-api',
-                    },
-                    { status: 200 },
-                );
                 const timestamp = Date.now();
                 const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
