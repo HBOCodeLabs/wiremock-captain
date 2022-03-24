@@ -11,57 +11,57 @@ import { DelayType, WireMock } from '../../src';
 const WEBHOOK_BASE_URL: string = 'http://host.docker.internal';
 const WEBHOOK_PORT: number = 9876;
 
-describe('WireMock', () => {
-    describe('Integration with WireMock', () => {
-        const wiremockUrl = 'http://localhost:8080';
-        const mock = new WireMock(wiremockUrl);
-        let webhookPromiseResolve: (r: jest.Mock) => void;
-        let webhookPromise: Promise<jest.Mock>;
-        let server: Server;
+describe('Integration with WireMock', () => {
+    const wiremockUrl = 'http://localhost:8080';
+    const mock = new WireMock(wiremockUrl);
+    let webhookPromiseResolve: (r: jest.Mock) => void;
+    let webhookPromise: Promise<jest.Mock>;
+    let server: Server;
 
-        const webhookGetHandler = (req: express.Request, res: express.Response): void => {
-            const webhookCallback = jest.fn();
-            webhookCallback(req.query);
-            webhookPromiseResolve(webhookCallback);
-            res.end();
-        };
+    const webhookGetHandler = (req: express.Request, res: express.Response): void => {
+        const webhookCallback = jest.fn();
+        webhookCallback(req.query);
+        webhookPromiseResolve(webhookCallback);
+        res.end();
+    };
 
-        const webhookPostHandler = (req: express.Request, res: express.Response): void => {
-            const webhookCallback = jest.fn();
-            webhookCallback(req.body);
-            webhookPromiseResolve(webhookCallback);
-            res.end();
-        };
+    const webhookPostHandler = (req: express.Request, res: express.Response): void => {
+        const webhookCallback = jest.fn();
+        webhookCallback(req.body);
+        webhookPromiseResolve(webhookCallback);
+        res.end();
+    };
 
-        beforeAll((done) => {
-            // Create webhook server. This will be used by wiremock.
-            const app = express();
-            // app.use(bodyParser.json());
-            app.use(express.json());
-            app.get('/webhook', webhookGetHandler);
-            app.post('/webhook', webhookPostHandler);
-            server = app.listen(WEBHOOK_PORT, done).on('error', (e) => {
-                fail('Error starting webhook callback server: ' + e.message);
-                done();
-            });
+    beforeAll((done) => {
+        // Create webhook server. This will be used by wiremock.
+        const app = express();
+        // app.use(bodyParser.json());
+        app.use(express.json());
+        app.get('/webhook', webhookGetHandler);
+        app.post('/webhook', webhookPostHandler);
+        server = app.listen(WEBHOOK_PORT, done).on('error', (e) => {
+            fail('Error starting webhook callback server: ' + e.message);
+            done();
         });
+    });
 
-        beforeEach(async () => {
-            await mock.clearAllExceptDefault();
-        });
+    beforeEach(async () => {
+        await mock.clearAllExceptDefault();
+    });
 
-        afterAll((done) => {
-            mock.clearAll()
-                .then(() => {
-                    server.close(done).on('error', (e) => {
-                        fail('Error closing webhook callback server: ' + e.message);
-                    });
-                })
-                .catch((e) => {
-                    fail('Error exiting test: ' + e.message);
+    afterAll((done) => {
+        mock.clearAll()
+            .then(() => {
+                server.close(done).on('error', (e) => {
+                    fail('Error closing webhook callback server: ' + e.message);
                 });
-        });
+            })
+            .catch((e) => {
+                fail('Error exiting test: ' + e.message);
+            });
+    });
 
+    describe('WireMock', () => {
         describe('register', () => {
             it('sets up a stub mapping in wiremock server and expects mapping to be called', async () => {
                 const requestBody = {
