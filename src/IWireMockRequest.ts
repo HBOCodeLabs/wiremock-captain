@@ -1,7 +1,7 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { KeyValue, Method } from './IWireMockTypes';
+import { KeyValue, Method } from './internalTypes';
 
 export interface IWireMockRequest {
     body?: unknown;

@@ -1,7 +1,14 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { IWireMockScenario } from './IWireMockTypes';
+import {
+    BodyType,
+    EndpointFeature,
+    IWireMockScenario,
+    IWireMockWebhook,
+    MatchingAttributes,
+    WireMockDelay,
+} from './externalTypes';
 
 /**
  * Specifies all possible attributes that can be assigned to mocked request or response.
@@ -16,7 +23,7 @@ export interface IWireMockFeatures {
     requestHeaderFeatures?: Record<string, MatchingAttributes>;
     requestQueryParamFeatures?: Record<string, MatchingAttributes>;
     responseBodyType?: BodyType;
-    responseDelay?: Delay;
+    responseDelay?: WireMockDelay;
     /**
      * All the scenarios start from state `Started`
      */
@@ -25,59 +32,5 @@ export interface IWireMockFeatures {
      * Lower the value, higher the priority
      */
     stubPriority?: number;
+    webhook?: IWireMockWebhook;
 }
-
-export const enum BodyType {
-    Default = 'jsonBody',
-    Body = 'body',
-    Base64Body = 'base64Body',
-}
-
-export const enum MatchingAttributes {
-    BinaryEqualTo = 'binaryEqualTo',
-    Contains = 'contains',
-    DoesNotMatch = 'doesNotMatch',
-    EqualTo = 'equalTo',
-    EqualToJson = 'equalToJson',
-    Matches = 'matches',
-    MatchesJsonPath = 'matchesJsonPath',
-}
-
-export const enum EndpointFeature {
-    Default = 'url',
-    UrlPath = 'urlPath',
-    UrlPathPattern = 'urlPathPattern',
-    UrlPattern = 'urlPattern',
-}
-
-export const enum DelayType {
-    CHUNKED_DRIBBLE = 'CHUNKED_DRIBBLE',
-    FIXED = 'FIXED',
-    LOG_NORMAL = 'LOG_NORMAL',
-    UNIFORM = 'UNIFORM',
-}
-
-export interface IFixedDelay {
-    type: DelayType.FIXED;
-    constantDelay: number;
-}
-
-export interface ILogNormalDelay {
-    type: DelayType.LOG_NORMAL;
-    median: number;
-    sigma: number;
-}
-
-export interface IUniformDelay {
-    type: DelayType.UNIFORM;
-    lower: number;
-    upper: number;
-}
-
-export interface IChunkedDribbleDelay {
-    type: DelayType.CHUNKED_DRIBBLE;
-    numberOfChunks: number;
-    totalDuration: number;
-}
-
-export type Delay = IChunkedDribbleDelay | IFixedDelay | ILogNormalDelay | IUniformDelay;

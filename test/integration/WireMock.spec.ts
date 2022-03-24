@@ -7,7 +7,6 @@ import axios from 'axios';
 import { DelayType, WireMock } from '../../src';
 
 describe('Integration with WireMock', () => {
-    // tslint:disable-next-line: no-http-string
     const wiremockUrl = 'http://localhost:8080';
     const mock = new WireMock(wiremockUrl);
 
@@ -106,7 +105,51 @@ describe('Integration with WireMock', () => {
                 const response = await axios.post(wiremockUrl + testEndpoint);
                 const body = response.data;
                 expect(body).toEqual(responseBody);
-                await mock.getRequestsForAPI('POST', testEndpoint);
+            });
+
+            test('sets up a stub mapping in wiremock server w/ webhook', async () => {
+                // setup webhook mock
+                await mock.register(
+                    {
+                        method: 'GET',
+                        endpoint: '/webhook-test-api',
+                    },
+                    { status: 200 },
+                );
+
+                const testEndpoint = '/test-endpoint';
+                const responseBody = { test: 'testValue' };
+                await mock.register(
+                    {
+                        method: 'POST',
+                        endpoint: testEndpoint,
+                    },
+                    {
+                        status: 200,
+                        body: responseBody,
+                    },
+                    {
+                        webhook: {
+                            method: 'GET',
+                            url: 'http://localhost:8080/webhook-test-api',
+                        },
+                    },
+                );
+
+                await axios.post(wiremockUrl + testEndpoint);
+
+                await new Promise<void>((resolve) => {
+                    const interval = setInterval(async () => {
+                        const calls = await mock.getRequestsForAPI('GET', '/webhook-test-api');
+                        if (calls.length >= 1) {
+                            expect(
+                                await mock.getRequestsForAPI('GET', '/webhook-test-api'),
+                            ).toHaveLength(1);
+                            clearInterval(interval);
+                            resolve();
+                        }
+                    }, 100);
+                });
             });
 
             it('sets up a stub mapping in wiremock server with priority', async () => {

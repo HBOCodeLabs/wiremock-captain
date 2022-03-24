@@ -1,9 +1,10 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { BodyType, DelayType, IWireMockFeatures } from './IWireMockFeatures';
+import { BodyType, DelayType } from './externalTypes';
+import { IResponseMock } from './internalTypes';
+import { IWireMockFeatures } from './IWireMockFeatures';
 import { IWireMockResponse } from './IWireMockResponse';
-import { IResponseMock } from './IWireMockTypes';
 
 export function createWireMockResponse(
     response: IWireMockResponse,

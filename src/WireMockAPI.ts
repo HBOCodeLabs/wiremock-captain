@@ -2,7 +2,7 @@
 // See the LICENSE file for license information.
 
 import { IWireMockFeatures, IWireMockRequest, IWireMockResponse } from '.';
-import { IWireMockMockedRequestResponse, Method } from './IWireMockTypes';
+import { IMockedRequestResponse, Method } from './internalTypes';
 import { WireMock } from './WireMock';
 
 export class WireMockAPI extends WireMock {
@@ -33,7 +33,7 @@ export class WireMockAPI extends WireMock {
         request: Omit<IWireMockRequest, 'endpoint' | 'method'>,
         response: IWireMockResponse,
         features?: IWireMockFeatures,
-    ): Promise<IWireMockMockedRequestResponse> {
+    ): Promise<IMockedRequestResponse> {
         return await super.register(
             { endpoint: this.endpoint, method: this.method, ...request },
             response,
@@ -50,7 +50,7 @@ export class WireMockAPI extends WireMock {
     public async registerDefaultResponse(
         response: IWireMockResponse,
         features?: IWireMockFeatures,
-    ): Promise<IWireMockMockedRequestResponse> {
+    ): Promise<IMockedRequestResponse> {
         return await this.register({}, response, features);
     }
 

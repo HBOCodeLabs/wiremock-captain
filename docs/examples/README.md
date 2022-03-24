@@ -170,8 +170,61 @@ await mock.register(
 In the above example, the first request made will respond with status code `201` while
 the second and all subsequent requests will respond with status `200`.
 
-### Using with jest
-Jest `expect` works well with `WireMock` and can used for various kinds of checks
+### Delayed response
+
+The following mock will delay all responses matching
+the stub by 300 milliseconds
+
+```typescript
+import { DelayType } from 'WireMock-Captain';
+
+await mock.register(
+    {
+        method: 'GET',
+        endpoint: '/test-endpoint',
+    },
+    {
+        status: 200,
+    },
+    {
+        responseDelay: {
+            type: DelayType.FIXED,
+            constantDelay: 300,
+        },
+    },
+);
+```
+
+### Webhook and callback
+
+The following mock will make an HTTP GET call to `http://some-service/webhook-api`
+every time the given stub is matched
+
+```typescript
+await mock.register(
+    {
+        method: 'GET',
+        endpoint: '/test-endpoint',
+    },
+    {
+        status: 200,
+    },
+    {
+        webhook: {
+            method: 'GET',
+            url: 'http://some-service/webhook-api',
+        },
+    },
+);
+```
+
+Webhook is not supported in default WireMock image instance. To get
+it to work, an additional webhook `.jar` extension is required to be available
+to the WireMock docker instance. Visit [here](https://wiremock.org/docs/docker/)
+or `<root>/scripts/setup.sh` for examples
+
+### Usage with jest
+Jest `expect` works well with `WireMock-Captain` and can used for various kinds of checks
 ```typescript
 const requestBody = {
     key: 'value'

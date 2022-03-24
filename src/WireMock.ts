@@ -4,16 +4,19 @@
 import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios';
 
 import {
-    IRequestMock,
-    IResponseMock,
-    IWireMockFeatures,
-    IWireMockMockedRequestResponse,
-    IWireMockRequest,
-    IWireMockResponse,
+    IMappingGetResponse,
+    IMockedRequestResponse,
+    IMockType,
+    IRequestGetResponse,
+    IScenarioGetResponse,
     Method,
-} from '.';
+} from './internalTypes';
+import { IWireMockFeatures } from './IWireMockFeatures';
+import { IWireMockRequest } from './IWireMockRequest';
+import { IWireMockResponse } from './IWireMockResponse';
 import { createWireMockRequest } from './RequestModel';
 import { createWireMockResponse } from './ResponseModel';
+import { filterRequest, getWebhookBody, getWebhookDelayBody } from './utils';
 
 // endpoint where wiremock stores mocks
 const WIREMOCK_MAPPINGS_URL: string = '__admin/mappings';
@@ -42,7 +45,7 @@ export class WireMock {
         request: IWireMockRequest,
         response: IWireMockResponse,
         features?: IWireMockFeatures,
-    ): Promise<IWireMockMockedRequestResponse> {
+    ): Promise<IMockedRequestResponse> {
         const mockedRequest = createWireMockRequest(request, features);
         const mockedResponse = createWireMockResponse(response, features);
         let mock: IMockType = {
@@ -56,6 +59,25 @@ export class WireMock {
 
         if (features?.scenario) {
             mock = { ...mock, ...features.scenario };
+        }
+
+        if (features?.webhook) {
+            mock.postServeActions = [
+                {
+                    name: 'webhook',
+                    parameters: {
+                        method: features.webhook.method,
+                        url: features.webhook.url,
+                        ...(features.webhook.headers && { headers: features.webhook.headers }),
+                        ...(features.webhook.body && {
+                            body: getWebhookBody(features.webhook.body),
+                        }),
+                        ...(features.webhook.delay && {
+                            delay: getWebhookDelayBody(features.webhook.delay),
+                        }),
+                    },
+                },
+            ];
         }
 
         const wiremockResponse = await axios.post(this.makeUrl(WIREMOCK_MAPPINGS_URL), mock, {
@@ -183,30 +205,4 @@ export class WireMock {
     protected makeUrl(endpoint: string): string {
         return new URL(endpoint, this.baseUrl).href;
     }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function filterRequest(method: Method, endpointUrl: string, request: any): boolean {
-    return request.request.method === method && request.request.url === endpointUrl;
-}
-
-interface IMockType {
-    request: IRequestMock;
-    response: IResponseMock;
-    priority?: number;
-    scenarioName?: string;
-    requiredScenarioState?: string;
-    newScenarioState?: string;
-}
-
-interface IMappingGetResponse {
-    mappings: Array<unknown>;
-}
-
-interface IRequestGetResponse {
-    requests: Array<unknown>;
-}
-
-interface IScenarioGetResponse {
-    scenarios: Array<unknown>;
 }

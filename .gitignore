@@ -38,3 +38,4 @@ npm-debug.log*
 [Dd]esktop.ini
 
 # For more .gitignore needs as your project grows, check out: https://www.gitignore.io
+extensions/
