@@ -11,7 +11,6 @@ Template for next unreleased block, should not be visible in github ui.
 
 ## [3.0.0] 2022-03-24
 
-
 ### Breaking Changes
 
 - Move around export of TS types
