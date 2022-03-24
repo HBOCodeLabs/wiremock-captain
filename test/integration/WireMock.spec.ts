@@ -3,15 +3,61 @@
 
 import { describe, expect, it } from '@jest/globals';
 import axios from 'axios';
+import * as express from 'express';
+import { Server } from 'http';
 
 import { DelayType, WireMock } from '../../src';
+
+const WEBHOOK_BASE_URL: string = 'http://host.docker.internal';
+const WEBHOOK_PORT: number = 9876;
 
 describe('Integration with WireMock', () => {
     const wiremockUrl = 'http://localhost:8080';
     const mock = new WireMock(wiremockUrl);
+    let webhookPromiseResolve: (r: jest.Mock) => void;
+    let webhookPromise: Promise<jest.Mock>;
+    let server: Server;
+
+    const webhookGetHandler = (req: express.Request, res: express.Response): void => {
+        const webhookCallback = jest.fn();
+        webhookCallback(req.query);
+        webhookPromiseResolve(webhookCallback);
+        res.end();
+    };
+
+    const webhookPostHandler = (req: express.Request, res: express.Response): void => {
+        const webhookCallback = jest.fn();
+        webhookCallback(req.body);
+        webhookPromiseResolve(webhookCallback);
+        res.end();
+    };
+
+    beforeAll((done) => {
+        // Create webhook server. This will be used by wiremock.
+        const app = express();
+        app.use(express.json());
+        app.get('/webhook', webhookGetHandler);
+        app.post('/webhook', webhookPostHandler);
+        server = app.listen(WEBHOOK_PORT, done).on('error', (e) => {
+            fail('Error starting webhook callback server: ' + e.message);
+            done();
+        });
+    });
 
     beforeEach(async () => {
         await mock.clearAllExceptDefault();
+    });
+
+    afterAll((done) => {
+        mock.clearAll()
+            .then(() => {
+                server.close(done).on('error', (e) => {
+                    fail('Error closing webhook callback server: ' + e.message);
+                });
+            })
+            .catch((e) => {
+                fail('Error exiting test: ' + e.message);
+            });
     });
 
     describe('WireMock', () => {
@@ -107,16 +153,13 @@ describe('Integration with WireMock', () => {
                 expect(body).toEqual(responseBody);
             });
 
-            test('sets up a stub mapping in wiremock server w/ webhook', async () => {
-                // setup webhook mock
-                await mock.register(
-                    {
-                        method: 'GET',
-                        endpoint: '/webhook-test-api',
-                    },
-                    { status: 200 },
-                );
+            it('sets up a stub mapping in wiremock server w/ GET webhook', async () => {
+                // This promise is resolved by the express "webhook" server
+                webhookPromise = new Promise((resolve: (r: jest.Mock) => void) => {
+                    webhookPromiseResolve = resolve;
+                });
 
+                const timestamp = Date.now();
                 const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
                 await mock.register(
@@ -131,25 +174,60 @@ describe('Integration with WireMock', () => {
                     {
                         webhook: {
                             method: 'GET',
-                            url: 'http://localhost:8080/webhook-test-api',
+                            url: `${WEBHOOK_BASE_URL}:9876/webhook?timestamp=${timestamp}`,
                         },
                     },
                 );
 
                 await axios.post(wiremockUrl + testEndpoint);
 
-                await new Promise<void>((resolve) => {
-                    const interval = setInterval(async () => {
-                        const calls = await mock.getRequestsForAPI('GET', '/webhook-test-api');
-                        if (calls.length >= 1) {
-                            expect(
-                                await mock.getRequestsForAPI('GET', '/webhook-test-api'),
-                            ).toHaveLength(1);
-                            clearInterval(interval);
-                            resolve();
-                        }
-                    }, 100);
+                const webhookCallback = await webhookPromise;
+
+                expect(webhookCallback).toHaveBeenCalledTimes(1);
+                expect(webhookCallback).toHaveBeenNthCalledWith(1, {
+                    timestamp: timestamp.toString(),
                 });
+            });
+
+            it('sets up a stub mapping in wiremock server w/ POST webhook', async () => {
+                // This promise is resolved by the express "webhook" server
+                webhookPromise = new Promise((resolve: (r: jest.Mock) => void) => {
+                    webhookPromiseResolve = resolve;
+                });
+
+                const timestamp = Date.now();
+                const testEndpoint = '/test-endpoint';
+                const responseBody = { test: 'testValue' };
+                await mock.register(
+                    {
+                        method: 'POST',
+                        endpoint: testEndpoint,
+                    },
+                    {
+                        status: 200,
+                        body: responseBody,
+                    },
+                    {
+                        webhook: {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            url: `${WEBHOOK_BASE_URL}:9876/webhook`,
+                            body: {
+                                type: 'JSON',
+                                data: { timestamp },
+                            },
+                        },
+                    },
+                );
+
+                await axios.post(wiremockUrl + testEndpoint);
+
+                const webhookCallback = await webhookPromise;
+
+                expect(webhookCallback).toHaveBeenCalledTimes(1);
+                expect(webhookCallback).toHaveBeenNthCalledWith(1, { timestamp });
             });
 
             it('sets up a stub mapping in wiremock server with priority', async () => {
