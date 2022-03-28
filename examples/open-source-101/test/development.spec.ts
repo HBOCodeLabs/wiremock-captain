@@ -20,7 +20,7 @@ describe('/artist-popularity', () => {
                 method: 'GET',
                 endpoint: '/v1/artists/0TnOYISbd1XYRBk9myaseg',
             },
-            // error response schema
+            // successful response schema
             {
                 status: 200,
                 body: spotifyGetArtistResponse,
