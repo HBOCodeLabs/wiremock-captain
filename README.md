@@ -112,8 +112,8 @@ import { WireMock } from 'wiremock-captain';
 
 describe('Integration with WireMock', () => {
   // Connect to WireMock
-  const downstreamWireMockEndpoint = 'http://localhost:8080';
-  const mock = new WireMock(downstreamWireMockEndpoint);
+  const wiremockEndpoint = 'http://localhost:8080';
+  const mock = new WireMock(wiremockEndpoint);
 
   test('mocks downstream service', async () => {
     const request: IWireMockRequest = {
