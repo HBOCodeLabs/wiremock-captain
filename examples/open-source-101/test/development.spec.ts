@@ -36,7 +36,6 @@ describe('/artist-popularity', () => {
         expect(resp.body.artistGenres.length).toBeGreaterThan(0);
     });
 
-    // why use wiremock-captain
     test('should respond back with error response when spotify API returns 401', async () => {
         // register Spotify API response with 401 error
         await mockServer.register(
@@ -48,12 +47,6 @@ describe('/artist-popularity', () => {
             // error response schema
             {
                 status: 401,
-                body: {
-                    error: {
-                        status: 401,
-                        message: 'string',
-                    },
-                },
             },
         );
 
