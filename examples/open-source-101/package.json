@@ -1,0 +1,39 @@
+{
+  "name": "oss101",
+  "version": "1.0.0",
+  "description": "oss101 demo",
+  "main": "src/development.ts",
+  "type": "module",
+  "scripts": {
+    "eslint:fix": "eslint --fix",
+    "start:dev": "NODE_ENV=development node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/development-final.ts",
+    "start:prod": "NODE_ENV=production node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm  src/development-final.ts",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.23",
+    "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.16.0",
+    "@typescript-eslint/parser": "^5.16.0",
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.5.1",
+    "prettier": "^2.6.0",
+    "supertest": "^6.2.2",
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.2"
+  },
+  "dependencies": {
+    "axios": "^0.26.1",
+    "express": "^4.17.3",
+    "pino-http": "^6.6.0",
+    "pino-pretty": "^7.6.0",
+    "wiremock-captain": "^3.0.0"
+  }
+}
