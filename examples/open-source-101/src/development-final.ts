@@ -1,17 +1,36 @@
 import axios from 'axios';
 import express from 'express';
 import { pinoHttp } from 'pino-http';
+import { WireMock } from 'wiremock-captain';
+import spotifyGetArtistResponse from './spotify-get-artist-200-resp.json';
 import { getSpotifyAccessToken } from './utils';
 
 // SPOTIFY GET artist API doc
 // https://developer.spotify.com/documentation/web-api/reference/#/operations/get-an-artist
 
+const ENV: string = process.env.NODE_ENV!;
 const PORT = 8080;
 
 const httpLogger = pinoHttp({
     prettyPrint: { translateTime: true, singleLine: true, colorize: true },
     customReceivedMessage: (_req, _res) => 'request received',
 });
+
+if (ENV === 'development') {
+    // create mock server instance
+    const mockServer = new WireMock(getSpotifyServerUrl());
+
+    // register request-response schema against mock server instance
+    await mockServer.register(
+        { endpoint: getSpotifyAristApi(), method: 'GET' },
+        {
+            status: 200,
+            body: spotifyGetArtistResponse,
+        },
+    );
+
+    httpLogger.logger.info('started mock spotify server');
+}
 
 const app = express();
 app.use(httpLogger);
@@ -70,5 +89,7 @@ function getSpotifyAristApi(): string {
 }
 
 function getSpotifyServerUrl(): string {
-    return 'https://api.spotify.com';
+    if (ENV === 'production') return 'https://api.spotify.com';
+
+    return 'http://localhost:8085';
 }

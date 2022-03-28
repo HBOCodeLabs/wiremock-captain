@@ -6,23 +6,22 @@ import {
     WireMock,
 } from 'wiremock-captain';
 
-const externalServiceEndpoint = 'http://localhost:8080';
-const mock = new WireMock(externalServiceEndpoint);
+const mock = new WireMock('http://localhost:8080');
 
 const request: IWireMockRequest = {
-    method: 'POST',
-    endpoint: '/test-endpoint',
-    body: {
-        hello: 'world',
+    method: 'GET',
+    endpoint: '/api-endpoint',
+    queryParameters: {
+        country: 'France',
     },
 };
 const mockedResponse: IWireMockResponse = {
     status: 200,
-    body: { goodbye: 'world' },
 };
 const features: IWireMockFeatures = {
-    requestHeaderFeatures: {
-        Accept: MatchingAttributes.EqualTo,
+    requestQueryParamFeatures: {
+        // make sure country is equal to France for the mock to be matched
+        country: MatchingAttributes.EqualTo,
     },
 };
 

@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "eslint:fix": "eslint --fix",
-    "start:dev": "NODE_ENV=development node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/development-final.ts",
-    "start:prod": "NODE_ENV=production node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm  src/development-final.ts",
+    "start:dev": "NODE_ENV=development node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/development.ts",
+    "start:prod": "NODE_ENV=production node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm  src/development.ts",
     "test": "jest"
   },
   "author": "",

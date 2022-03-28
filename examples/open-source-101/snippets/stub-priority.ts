@@ -1,27 +1,44 @@
-import { IWireMockFeatures, IWireMockRequest, IWireMockResponse, WireMock } from 'wiremock-captain';
+import {
+    IWireMockFeatures,
+    IWireMockRequest,
+    IWireMockResponse,
+    MatchingAttributes,
+    WireMock,
+} from 'wiremock-captain';
 
 const externalServiceEndpoint = 'http://localhost:8080';
 const mock = new WireMock(externalServiceEndpoint);
 
-const request: IWireMockRequest = {
-    method: 'POST',
-    endpoint: '/test-endpoint',
-    body: {
-        hello: 'world',
-    },
+const defaultRequest: IWireMockRequest = {
+    method: 'GET',
+    endpoint: '/api-endpoint',
 };
 const errorResponse: IWireMockResponse = {
-    status: 500,
-    body: { error: 'Internal server error' },
+    status: 401,
+    body: { error: 'Unauthorized' },
 };
 const lowerPriorityFeature: IWireMockFeatures = { stubPriority: 2 };
-await mock.register(request, errorResponse, lowerPriorityFeature);
+// set up lower priority mock
+// respond back with 401 for all requests
+await mock.register(defaultRequest, errorResponse, lowerPriorityFeature);
 
+const defaultRequestWithHeader: IWireMockRequest = {
+    method: 'GET',
+    endpoint: '/api-endpoint',
+    headers: {
+        Authorization: 'Bearer .*',
+    },
+};
 const successResponse: IWireMockResponse = {
     status: 200,
-    body: { goodbye: 'world' },
+    body: { message: 'Authorized' },
 };
 const higherPriorityFeature: IWireMockFeatures = {
     stubPriority: 1,
+    requestHeaderFeatures: {
+        Authorization: MatchingAttributes.Matches,
+    },
 };
-await mock.register(request, successResponse, higherPriorityFeature);
+// set up higher priority mock
+// respond back with 200 if Authorization header starting with 'Bearer ' is present
+await mock.register(defaultRequestWithHeader, successResponse, higherPriorityFeature);

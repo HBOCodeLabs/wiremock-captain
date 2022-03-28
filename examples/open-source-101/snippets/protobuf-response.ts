@@ -6,17 +6,14 @@ import {
     WireMock,
 } from 'wiremock-captain';
 
-const externalServiceEndpoint = 'http://localhost:8080';
-const mock = new WireMock(externalServiceEndpoint);
+const mock = new WireMock('http://localhost:8080');
 
 const request: IWireMockRequest = {
     method: 'POST',
-    endpoint: '/test-endpoint',
-    body: {
-        hello: 'world',
-    },
+    endpoint: '/api-endpoint',
 };
 
+// create binary response data
 const responseBase64 = Buffer.from('test-string').toString('base64');
 const mockedResponse: IWireMockResponse = {
     status: 200,
