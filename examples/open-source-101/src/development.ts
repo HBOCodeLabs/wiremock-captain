@@ -18,42 +18,26 @@ app.use(httpLogger);
 
 // set up API
 app.get('/artist-popularity', async (req: express.Request, res: express.Response) => {
-    try {
-        const spotifyServer = getSpotifyServerUrl();
-        const spotifyArtistApi = getSpotifyAristApi();
+    const spotifyServer = getSpotifyServerUrl();
+    const spotifyArtistApi = getSpotifyAristApi();
 
-        req.log.info('making external request to ' + spotifyServer + spotifyArtistApi);
+    req.log.info('making external request to ' + spotifyServer + spotifyArtistApi);
 
-        const accessToken = await getSpotifyAccessToken();
-        const resp = await axios.get(spotifyServer + spotifyArtistApi, {
-            headers: { Authorization: 'Bearer ' + accessToken },
-            timeout: 1000,
-        });
-        const data = resp.data;
+    const accessToken = await getSpotifyAccessToken();
+    const resp = await axios.get(spotifyServer + spotifyArtistApi, {
+        headers: { Authorization: 'Bearer ' + accessToken },
+        timeout: 1000,
+    });
+    const data = resp.data;
 
-        // construct API response
-        const artistInfo = {
-            artistName: data.name,
-            artistPopularity: data.popularity,
-            artistGenres: data.genres,
-        };
+    // construct API response
+    const artistInfo = {
+        artistName: data.name,
+        artistPopularity: data.popularity,
+        artistGenres: data.genres,
+    };
 
-        res.status(200).json(artistInfo);
-    } catch (e: any) {
-        const externalApiErrorStatus = e.response?.status;
-
-        if (externalApiErrorStatus) {
-            // Spotify responded with non-200 status code
-            // Respond with Spotify's error response status code
-            res.status(externalApiErrorStatus).json(
-                'Spotify API errored with status code: ' + externalApiErrorStatus,
-            );
-        } else {
-            // Error occured outside of talking with Spotify's API
-            // Respond back with a generic 500 status code
-            res.sendStatus(500).json('Internal Server Error');
-        }
-    }
+    res.status(200).json(artistInfo);
 });
 
 // start the Express server
