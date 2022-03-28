@@ -14,7 +14,7 @@ describe('Integration with WireMock', () => {
     const mock = new WireMockAPI(downstreamWireMockUrl, downstreamWireMockEndpoint, downstreamWireMockMethod);
 
     afterAll(() => {
-        return mock.clearAll();
+        return mock.clearAllExceptDefault();
     });
 
     describe('happy path', () => {
