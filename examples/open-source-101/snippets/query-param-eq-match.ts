@@ -1,4 +1,5 @@
 import {
+    EndpointFeature,
     IWireMockFeatures,
     IWireMockRequest,
     IWireMockResponse,
@@ -19,6 +20,8 @@ const mockedResponse: IWireMockResponse = {
     status: 200,
 };
 const features: IWireMockFeatures = {
+    // only match the path and the the stringified query parameters
+    requestEndpointFeature: EndpointFeature.UrlPath,
     requestQueryParamFeatures: {
         // make sure country is equal to France for the mock to be matched
         country: MatchingAttributes.EqualTo,
