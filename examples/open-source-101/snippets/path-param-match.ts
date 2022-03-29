@@ -6,7 +6,7 @@ import {
     WireMock,
 } from 'wiremock-captain';
 
-const mock = new WireMock('http://localhost:8080');
+const mock = new WireMock('http://localhost:8085');
 
 const request: IWireMockRequest = {
     method: 'POST',
@@ -21,3 +21,5 @@ const features: IWireMockFeatures = {
 };
 
 await mock.register(request, mockedResponse, features);
+
+// curl --location --request POST 'http://localhost:8085/students/some-student-id'

@@ -8,6 +8,12 @@
     "eslint:fix": "eslint --fix",
     "start:dev": "NODE_ENV=development node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/development.ts",
     "start:prod": "NODE_ENV=production node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm  src/development.ts",
+    "register:basic": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm  snippets/basic-stub.ts",
+    "register:delayed": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm  snippets/delayed-response.ts",
+    "register:path": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm  snippets/path-param-match.ts",
+    "register:query": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm  snippets/query-param-eq-match.ts",
+    "register:priority": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm  snippets/stub-priority.ts",
+    "clear:all": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm  snippets/clear-all-mocks.ts",
     "test": "jest --forceExit"
   },
   "author": "",
