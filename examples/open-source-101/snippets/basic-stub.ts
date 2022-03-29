@@ -1,6 +1,6 @@
 import { IWireMockRequest, IWireMockResponse, WireMock } from 'wiremock-captain';
 
-const mock = new WireMock('http://localhost:8080');
+const mock = new WireMock('http://localhost:8085');
 
 const request: IWireMockRequest = {
     method: 'GET',
@@ -16,3 +16,9 @@ const mockedResponse: IWireMockResponse = {
 
 // if incoming request matches request parameter, respond with mockedResponse parameter
 await mock.register(request, mockedResponse);
+
+// curl --location --request GET 'http://localhost:8085/api-endpoint' \
+// --header 'Content-Type: application/json' \
+// --data-raw '{
+//     "hello": "world"
+// }'

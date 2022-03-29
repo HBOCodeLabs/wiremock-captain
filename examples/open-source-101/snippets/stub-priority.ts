@@ -6,8 +6,7 @@ import {
     WireMock,
 } from 'wiremock-captain';
 
-const externalServiceEndpoint = 'http://localhost:8080';
-const mock = new WireMock(externalServiceEndpoint);
+const mock = new WireMock('http://localhost:8085');
 
 const defaultRequest: IWireMockRequest = {
     method: 'GET',
@@ -42,3 +41,8 @@ const higherPriorityFeature: IWireMockFeatures = {
 // set up higher priority mock
 // respond back with 200 if Authorization header starting with 'Bearer ' is present
 await mock.register(defaultRequestWithHeader, successResponse, higherPriorityFeature);
+
+// curl --location --request GET 'http://localhost:8085/api-endpoint'
+
+// curl --location --request GET 'http://localhost:8085/api-endpoint' \
+// --header 'Authorization: Bearer abc'
