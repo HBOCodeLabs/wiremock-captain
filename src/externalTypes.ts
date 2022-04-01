@@ -1,7 +1,7 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { KeyValue, Method, WebhookBody } from './internalTypes';
+import { KeyValue, WebhookBody } from './internalTypes';
 
 export interface IWireMockScenario {
     scenarioName: string;
@@ -69,5 +69,17 @@ export const enum MatchingAttributes {
     Matches = 'matches',
     MatchesJsonPath = 'matchesJsonPath',
 }
+
+export type Method =
+    | 'ANY'
+    | 'CONNECT'
+    | 'DELETE'
+    | 'GET'
+    | 'HEAD'
+    | 'OPTIONS'
+    | 'PATCH'
+    | 'POST'
+    | 'PUT'
+    | 'TRACE';
 
 export type WireMockDelay = IChunkedDribbleDelay | IFixedDelay | ILogNormalDelay | IUniformDelay;
