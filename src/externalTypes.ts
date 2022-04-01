@@ -70,4 +70,6 @@ export const enum MatchingAttributes {
     MatchesJsonPath = 'matchesJsonPath',
 }
 
+export { Method };
+
 export type WireMockDelay = IChunkedDribbleDelay | IFixedDelay | ILogNormalDelay | IUniformDelay;
