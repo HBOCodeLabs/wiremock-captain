@@ -9,6 +9,12 @@ Template for next unreleased block, should not be visible in github ui.
 ### Fixed
 --->
 
+## [3.0.1] 2022-04-01
+
+### Fixed
+
+- Export `Method` type
+
 ## [3.0.0] 2022-03-24
 
 ### Breaking Changes
