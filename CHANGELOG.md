@@ -13,7 +13,7 @@ Template for next unreleased block, should not be visible in github ui.
 
 ### Fixed
 
-- Update outdated dependences
+- Update outdated dependencies
 
 ## [3.0.1] 2022-04-01
 
