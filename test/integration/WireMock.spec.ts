@@ -6,7 +6,7 @@ import axios from 'axios';
 import * as express from 'express';
 import { Server } from 'http';
 
-import { DelayType, WireMock } from '../../src';
+import { DelayType, WireMock, WireMockFault } from '../../src';
 
 const WEBHOOK_BASE_URL: string = 'http://host.docker.internal';
 const WEBHOOK_PORT: number = 9876;
@@ -314,6 +314,89 @@ describe('Integration with WireMock', () => {
                 expect(jestMock).toHaveBeenCalledWith(
                     expect.objectContaining({ body: JSON.stringify(requestBody) }),
                 );
+            });
+
+            it('sets up a stub mapping in wiremock server w/ EMPTY_RESPONSE fault', async () => {
+                const testEndpoint = '/test-endpoint';
+                const responseBody = { test: 'testValue' };
+                await mock.register(
+                    {
+                        method: 'POST',
+                        endpoint: testEndpoint,
+                    },
+                    {
+                        status: 200,
+                        body: responseBody,
+                    },
+                    { fault: WireMockFault.EMPTY_RESPONSE },
+                );
+
+                await expect(axios.post(wiremockUrl + testEndpoint)).rejects.toThrowError(
+                    'socket hang up',
+                );
+            });
+
+            it('sets up a stub mapping in wiremock server w/ CONNECTION_RESET_BY_PEER fault', async () => {
+                const testEndpoint = '/test-endpoint';
+                const responseBody = { test: 'testValue' };
+                await mock.register(
+                    {
+                        method: 'POST',
+                        endpoint: testEndpoint,
+                    },
+                    {
+                        status: 200,
+                        body: responseBody,
+                    },
+                    { fault: WireMockFault.CONNECTION_RESET_BY_PEER },
+                );
+
+                await expect(axios.post(wiremockUrl + testEndpoint)).rejects.toThrowError(
+                    'socket hang up',
+                );
+            });
+
+            it('sets up a stub mapping in wiremock server w/ RANDOM_DATA_THEN_CLOSE fault', async () => {
+                const testEndpoint = '/test-endpoint';
+                const responseBody = { test: 'testValue' };
+                await mock.register(
+                    {
+                        method: 'POST',
+                        endpoint: testEndpoint,
+                    },
+                    {
+                        status: 200,
+                        body: responseBody,
+                    },
+                    { fault: WireMockFault.RANDOM_DATA_THEN_CLOSE },
+                );
+
+                await expect(axios.post(wiremockUrl + testEndpoint)).rejects.toThrowError(
+                    'Parse Error: Expected HTTP/',
+                );
+            });
+
+            it('sets up a stub mapping in wiremock server w/ MALFORMED_RESPONSE_CHUNK fault', async () => {
+                const testEndpoint = '/test-endpoint';
+                const responseBody = { test: 'testValue' };
+                await mock.register(
+                    {
+                        method: 'POST',
+                        endpoint: testEndpoint,
+                    },
+                    {
+                        status: 200,
+                        body: responseBody,
+                    },
+                    { fault: WireMockFault.MALFORMED_RESPONSE_CHUNK },
+                );
+
+                const response = await axios.post(wiremockUrl + testEndpoint);
+                const statusCode = response.status;
+                const data = response.data;
+                expect(statusCode).toEqual(200);
+                expect(data).toBeDefined();
+                expect(data).not.toEqual(responseBody);
             });
         });
 

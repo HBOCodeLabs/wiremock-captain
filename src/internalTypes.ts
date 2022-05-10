@@ -1,6 +1,8 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
+import { WireMockFault } from './externalTypes';
+
 export interface IMockedRequestResponse {
     id: string;
     newScenarioState?: string;
@@ -36,15 +38,19 @@ export interface IRequestMock {
     [key: string]: unknown;
 }
 
-export interface IResponseMock {
-    status: number;
-    headers?: Record<string, KeyValue>;
-    fixedDelayMilliseconds?: number;
-    delayDistribution?: Record<string, number | string>;
-    chunkedDribbleDelay?: Record<string, number>;
+export type IResponseMock =
+    | {
+          status: number;
+          headers?: Record<string, KeyValue>;
+          fixedDelayMilliseconds?: number;
+          delayDistribution?: Record<string, number | string>;
+          chunkedDribbleDelay?: Record<string, number>;
 
-    [key: string]: unknown;
-}
+          [key: string]: unknown;
+      }
+    | {
+          fault: WireMockFault;
+      };
 
 export interface IScenarioGetResponse {
     scenarios: Array<unknown>;
