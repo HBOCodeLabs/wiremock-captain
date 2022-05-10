@@ -9,6 +9,12 @@ Template for next unreleased block, should not be visible in github ui.
 ### Fixed
 --->
 
+## [3.1.0] 2022-05-10
+
+### Added
+
+- Support response faults
+
 ## [3.0.2] 2022-05-05
 
 ### Fixed
