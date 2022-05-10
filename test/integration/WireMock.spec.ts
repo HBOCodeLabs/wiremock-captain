@@ -396,6 +396,7 @@ describe('Integration with WireMock', () => {
                 const data = response.data;
                 expect(statusCode).toEqual(200);
                 expect(data).toBeDefined();
+                expect(data).not.toEqual(responseBody);
             });
         });
 
