@@ -6,7 +6,7 @@ import axios from 'axios';
 import * as express from 'express';
 import { Server } from 'http';
 
-import { DelayType, WireMock } from '../../src';
+import { DelayType, WireMock, WireMockFault } from '../../src';
 
 const WEBHOOK_BASE_URL: string = 'http://host.docker.internal';
 const WEBHOOK_PORT: number = 9876;
@@ -313,6 +313,26 @@ describe('Integration with WireMock', () => {
                 });
                 expect(jestMock).toHaveBeenCalledWith(
                     expect.objectContaining({ body: JSON.stringify(requestBody) }),
+                );
+            });
+
+            it('sets up a stub mapping in wiremock server w/ fault', async () => {
+                const testEndpoint = '/test-endpoint';
+                const responseBody = { test: 'testValue' };
+                await mock.register(
+                    {
+                        method: 'POST',
+                        endpoint: testEndpoint,
+                    },
+                    {
+                        status: 200,
+                        body: responseBody,
+                    },
+                    { fault: WireMockFault.EMPTY_RESPONSE },
+                );
+
+                await expect(axios.post(wiremockUrl + testEndpoint)).rejects.toThrowError(
+                    'socket hang up',
                 );
             });
         });

@@ -3,7 +3,7 @@
 
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
-import { DelayType } from '../../src';
+import { DelayType, WireMockFault } from '../../src';
 
 describe('WireMock', () => {
     const mockData = {
@@ -213,6 +213,32 @@ describe('WireMock', () => {
                 },
             );
             expect(resp).toEqual({});
+        });
+
+        it('should return empty response w/ fault', async () => {
+            jest.mock('../../src/RequestModel', () => ({
+                createWireMockRequest: jest.fn().mockName('mockedGetRequest'),
+            }));
+            jest.mock('../../src/ResponseModel', () => ({
+                createWireMockResponse: jest.fn().mockName('mockedGetResponse'),
+            }));
+            const wireMock = require('../../src/WireMock');
+            const wireMockUrl = 'https://testservice/';
+            const mock = new wireMock.WireMock(wireMockUrl);
+            const resp = await mock.register({}, {}, { fault: WireMockFault.EMPTY_RESPONSE });
+            expect(resp).toEqual({});
+            expect(mockAxios.default.post).toHaveBeenCalledWith(
+                'https://testservice/__admin/mappings',
+                {
+                    request: undefined,
+                    response: { fault: 'EMPTY_RESPONSE' },
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            );
         });
     });
 

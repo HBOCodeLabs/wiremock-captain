@@ -223,6 +223,30 @@ it to work, an additional webhook `.jar` extension is required to be available
 to the WireMock docker instance. Visit [here](https://wiremock.org/docs/docker/)
 or `<root>/scripts/setup.sh` for examples
 
+### Response fault
+
+The following mock will return an empty response (no status code, no body)
+when matched. This can be used to test for socket timeouts, connection resets,
+etc.
+
+```typescript
+await mock.register(
+    {
+        method: 'GET',
+        endpoint: '/test-endpoint',
+    },
+    {
+        status: 200,
+        body: {
+            hello: 'world',
+        },
+    },
+    {
+        fault: WireMockFault.EMPTY_RESPONSE,
+    },
+);
+```
+
 ### Usage with jest
 Jest `expect` works well with `WireMock-Captain` and can used for various kinds of checks
 ```typescript

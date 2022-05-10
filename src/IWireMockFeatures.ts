@@ -8,6 +8,7 @@ import {
     IWireMockWebhook,
     MatchingAttributes,
     WireMockDelay,
+    WireMockFault,
 } from './externalTypes';
 
 /**
@@ -17,6 +18,10 @@ import {
  * For more info how each of these work, visit: http://wiremock.org/docs/
  */
 export interface IWireMockFeatures {
+    /**
+     * If provided, will override any response status and body
+     */
+    fault?: WireMockFault;
     requestBodyFeature?: MatchingAttributes;
     requestCookieFeatures?: Record<string, MatchingAttributes>;
     requestEndpointFeature?: EndpointFeature;

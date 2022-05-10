@@ -80,6 +80,10 @@ export class WireMock {
             ];
         }
 
+        if (features?.fault) {
+            mock.response = { fault: features.fault };
+        }
+
         const wiremockResponse = await axios.post(this.makeUrl(WIREMOCK_MAPPINGS_URL), mock, {
             headers: HEADERS,
         });
