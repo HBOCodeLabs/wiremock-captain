@@ -336,7 +336,7 @@ describe('Integration with WireMock', () => {
                 );
             });
 
-            it('sets up a stub mapping in wiremock server w/ EMPTY_RESPONSE fault', async () => {
+            it('sets up a stub mapping in wiremock server w/ CONNECTION_RESET_BY_PEER fault', async () => {
                 const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
                 await mock.register(
@@ -348,7 +348,7 @@ describe('Integration with WireMock', () => {
                         status: 200,
                         body: responseBody,
                     },
-                    { fault: WireMockFault.EMPTY_RESPONSE },
+                    { fault: WireMockFault.CONNECTION_RESET_BY_PEER },
                 );
 
                 await expect(axios.post(wiremockUrl + testEndpoint)).rejects.toThrowError(
