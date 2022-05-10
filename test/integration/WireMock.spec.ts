@@ -316,7 +316,7 @@ describe('Integration with WireMock', () => {
                 );
             });
 
-            it('sets up a stub mapping in wiremock server w/ fault', async () => {
+            it('sets up a stub mapping in wiremock server w/ EMPTY_RESPONSE fault', async () => {
                 const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
                 await mock.register(
@@ -333,6 +333,46 @@ describe('Integration with WireMock', () => {
 
                 await expect(axios.post(wiremockUrl + testEndpoint)).rejects.toThrowError(
                     'socket hang up',
+                );
+            });
+
+            it('sets up a stub mapping in wiremock server w/ EMPTY_RESPONSE fault', async () => {
+                const testEndpoint = '/test-endpoint';
+                const responseBody = { test: 'testValue' };
+                await mock.register(
+                    {
+                        method: 'POST',
+                        endpoint: testEndpoint,
+                    },
+                    {
+                        status: 200,
+                        body: responseBody,
+                    },
+                    { fault: WireMockFault.EMPTY_RESPONSE },
+                );
+
+                await expect(axios.post(wiremockUrl + testEndpoint)).rejects.toThrowError(
+                    'socket hang up',
+                );
+            });
+
+            it('sets up a stub mapping in wiremock server w/ RANDOM_DATA_THEN_CLOSE fault', async () => {
+                const testEndpoint = '/test-endpoint';
+                const responseBody = { test: 'testValue' };
+                await mock.register(
+                    {
+                        method: 'POST',
+                        endpoint: testEndpoint,
+                    },
+                    {
+                        status: 200,
+                        body: responseBody,
+                    },
+                    { fault: WireMockFault.RANDOM_DATA_THEN_CLOSE },
+                );
+
+                await expect(axios.post(wiremockUrl + testEndpoint)).rejects.toThrowError(
+                    'Parse Error: Expected HTTP/',
                 );
             });
         });
