@@ -32,15 +32,14 @@ describe('Integration with WireMock', () => {
         res.end();
     };
 
-    beforeAll((done) => {
+    beforeAll(() => {
         // Create webhook server. This will be used by wiremock.
         const app = express();
         app.use(express.json());
         app.get('/webhook', webhookGetHandler);
         app.post('/webhook', webhookPostHandler);
-        server = app.listen(WEBHOOK_PORT, done).on('error', (e) => {
+        server = app.listen(WEBHOOK_PORT).on('error', (e) => {
             fail('Error starting webhook callback server: ' + e.message);
-            done();
         });
     });
 
