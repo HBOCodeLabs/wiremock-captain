@@ -2,7 +2,7 @@
 // See the LICENSE file for license information.
 
 import { IWireMockFeatures, IWireMockRequest, IWireMockResponse } from '.';
-import { IMockedRequestResponse, Method } from './internalTypes';
+import { IMockedRequestResponse, Method } from './types/internalTypes';
 import { WireMock } from './WireMock';
 
 export class WireMockAPI extends WireMock {

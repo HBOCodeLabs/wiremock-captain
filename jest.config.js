@@ -1,7 +1,7 @@
 module.exports = {
     clearMocks: true,
     collectCoverageFrom: ['src/**/*.ts'],
-    coveragePathIgnorePatterns: ['index.ts'],
+    coveragePathIgnorePatterns: ['index.ts', 'types'],
     coverageReporters: ['cobertura', 'html', 'text-summary', 'text'],
     coverageThreshold: {
         global: {

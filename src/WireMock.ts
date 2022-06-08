@@ -10,10 +10,10 @@ import {
     IRequestGetResponse,
     IScenarioGetResponse,
     Method,
-} from './internalTypes';
-import { IWireMockFeatures } from './IWireMockFeatures';
-import { IWireMockRequest } from './IWireMockRequest';
-import { IWireMockResponse } from './IWireMockResponse';
+} from './types/internalTypes';
+import { IWireMockFeatures } from './types/IWireMockFeatures';
+import { IWireMockRequest } from './types/IWireMockRequest';
+import { IWireMockResponse } from './types/IWireMockResponse';
 import { createWireMockRequest } from './RequestModel';
 import { createWireMockResponse } from './ResponseModel';
 import { filterRequest, getWebhookBody, getWebhookDelayBody } from './utils';
