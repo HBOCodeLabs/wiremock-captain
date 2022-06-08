@@ -3,6 +3,8 @@
 
 import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios';
 
+import { createWireMockRequest } from './RequestModel';
+import { createWireMockResponse } from './ResponseModel';
 import {
     IMappingGetResponse,
     IMockedRequestResponse,
@@ -14,8 +16,6 @@ import {
 import { IWireMockFeatures } from './types/IWireMockFeatures';
 import { IWireMockRequest } from './types/IWireMockRequest';
 import { IWireMockResponse } from './types/IWireMockResponse';
-import { createWireMockRequest } from './RequestModel';
-import { createWireMockResponse } from './ResponseModel';
 import { filterRequest, getWebhookBody, getWebhookDelayBody } from './utils';
 
 // endpoint where wiremock stores mocks
