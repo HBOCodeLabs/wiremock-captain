@@ -7,11 +7,10 @@
         "declaration": true,
         "declarationMap": true,
         "strict": true,
-        "incremental": true,
+        "incremental": false,
         "pretty": true,
-        "removeComments": true,
-        "sourceMap": true,
-        "tsBuildInfoFile": "./.buildcache"
+        "removeComments": false,
+        "sourceMap": true
     },
     "include": ["src/**/*"]
 }
