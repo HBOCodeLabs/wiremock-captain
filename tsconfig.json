@@ -1,16 +1,24 @@
 {
     "compilerOptions": {
+        "allowJs": false,
+        "allowUnreachableCode": false,
         "alwaysStrict": true,
-        "outDir": "dist",
-        "target": "es2019",
-        "module": "commonjs",
         "declaration": true,
-        "declarationMap": true,
-        "strict": true,
+        "declarationMap": false,
+        "exactOptionalPropertyTypes": true,
         "incremental": false,
+        "module": "commonjs",
+        "noEmitOnError": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noUncheckedIndexedAccess": true,
+        "outDir": "dist",
+        "preserveConstEnums": false,
         "pretty": true,
         "removeComments": false,
-        "sourceMap": true
+        "sourceMap": false,
+        "strict": true,
+        "target": "es2019"
     },
     "include": ["src/**/*"]
 }

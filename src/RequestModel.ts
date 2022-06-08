@@ -56,7 +56,7 @@ function getMockedObject(
     const mockObject: { [key: string]: unknown } = {};
     for (const key of Object.keys(dict)) {
         mockObject[key] = mapPropertyToAttribute(
-            dict[key],
+            dict[key]!,
             dictMatchingAttributes?.[key] ?? MatchingAttributes.EqualTo,
         );
     }
