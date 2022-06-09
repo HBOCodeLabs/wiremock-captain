@@ -1,8 +1,8 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { DelayType, WireMockDelay } from './externalTypes';
-import { Method, WebhookBody } from './internalTypes';
+import { DelayType, WireMockDelay } from './types/externalTypes';
+import { Method, WebhookBody } from './types/internalTypes';
 
 export function filterRequest(method: Method, endpointUrl: string, request: any): boolean {
     return request.request.method === method && request.request.url === endpointUrl;

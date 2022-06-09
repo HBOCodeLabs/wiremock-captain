@@ -2,13 +2,13 @@
 // See the LICENSE file for license information.
 
 import { IWireMockFeatures, IWireMockRequest, IWireMockResponse } from '.';
-import { IMockedRequestResponse, Method } from './internalTypes';
+import { IMockedRequestResponse, Method } from './types/internalTypes';
 import { WireMock } from './WireMock';
 
 export class WireMockAPI extends WireMock {
     protected readonly endpoint: string;
     protected readonly method: Method;
-    protected readonly features?: IWireMockFeatures;
+    protected readonly features: IWireMockFeatures | undefined;
 
     public constructor(
         baseUrl: string,
@@ -29,7 +29,7 @@ export class WireMockAPI extends WireMock {
      * @param features Additional options to be used for creation of stub mapping
      * @returns Created wiremock stub mapping. Contains `id` which is needed to delete a mapping
      */
-    public async register(
+    public override async register(
         request: Omit<IWireMockRequest, 'endpoint' | 'method'>,
         response: IWireMockResponse,
         features?: IWireMockFeatures,
@@ -58,7 +58,7 @@ export class WireMockAPI extends WireMock {
      * Returns list of request(s) made to the WireMock API
      * @returns List of wiremock requests made to the endpoint with given method
      */
-    public async getRequestsForAPI(): Promise<unknown[]> {
+    public override async getRequestsForAPI(): Promise<unknown[]> {
         return await super.getRequestsForAPI(this.method, this.endpoint);
     }
 }
