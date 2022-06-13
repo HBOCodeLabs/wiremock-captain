@@ -9,6 +9,12 @@ Template for next unreleased block, should not be visible in github ui.
 ### Fixed
 --->
 
+## [3.1.1] 2022-06-013
+
+### Fixed
+
+- Update tsconfig
+
 ## [3.1.0] 2022-05-10
 
 ### Added
