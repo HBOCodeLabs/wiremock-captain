@@ -1,14 +1,12 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { afterEach, expect, jest } from '@jest/globals';
-
 import { DelayType } from '../../src';
 
 describe('utils', () => {
-    afterEach(() => {
-        jest.resetModules();
+    beforeEach(() => {
         jest.clearAllMocks();
+        jest.resetModules();
     });
 
     describe('getWebhookBody', () => {
