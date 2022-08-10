@@ -25,11 +25,11 @@ export interface IMockType {
 }
 
 export interface IMappingGetResponse {
-    mappings: Array<unknown>;
+    mappings: unknown[];
 }
 
 export interface IRequestGetResponse {
-    requests: Array<unknown>;
+    requests: unknown[];
 }
 
 export interface IRequestMock {
@@ -53,7 +53,7 @@ export type IResponseMock =
       };
 
 export interface IScenarioGetResponse {
-    scenarios: Array<unknown>;
+    scenarios: unknown[];
 }
 
 export interface IWebhook {

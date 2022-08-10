@@ -1,15 +1,14 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { describe, expect, it } from '@jest/globals';
 import axios from 'axios';
 import * as express from 'express';
 import { Server } from 'http';
 
 import { DelayType, WireMock, WireMockFault } from '../../src';
 
-const WEBHOOK_BASE_URL: string = 'http://host.docker.internal';
-const WEBHOOK_PORT: number = 9876;
+const WEBHOOK_BASE_URL = 'http://host.docker.internal';
+const WEBHOOK_PORT = 9876;
 
 describe('Integration with WireMock', () => {
     const wiremockUrl = 'http://localhost:8080';
