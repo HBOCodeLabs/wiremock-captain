@@ -12,6 +12,7 @@ module.exports = {
         'plugin:eslint-comments/recommended',
         'plugin:import/recommended',
         'plugin:import/typescript',
+        'plugin:jest/recommended',
         'plugin:node/recommended',
         'plugin:prettier/recommended',
         'prettier',

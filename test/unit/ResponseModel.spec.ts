@@ -126,7 +126,7 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('should build response with log normal delay', () => {
+        it('should build response with uniform delay', () => {
             const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse(
                 {

@@ -38,7 +38,7 @@ describe('Integration with WireMock', () => {
         app.get('/webhook', webhookGetHandler);
         app.post('/webhook', webhookPostHandler);
         server = app.listen(WEBHOOK_PORT).on('error', (e) => {
-            fail('Error starting webhook callback server: ' + e.message);
+            throw new Error('Error starting webhook callback server: ' + e.message);
         });
     });
 
@@ -46,15 +46,15 @@ describe('Integration with WireMock', () => {
         await mock.clearAllExceptDefault();
     });
 
-    afterAll((done) => {
+    afterAll(() => {
         mock.clearAll()
             .then(() => {
-                server.close(done).on('error', (e) => {
-                    fail('Error closing webhook callback server: ' + e.message);
+                server.close().on('error', (e) => {
+                    throw new Error('Error closing webhook callback server: ' + e.message);
                 });
             })
             .catch((e) => {
-                fail('Error exiting test: ' + e.message);
+                throw new Error('Error exiting test: ' + e.message);
             });
     });
 
