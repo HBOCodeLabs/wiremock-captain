@@ -32,7 +32,7 @@ describe('WireMock', () => {
     });
 
     describe('clear', () => {
-        it('clears all', async () => {
+        test('clears all', async () => {
             const wireMock = require('../../src/WireMock');
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
@@ -41,7 +41,7 @@ describe('WireMock', () => {
             expect(deleteMock).toHaveBeenCalledWith(wireMockUrl + '__admin/requests');
         });
 
-        it('clears all except default', async () => {
+        test('clears all except default', async () => {
             const wireMock = require('../../src/WireMock');
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
@@ -52,7 +52,7 @@ describe('WireMock', () => {
     });
 
     describe('deleteMapping', () => {
-        it('should delete the stub', async () => {
+        test('should delete the stub', async () => {
             const wireMock = require('../../src/WireMock');
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
@@ -62,7 +62,7 @@ describe('WireMock', () => {
     });
 
     describe('getMapping', () => {
-        it('should get all mappings', async () => {
+        test('should get all mappings', async () => {
             const wireMock = require('../../src/WireMock');
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
@@ -70,7 +70,7 @@ describe('WireMock', () => {
             expect(getMock).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings');
         });
 
-        it('should get a single mapping', async () => {
+        test('should get a single mapping', async () => {
             const wireMock = require('../../src/WireMock');
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
@@ -80,7 +80,7 @@ describe('WireMock', () => {
     });
 
     describe('getRequest', () => {
-        it('getAllRequests', async () => {
+        test('getAllRequests', async () => {
             const wireMock = require('../../src/WireMock');
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
@@ -88,7 +88,7 @@ describe('WireMock', () => {
             expect(getMock).toHaveBeenCalledWith(wireMockUrl + '__admin/requests');
         });
 
-        it('getUnmatchedRequests', async () => {
+        test('getUnmatchedRequests', async () => {
             const wireMock = require('../../src/WireMock');
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
@@ -98,7 +98,7 @@ describe('WireMock', () => {
     });
 
     describe('getScenario', () => {
-        it('getAllScenarios', async () => {
+        test('getAllScenarios', async () => {
             const wireMock = require('../../src/WireMock');
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
@@ -108,7 +108,7 @@ describe('WireMock', () => {
     });
 
     describe('register', () => {
-        it('should return empty response w/ priority and scenario', async () => {
+        test('should return empty response w/ priority and scenario', async () => {
             jest.mock('../../src/RequestModel', () => ({
                 createWireMockRequest: jest.fn().mockName('mockedGetRequest'),
             }));
@@ -143,7 +143,7 @@ describe('WireMock', () => {
             expect(resp).toEqual({});
         });
 
-        it('should return empty response w/o priority and scenario', async () => {
+        test('should return empty response w/o priority and scenario', async () => {
             jest.mock('../../src/RequestModel', () => ({
                 createWireMockRequest: jest.fn().mockName('mockedGetRequest'),
             }));
@@ -157,7 +157,7 @@ describe('WireMock', () => {
             expect(resp).toEqual({});
         });
 
-        it('should return empty response w/ webhook', async () => {
+        test('should return empty response w/ webhook', async () => {
             jest.mock('../../src/RequestModel', () => ({
                 createWireMockRequest: jest.fn().mockName('mockedGetRequest'),
             }));
@@ -207,7 +207,7 @@ describe('WireMock', () => {
             expect(resp).toEqual({});
         });
 
-        it('should return empty response w/ fault', async () => {
+        test('should return empty response w/ fault', async () => {
             jest.mock('../../src/RequestModel', () => ({
                 createWireMockRequest: jest.fn().mockName('mockedGetRequest'),
             }));
@@ -235,7 +235,7 @@ describe('WireMock', () => {
     });
 
     describe('resetScenario', () => {
-        it('resetAllScenarios', async () => {
+        test('resetAllScenarios', async () => {
             const wireMock = require('../../src/WireMock');
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
@@ -245,7 +245,7 @@ describe('WireMock', () => {
     });
 
     describe('resetMapping', () => {
-        it('should reset mappings', async () => {
+        test('should reset mappings', async () => {
             const wireMock = require('../../src/WireMock');
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
@@ -255,7 +255,7 @@ describe('WireMock', () => {
     });
 
     describe('verify', () => {
-        it('verify calls', async () => {
+        test('verify calls', async () => {
             const wireMock = require('../../src/WireMock');
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);

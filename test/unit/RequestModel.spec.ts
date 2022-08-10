@@ -10,7 +10,7 @@ describe('RequestModel', () => {
     });
 
     describe('createWireMockRequest', () => {
-        it('builds with method and endpoint', () => {
+        test('builds with method and endpoint', () => {
             const testModule = require('../../src/RequestModel');
             const mockedRequest = testModule.createWireMockRequest({
                 method: 'GET',
@@ -22,7 +22,7 @@ describe('RequestModel', () => {
             });
         });
 
-        it('builds with method and urlpath', () => {
+        test('builds with method and urlpath', () => {
             const testModule = require('../../src/RequestModel');
             const mockedRequest = testModule.createWireMockRequest(
                 {
@@ -37,7 +37,7 @@ describe('RequestModel', () => {
             });
         });
 
-        it('builds with method, endpoint, and body', () => {
+        test('builds with method, endpoint, and body', () => {
             const testModule = require('../../src/RequestModel');
             const mockedRequest = testModule.createWireMockRequest({
                 method: 'GET',
@@ -51,7 +51,7 @@ describe('RequestModel', () => {
             });
         });
 
-        it('builds with method, endpoint, and body (with feature)', () => {
+        test('builds with method, endpoint, and body (with feature)', () => {
             const testModule = require('../../src/RequestModel');
             const mockedRequest = testModule.createWireMockRequest(
                 {
@@ -68,7 +68,7 @@ describe('RequestModel', () => {
             });
         });
 
-        it('builds with method, endpoint, and cookies', () => {
+        test('builds with method, endpoint, and cookies', () => {
             const testModule = require('../../src/RequestModel');
             const mockedRequest = testModule.createWireMockRequest({
                 method: 'GET',
@@ -82,7 +82,7 @@ describe('RequestModel', () => {
             });
         });
 
-        it('builds with method, endpoint, and cookies (with feature)', () => {
+        test('builds with method, endpoint, and cookies (with feature)', () => {
             const testModule = require('../../src/RequestModel');
             const mockedRequest = testModule.createWireMockRequest(
                 {
@@ -103,7 +103,7 @@ describe('RequestModel', () => {
             });
         });
 
-        it('builds with method, endpoint, and headers', () => {
+        test('builds with method, endpoint, and headers', () => {
             const testModule = require('../../src/RequestModel');
             const mockedRequest = testModule.createWireMockRequest({
                 method: 'GET',
@@ -117,7 +117,7 @@ describe('RequestModel', () => {
             });
         });
 
-        it('builds with method, endpoint, and headers (with feature)', () => {
+        test('builds with method, endpoint, and headers (with feature)', () => {
             const testModule = require('../../src/RequestModel');
             const mockedRequest = testModule.createWireMockRequest(
                 {
@@ -138,7 +138,7 @@ describe('RequestModel', () => {
             });
         });
 
-        it('builds with method, endpoint, and queryParams', () => {
+        test('builds with method, endpoint, and queryParams', () => {
             const testModule = require('../../src/RequestModel');
             const mockedRequest = testModule.createWireMockRequest({
                 method: 'GET',
@@ -158,7 +158,7 @@ describe('RequestModel', () => {
             });
         });
 
-        it('builds with method, endpoint, and queryParams (with feature)', () => {
+        test('builds with method, endpoint, and queryParams (with feature)', () => {
             const testModule = require('../../src/RequestModel');
             const mockedRequest = testModule.createWireMockRequest(
                 {

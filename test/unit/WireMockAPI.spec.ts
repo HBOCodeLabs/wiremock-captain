@@ -29,7 +29,7 @@ describe('WireMockAPI', () => {
     });
 
     describe('register', () => {
-        it('should return empty response w/ priority and scenario', async () => {
+        test('should return empty response w/ priority and scenario', async () => {
             jest.mock('../../src/RequestModel', () => ({
                 createWireMockRequest: jest.fn().mockName('mockedGetRequest'),
             }));
@@ -52,7 +52,7 @@ describe('WireMockAPI', () => {
     });
 
     describe('registerDefaultResponse', () => {
-        it('should return empty response w/ priority and scenario', async () => {
+        test('should return empty response w/ priority and scenario', async () => {
             jest.mock('../../src/RequestModel', () => ({
                 createWireMockRequest: jest.fn().mockName('mockedGetRequest'),
             }));
@@ -77,7 +77,7 @@ describe('WireMockAPI', () => {
     });
 
     describe('verify', () => {
-        it('verify calls', async () => {
+        test('verify calls', async () => {
             const wireMockApi = require('../../src/WireMockAPI');
             const wireMockUrl = 'https://testservice/';
             const wireMockEndpoint = '/test-endpoint';

@@ -24,7 +24,7 @@ describe('postProcessData', () => {
     await mockInstance.clearAll();
   });
 
-  it('should return 200', () => {
+  test('should return 200', () => {
     return supertest(serviceUrl)
       .post('/processData')
       .send()

@@ -10,7 +10,7 @@ describe('ResponseModel', () => {
     });
 
     describe('createWireMockResponse', () => {
-        it('builds with statusCode', () => {
+        test('builds with statusCode', () => {
             const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse({
                 status: 200,
@@ -21,7 +21,7 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('builds with statusCode and body', () => {
+        test('builds with statusCode and body', () => {
             const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse({
                 status: 200,
@@ -34,7 +34,7 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('builds with statusCode and body (with feature)', () => {
+        test('builds with statusCode and body (with feature)', () => {
             const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse(
                 {
@@ -50,7 +50,7 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('builds with statusCode and headers', () => {
+        test('builds with statusCode and headers', () => {
             const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse({
                 status: 200,
@@ -62,7 +62,7 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('should build response with chunked dribble delay', () => {
+        test('should build response with chunked dribble delay', () => {
             const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse(
                 {
@@ -86,7 +86,7 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('should build response with fixed delay', () => {
+        test('should build response with fixed delay', () => {
             const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse(
                 {
@@ -101,7 +101,7 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('should build response with log normal delay', () => {
+        test('should build response with log normal delay', () => {
             const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse(
                 {
@@ -126,7 +126,7 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('should build response with uniform delay', () => {
+        test('should build response with uniform delay', () => {
             const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse(
                 {
