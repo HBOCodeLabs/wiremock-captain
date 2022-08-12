@@ -19,11 +19,11 @@ import { IWireMockResponse } from './types/IWireMockResponse';
 import { filterRequest, getWebhookBody, getWebhookDelayBody } from './utils';
 
 // endpoint where wiremock stores mocks
-const WIREMOCK_MAPPINGS_URL: string = '__admin/mappings';
+const WIREMOCK_MAPPINGS_URL = '__admin/mappings';
 // endpoint that records all the incoming requests
-const WIREMOCK_REQUESTS_URL: string = '__admin/requests';
+const WIREMOCK_REQUESTS_URL = '__admin/requests';
 // endpoint that records all the scenario information
-const WIREMOCK_SCENARIO_URL: string = '__admin/scenarios';
+const WIREMOCK_SCENARIO_URL = '__admin/scenarios';
 
 const HEADERS: AxiosRequestHeaders = { 'Content-Type': 'application/json' };
 

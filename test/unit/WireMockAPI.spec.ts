@@ -5,29 +5,31 @@ describe('WireMockAPI', () => {
     const mockData = {
         data: {},
     };
-    const mockAxios = {
-        default: {
-            delete: jest.fn().mockResolvedValue(mockData as never),
-            get: jest.fn().mockResolvedValue(mockData as never),
-            post: jest.fn().mockResolvedValue(mockData as never),
-        },
-        AxiosRequestHeaders: jest.fn(),
-        AxiosResponse: jest.fn(),
-    };
+    const deleteMock = jest.fn().mockResolvedValue(mockData as never);
+    const getMock = jest.fn().mockResolvedValue(mockData as never);
+    const postMock = jest.fn().mockResolvedValue(mockData as never);
 
     beforeEach(() => {
-        jest.mock('axios', () => mockAxios);
+        jest.clearAllMocks();
+        jest.resetModules();
+        jest.mock('axios', () => ({
+            default: {
+                delete: deleteMock,
+                get: getMock,
+                post: postMock,
+            },
+            AxiosRequestHeaders: jest.fn(),
+            AxiosResponse: jest.fn(),
+        }));
     });
 
     afterEach(() => {
         jest.unmock('../../src/RequestModel');
         jest.unmock('../../src/ResponseModel');
-        jest.resetModules();
-        jest.clearAllMocks();
     });
 
     describe('register', () => {
-        it('should return empty response w/ priority and scenario', async () => {
+        test('should return empty response w/ priority and scenario', async () => {
             jest.mock('../../src/RequestModel', () => ({
                 createWireMockRequest: jest.fn().mockName('mockedGetRequest'),
             }));
@@ -40,7 +42,7 @@ describe('WireMockAPI', () => {
             const wireMockMethod = 'GET';
             const mock = new wireMockApi.WireMockAPI(wireMockUrl, wireMockEndpoint, wireMockMethod);
             const resp = await mock.register({}, {});
-            expect(mockAxios.default.post).toHaveBeenCalledWith(
+            expect(postMock).toHaveBeenCalledWith(
                 wireMockUrl + '__admin/mappings',
                 {},
                 { headers: { 'Content-Type': 'application/json' } },
@@ -50,7 +52,7 @@ describe('WireMockAPI', () => {
     });
 
     describe('registerDefaultResponse', () => {
-        it('should return empty response w/ priority and scenario', async () => {
+        test('should return empty response w/ priority and scenario', async () => {
             jest.mock('../../src/RequestModel', () => ({
                 createWireMockRequest: jest.fn().mockName('mockedGetRequest'),
             }));
@@ -65,7 +67,7 @@ describe('WireMockAPI', () => {
             const resp = await mock.registerDefaultResponse({
                 body: {},
             });
-            expect(mockAxios.default.post).toHaveBeenCalledWith(
+            expect(postMock).toHaveBeenCalledWith(
                 wireMockUrl + '__admin/mappings',
                 {},
                 { headers: { 'Content-Type': 'application/json' } },
@@ -75,7 +77,7 @@ describe('WireMockAPI', () => {
     });
 
     describe('verify', () => {
-        it('verify calls', async () => {
+        test('verify calls', async () => {
             const wireMockApi = require('../../src/WireMockAPI');
             const wireMockUrl = 'https://testservice/';
             const wireMockEndpoint = '/test-endpoint';
@@ -103,7 +105,7 @@ describe('WireMockAPI', () => {
                 ],
             };
             const calls = await mock.getRequestsForAPI();
-            expect(mockAxios.default.get).toHaveBeenCalledWith(wireMockUrl + '__admin/requests');
+            expect(getMock).toHaveBeenCalledWith(wireMockUrl + '__admin/requests');
             expect(calls.length).toEqual(1);
         });
     });

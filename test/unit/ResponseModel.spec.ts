@@ -1,8 +1,6 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-
 import { BodyType, DelayType } from '../../src';
 
 describe('ResponseModel', () => {
@@ -12,8 +10,8 @@ describe('ResponseModel', () => {
     });
 
     describe('createWireMockResponse', () => {
-        it('builds with statusCode', () => {
-            const testModule: typeof import('../../src/ResponseModel') = require('../../src/ResponseModel');
+        test('builds with statusCode', () => {
+            const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse({
                 status: 200,
             });
@@ -23,8 +21,8 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('builds with statusCode and body', () => {
-            const testModule: typeof import('../../src/ResponseModel') = require('../../src/ResponseModel');
+        test('builds with statusCode and body', () => {
+            const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse({
                 status: 200,
                 body: { testKey: 'test-value' },
@@ -36,8 +34,8 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('builds with statusCode and body (with feature)', () => {
-            const testModule: typeof import('../../src/ResponseModel') = require('../../src/ResponseModel');
+        test('builds with statusCode and body (with feature)', () => {
+            const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse(
                 {
                     status: 200,
@@ -52,8 +50,8 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('builds with statusCode and headers', () => {
-            const testModule: typeof import('../../src/ResponseModel') = require('../../src/ResponseModel');
+        test('builds with statusCode and headers', () => {
+            const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse({
                 status: 200,
                 headers: { Accept: 'json' },
@@ -64,8 +62,8 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('should build response with chunked dribble delay', () => {
-            const testModule: typeof import('../../src/ResponseModel') = require('../../src/ResponseModel');
+        test('should build response with chunked dribble delay', () => {
+            const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse(
                 {
                     status: 200,
@@ -88,8 +86,8 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('should build response with fixed delay', () => {
-            const testModule: typeof import('../../src/ResponseModel') = require('../../src/ResponseModel');
+        test('should build response with fixed delay', () => {
+            const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse(
                 {
                     status: 200,
@@ -103,8 +101,8 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('should build response with log normal delay', () => {
-            const testModule: typeof import('../../src/ResponseModel') = require('../../src/ResponseModel');
+        test('should build response with log normal delay', () => {
+            const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse(
                 {
                     status: 200,
@@ -128,8 +126,8 @@ describe('ResponseModel', () => {
             });
         });
 
-        it('should build response with log normal delay', () => {
-            const testModule: typeof import('../../src/ResponseModel') = require('../../src/ResponseModel');
+        test('should build response with uniform delay', () => {
+            const testModule = require('../../src/ResponseModel');
             const mockedResponse = testModule.createWireMockResponse(
                 {
                     status: 200,

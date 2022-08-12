@@ -40,27 +40,27 @@ export interface IWireMockWebhook {
     delay?: WireMockDelay;
 }
 
-export const enum BodyType {
+export enum BodyType {
     Default = 'jsonBody',
     Body = 'body',
     Base64Body = 'base64Body',
 }
 
-export const enum DelayType {
+export enum DelayType {
     CHUNKED_DRIBBLE = 'CHUNKED_DRIBBLE',
     FIXED = 'FIXED',
     LOG_NORMAL = 'LOG_NORMAL',
     UNIFORM = 'UNIFORM',
 }
 
-export const enum EndpointFeature {
+export enum EndpointFeature {
     Default = 'url',
     UrlPath = 'urlPath',
     UrlPathPattern = 'urlPathPattern',
     UrlPattern = 'urlPattern',
 }
 
-export const enum MatchingAttributes {
+export enum MatchingAttributes {
     BinaryEqualTo = 'binaryEqualTo',
     Contains = 'contains',
     DoesNotMatch = 'doesNotMatch',
@@ -70,7 +70,7 @@ export const enum MatchingAttributes {
     MatchesJsonPath = 'matchesJsonPath',
 }
 
-export const enum WireMockFault {
+export enum WireMockFault {
     CONNECTION_RESET_BY_PEER = 'CONNECTION_RESET_BY_PEER',
     EMPTY_RESPONSE = 'EMPTY_RESPONSE',
     MALFORMED_RESPONSE_CHUNK = 'MALFORMED_RESPONSE_CHUNK',

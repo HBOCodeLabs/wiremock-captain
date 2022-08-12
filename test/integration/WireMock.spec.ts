@@ -1,15 +1,14 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { describe, expect, it } from '@jest/globals';
 import axios from 'axios';
 import * as express from 'express';
 import { Server } from 'http';
 
 import { DelayType, WireMock, WireMockFault } from '../../src';
 
-const WEBHOOK_BASE_URL: string = 'http://host.docker.internal';
-const WEBHOOK_PORT: number = 9876;
+const WEBHOOK_BASE_URL = 'http://host.docker.internal';
+const WEBHOOK_PORT = 9876;
 
 describe('Integration with WireMock', () => {
     const wiremockUrl = 'http://localhost:8080';
@@ -39,7 +38,7 @@ describe('Integration with WireMock', () => {
         app.get('/webhook', webhookGetHandler);
         app.post('/webhook', webhookPostHandler);
         server = app.listen(WEBHOOK_PORT).on('error', (e) => {
-            fail('Error starting webhook callback server: ' + e.message);
+            throw new Error('Error starting webhook callback server: ' + e.message);
         });
     });
 
@@ -47,21 +46,21 @@ describe('Integration with WireMock', () => {
         await mock.clearAllExceptDefault();
     });
 
-    afterAll((done) => {
+    afterAll(() => {
         mock.clearAll()
             .then(() => {
-                server.close(done).on('error', (e) => {
-                    fail('Error closing webhook callback server: ' + e.message);
+                server.close().on('error', (e) => {
+                    throw new Error('Error closing webhook callback server: ' + e.message);
                 });
             })
             .catch((e) => {
-                fail('Error exiting test: ' + e.message);
+                throw new Error('Error exiting test: ' + e.message);
             });
     });
 
     describe('WireMock', () => {
         describe('register', () => {
-            it('sets up a stub mapping in wiremock server and expects mapping to be called', async () => {
+            test('sets up a stub mapping in wiremock server and expects mapping to be called', async () => {
                 const requestBody = {
                     objectKey: {
                         intKey: 5,
@@ -99,7 +98,7 @@ describe('Integration with WireMock', () => {
                 );
             });
 
-            it('sets up a stub mapping in wiremock server and expects mapping to be called w/ delay', async () => {
+            test('sets up a stub mapping in wiremock server and expects mapping to be called w/ delay', async () => {
                 const requestBody = {
                     objectKey: {
                         intKey: 5,
@@ -133,7 +132,7 @@ describe('Integration with WireMock', () => {
                 expect(Date.now() - start).toBeGreaterThanOrEqual(300);
             });
 
-            it('sets up a stub mapping in wiremock server without body', async () => {
+            test('sets up a stub mapping in wiremock server without body', async () => {
                 const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
                 await mock.register(
@@ -152,7 +151,7 @@ describe('Integration with WireMock', () => {
                 expect(body).toEqual(responseBody);
             });
 
-            it('sets up a stub mapping in wiremock server w/ GET webhook', async () => {
+            test('sets up a stub mapping in wiremock server w/ GET webhook', async () => {
                 // This promise is resolved by the express "webhook" server
                 webhookPromise = new Promise((resolve: (r: jest.Mock) => void) => {
                     webhookPromiseResolve = resolve;
@@ -188,7 +187,7 @@ describe('Integration with WireMock', () => {
                 });
             });
 
-            it('sets up a stub mapping in wiremock server w/ POST webhook', async () => {
+            test('sets up a stub mapping in wiremock server w/ POST webhook', async () => {
                 // This promise is resolved by the express "webhook" server
                 webhookPromise = new Promise((resolve: (r: jest.Mock) => void) => {
                     webhookPromiseResolve = resolve;
@@ -229,7 +228,7 @@ describe('Integration with WireMock', () => {
                 expect(webhookCallback).toHaveBeenNthCalledWith(1, { timestamp });
             });
 
-            it('sets up a stub mapping in wiremock server with priority', async () => {
+            test('sets up a stub mapping in wiremock server with priority', async () => {
                 const requestBody = {
                     objectKey: {
                         intKey: 5,
@@ -266,7 +265,7 @@ describe('Integration with WireMock', () => {
                 );
             });
 
-            it('sets up a stub mapping in wiremock server with higher priority', async () => {
+            test('sets up a stub mapping in wiremock server with higher priority', async () => {
                 const requestBody = {
                     objectKey: {
                         intKey: 5,
@@ -315,7 +314,7 @@ describe('Integration with WireMock', () => {
                 );
             });
 
-            it('sets up a stub mapping in wiremock server w/ EMPTY_RESPONSE fault', async () => {
+            test('sets up a stub mapping in wiremock server w/ EMPTY_RESPONSE fault', async () => {
                 const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
                 await mock.register(
@@ -335,7 +334,7 @@ describe('Integration with WireMock', () => {
                 );
             });
 
-            it('sets up a stub mapping in wiremock server w/ CONNECTION_RESET_BY_PEER fault', async () => {
+            test('sets up a stub mapping in wiremock server w/ CONNECTION_RESET_BY_PEER fault', async () => {
                 const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
                 await mock.register(
@@ -355,7 +354,7 @@ describe('Integration with WireMock', () => {
                 );
             });
 
-            it('sets up a stub mapping in wiremock server w/ RANDOM_DATA_THEN_CLOSE fault', async () => {
+            test('sets up a stub mapping in wiremock server w/ RANDOM_DATA_THEN_CLOSE fault', async () => {
                 const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
                 await mock.register(
@@ -375,7 +374,7 @@ describe('Integration with WireMock', () => {
                 );
             });
 
-            it('sets up a stub mapping in wiremock server w/ MALFORMED_RESPONSE_CHUNK fault', async () => {
+            test('sets up a stub mapping in wiremock server w/ MALFORMED_RESPONSE_CHUNK fault', async () => {
                 const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
                 await mock.register(
@@ -400,7 +399,7 @@ describe('Integration with WireMock', () => {
         });
 
         describe('deleteMapping', () => {
-            it('sets up a stub mapping and deletes it', async () => {
+            test('sets up a stub mapping and deletes it', async () => {
                 const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
 
@@ -422,7 +421,7 @@ describe('Integration with WireMock', () => {
         });
 
         describe('getMapping', () => {
-            it('sets up a stub mapping and returns it with get mappings', async () => {
+            test('sets up a stub mapping and returns it with get mappings', async () => {
                 const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
 
@@ -442,7 +441,7 @@ describe('Integration with WireMock', () => {
         });
 
         describe('getRequests', () => {
-            it('returns number of requests made', async () => {
+            test('returns number of requests made', async () => {
                 const testEndpoint = '/test-endpoint';
                 await mock.register({ method: 'GET', endpoint: testEndpoint }, { status: 200 });
 
@@ -452,7 +451,7 @@ describe('Integration with WireMock', () => {
                 expect(await mock.getAllRequests()).toHaveLength(5);
             });
 
-            it('returns number of unmatched requests', async () => {
+            test('returns number of unmatched requests', async () => {
                 const testEndpoint = '/test-endpoint';
                 await mock.register({ method: 'GET', endpoint: testEndpoint }, { status: 200 });
 
@@ -467,7 +466,7 @@ describe('Integration with WireMock', () => {
         });
 
         describe('getScenarios', () => {
-            it('should return scenarios', async () => {
+            test('should return scenarios', async () => {
                 const testEndpoint = '/test-endpoint';
                 expect(await mock.getAllScenarios()).toHaveLength(0);
                 await mock.register({ method: 'GET', endpoint: testEndpoint }, { status: 400 });
@@ -487,7 +486,7 @@ describe('Integration with WireMock', () => {
         });
 
         describe('resetMappings', () => {
-            it('sets up a stub mapping and deletes it', async () => {
+            test('sets up a stub mapping and deletes it', async () => {
                 const testEndpoint = '/test-endpoint';
                 const responseBody = { test: 'testValue' };
 
@@ -509,7 +508,7 @@ describe('Integration with WireMock', () => {
         });
 
         describe('resetScenarios', () => {
-            it('should return scenarios', async () => {
+            test('should return scenarios', async () => {
                 const testEndpoint = '/test-endpoint';
                 await mock.register(
                     { method: 'GET', endpoint: testEndpoint },

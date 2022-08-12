@@ -1,7 +1,6 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { describe, expect, it } from '@jest/globals';
 import axios from 'axios';
 
 import { WireMockAPI } from '../../src';
@@ -18,7 +17,7 @@ describe('Integration with WireMock', () => {
 
     describe('WireMockAPI', () => {
         describe('register', () => {
-            it('sets up a stub mapping in wiremock server and expects mapping to be called', async () => {
+            test('sets up a stub mapping in wiremock server and expects mapping to be called', async () => {
                 const requestBody = {
                     objectKey: {
                         intKey: 5,
@@ -51,7 +50,7 @@ describe('Integration with WireMock', () => {
                 );
             });
 
-            it('sets up a stub mapping in wiremock server without body', async () => {
+            test('sets up a stub mapping in wiremock server without body', async () => {
                 const responseBody = { test: 'testValue' };
                 await mock.register(
                     {},
@@ -67,7 +66,7 @@ describe('Integration with WireMock', () => {
                 await mock.getRequestsForAPI();
             });
 
-            it('sets up a stub mapping in wiremock server with priority', async () => {
+            test('sets up a stub mapping in wiremock server with priority', async () => {
                 const requestBody = {
                     objectKey: {
                         intKey: 5,
@@ -101,7 +100,7 @@ describe('Integration with WireMock', () => {
                 );
             });
 
-            it('sets up a stub mapping in wiremock server with higher priority', async () => {
+            test('sets up a stub mapping in wiremock server with higher priority', async () => {
                 const requestBody = {
                     objectKey: {
                         intKey: 5,
@@ -147,7 +146,7 @@ describe('Integration with WireMock', () => {
         });
 
         describe('deleteMapping', () => {
-            it('sets up a stub mapping and deletes it', async () => {
+            test('sets up a stub mapping and deletes it', async () => {
                 const responseBody = { test: 'testValue' };
 
                 expect(await mock.getAllMappings()).toHaveLength(0);
@@ -165,7 +164,7 @@ describe('Integration with WireMock', () => {
         });
 
         describe('getMapping', () => {
-            it('sets up a stub mapping and returns it with get mappings', async () => {
+            test('sets up a stub mapping and returns it with get mappings', async () => {
                 const responseBody = { test: 'testValue' };
 
                 expect(await mock.getAllMappings()).toHaveLength(0);
@@ -181,7 +180,7 @@ describe('Integration with WireMock', () => {
         });
 
         describe('getRequests', () => {
-            it('returns number of unmatched requests', async () => {
+            test('returns number of unmatched requests', async () => {
                 await mock.register({}, { status: 200 });
 
                 for (let i = 0; i < 5; i++) {
@@ -195,7 +194,7 @@ describe('Integration with WireMock', () => {
         });
 
         describe('getScenarios', () => {
-            it('should return scenarios', async () => {
+            test('should return scenarios', async () => {
                 expect(await mock.getAllScenarios()).toHaveLength(0);
                 await mock.register({}, { status: 400 });
                 expect(await mock.getAllScenarios()).toHaveLength(0);
@@ -214,7 +213,7 @@ describe('Integration with WireMock', () => {
         });
 
         describe('resetScenarios', () => {
-            it('should return scenarios', async () => {
+            test('should return scenarios', async () => {
                 await mock.register(
                     {},
                     { status: 200 },
