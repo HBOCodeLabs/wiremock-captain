@@ -7,21 +7,20 @@ name: Mark stale issues and pull requests
 
 on:
   schedule:
-  - cron: '41 12 * * *'
+    - cron: '41 12 * * *'
 
 jobs:
   stale:
-
     runs-on: ubuntu-latest
     permissions:
       issues: write
       pull-requests: write
 
     steps:
-    - uses: actions/stale@v3
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        stale-issue-message: 'Issue will be auto-closed due to no updates.'
-        stale-pr-message: 'PR will be auto-closed due to no updates.'
-        stale-issue-label: 'no-issue-activity'
-        stale-pr-label: 'no-pr-activity'
+      - uses: actions/stale@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: 'Issue will be auto-closed due to no updates.'
+          stale-pr-message: 'PR will be auto-closed due to no updates.'
+          stale-issue-label: 'no-issue-activity'
+          stale-pr-label: 'no-pr-activity'
