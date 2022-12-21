@@ -1,23 +1,23 @@
 {
-    "compilerOptions": {
-        "allowJs": false,
-        "allowUnreachableCode": false,
-        "alwaysStrict": true,
-        "declaration": true,
-        "declarationMap": false,
-        "exactOptionalPropertyTypes": true,
-        "incremental": false,
-        "module": "commonjs",
-        "noEmitOnError": true,
-        "noImplicitOverride": true,
-        "noImplicitReturns": true,
-        "noUncheckedIndexedAccess": true,
-        "outDir": "dist",
-        "pretty": true,
-        "removeComments": false,
-        "sourceMap": false,
-        "strict": true,
-        "target": "es2019"
-    },
-    "include": ["src/**/*"]
+  "compilerOptions": {
+    "allowJs": false,
+    "allowUnreachableCode": false,
+    "alwaysStrict": true,
+    "declaration": true,
+    "declarationMap": false,
+    "exactOptionalPropertyTypes": true,
+    "incremental": false,
+    "module": "commonjs",
+    "noEmitOnError": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "outDir": "dist",
+    "pretty": true,
+    "removeComments": false,
+    "sourceMap": false,
+    "strict": true,
+    "target": "es2019"
+  },
+  "include": ["src/**/*"]
 }

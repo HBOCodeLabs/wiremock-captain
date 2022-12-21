@@ -1,7 +1,7 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import { createWireMockRequest } from './RequestModel';
 import { createWireMockResponse } from './ResponseModel';
@@ -25,7 +25,7 @@ const WIREMOCK_REQUESTS_URL = '__admin/requests';
 // endpoint that records all the scenario information
 const WIREMOCK_SCENARIO_URL = '__admin/scenarios';
 
-const HEADERS: AxiosRequestHeaders = { 'Content-Type': 'application/json' };
+const HEADERS = { 'Content-Type': 'application/json' };
 
 export class WireMock {
     protected readonly baseUrl: string;

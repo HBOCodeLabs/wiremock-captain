@@ -329,7 +329,7 @@ describe('Integration with WireMock', () => {
                     { fault: WireMockFault.EMPTY_RESPONSE },
                 );
 
-                await expect(axios.post(wiremockUrl + testEndpoint)).rejects.toThrowError(
+                await expect(axios.post(wiremockUrl + testEndpoint)).rejects.toThrow(
                     'socket hang up',
                 );
             });
@@ -349,7 +349,7 @@ describe('Integration with WireMock', () => {
                     { fault: WireMockFault.CONNECTION_RESET_BY_PEER },
                 );
 
-                await expect(axios.post(wiremockUrl + testEndpoint)).rejects.toThrowError(
+                await expect(axios.post(wiremockUrl + testEndpoint)).rejects.toThrow(
                     'socket hang up',
                 );
             });
@@ -369,7 +369,7 @@ describe('Integration with WireMock', () => {
                     { fault: WireMockFault.RANDOM_DATA_THEN_CLOSE },
                 );
 
-                await expect(axios.post(wiremockUrl + testEndpoint)).rejects.toThrowError(
+                await expect(axios.post(wiremockUrl + testEndpoint)).rejects.toThrow(
                     'Parse Error: Expected HTTP/',
                 );
             });
