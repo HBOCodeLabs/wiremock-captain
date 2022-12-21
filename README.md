@@ -85,7 +85,7 @@ Here's how to set up WireMock Captain.  The demo project can be copy+pasted as a
    $ cd wiremock-captain/examples/express-app
 
    # Start the WireMock simulator
-   $ docker run -itd --rm -p 8080:8080 --name mocked-service wiremock/wiremock:2.31.0
+   $ docker run -itd --rm -p 8080:8080 --name mocked-service wiremock/wiremock:2.32.0
 
    # Start the service in development mode
    $ npm run dev
@@ -103,7 +103,7 @@ failed.
 Assuming the wiremock docker instance is already running using the following command:
 
 ```bash
-docker run -itd --rm --name wiremock-container -p 8080:8080 wiremock/wiremock:2.31.0 --record-mappings --verbose
+docker run -itd --rm --name wiremock-container -p 8080:8080 wiremock/wiremock:2.32.0 --record-mappings --verbose
 ```
 
 Typical usage looks like this:

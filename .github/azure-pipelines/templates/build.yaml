@@ -13,6 +13,9 @@ steps:
     - script: 'npm ci'
       displayName: 'Install: wiremock-captain'
 
+    - script: 'npm run lint'
+      displayName: 'Lint: wiremock-captain'
+
     - script: 'npm run build'
       displayName: 'Build: wiremock-captain'
 
