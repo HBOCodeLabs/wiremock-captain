@@ -266,7 +266,7 @@ const response = await fetch(wiremockUrl + '/test', {
     body: JSON.stringify(requestBody),
 });
 const body = await response.json();
-const calls = await mock.requests('POST', testEndpoint);
+const calls = await mock.getRequestsForAPI('POST', testEndpoint);
 const jestMock = jest.fn();
 
 calls.forEach((request: unknown) => {
