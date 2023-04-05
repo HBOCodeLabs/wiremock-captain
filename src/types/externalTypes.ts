@@ -66,6 +66,7 @@ export enum MatchingAttributes {
     DoesNotMatch = 'doesNotMatch',
     EqualTo = 'equalTo',
     EqualToJson = 'equalToJson',
+    EqualToXml = 'equalToXml',
     Matches = 'matches',
     MatchesJsonPath = 'matchesJsonPath',
 }
