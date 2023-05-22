@@ -159,6 +159,11 @@ inside each test if necessary using `stubPriority` from `IWireMockFeatures`.
 - Use `getUnmatchedRequests` to make sure there are no unmatched mocks at the end of each of the tests
 - Use `clearAllExceptDefault` after each test to clear mocks set up during individual tests
 
+## Development
+
+To use Dev Container locally for easier development environment setup, use VSCode
+[Dev Container plugin](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
+
 ## WireMock
 
 This project is not officially affiliated with WireMock. For documentation about WireMock,
