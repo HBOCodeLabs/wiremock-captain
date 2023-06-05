@@ -3,6 +3,9 @@ module.exports = {
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },
+  moduleNameMapper: {
+    axios: 'axios/dist/node/axios.cjs',
+  },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   testRegex: '(/test/integration/.*|(\\.|/)(test|spec))\\.(ts)x?$',
   coverageDirectory: 'coverage',
