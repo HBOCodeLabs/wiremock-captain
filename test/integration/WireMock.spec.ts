@@ -373,30 +373,6 @@ describe('Integration with WireMock', () => {
                     'Parse Error: Expected HTTP/',
                 );
             });
-
-            // skipping due to updated axios behavior where it throws error at `axios.post`
-            test.skip('sets up a stub mapping in wiremock server w/ MALFORMED_RESPONSE_CHUNK fault', async () => {
-                const testEndpoint = '/test-endpoint';
-                const responseBody = { test: 'testValue' };
-                await mock.register(
-                    {
-                        method: 'POST',
-                        endpoint: testEndpoint,
-                    },
-                    {
-                        status: 200,
-                        body: responseBody,
-                    },
-                    { fault: WireMockFault.MALFORMED_RESPONSE_CHUNK },
-                );
-
-                const response = await axios.post(wiremockUrl + testEndpoint);
-                const statusCode = response.status;
-                const data = response.data;
-                expect(statusCode).toEqual(200);
-                expect(data).toBeDefined();
-                expect(data).not.toEqual(responseBody);
-            });
         });
 
         describe('deleteMapping', () => {

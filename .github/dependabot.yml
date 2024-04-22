@@ -9,3 +9,12 @@ updates:
     directory: '/' # Location of package manifests
     schedule:
       interval: 'daily'
+    groups:
+      lint:
+        patterns:
+          - 'eslint*'
+          - 'prettier'
+          - 'husky'
+          - 'lint-staged'
+          - '@typescript-eslint*'
+          - 'pretty-quick'
