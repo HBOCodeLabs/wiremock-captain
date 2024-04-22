@@ -4,6 +4,7 @@
 import { DelayType, WireMockDelay } from './types/externalTypes';
 import { Method, WebhookBody } from './types/internalTypes';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function filterRequest(method: Method, endpointUrl: string, request: any): boolean {
     return request.request.method === method && request.request.url === endpointUrl;
 }
