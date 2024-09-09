@@ -11,9 +11,9 @@ pool:
 
 steps:
     - task: NodeTool@0
-      displayName: 'Use Node 16'
+      displayName: 'Use Node 20'
       inputs:
-          versionSpec: '16.x'
+          versionSpec: '20.x'
           checkLatest: true
 
     - template: templates/build.yaml
@@ -22,11 +22,10 @@ steps:
       displayName: 'Collect test results'
       condition: succeededOrFailed()
       inputs:
-          testRunner: JUnit
+          testResultsFormat: JUnit
           testResultsFiles: 'reports/*.xml'
 
-    - task: PublishCodeCoverageResults@1
+    - task: PublishCodeCoverageResults@2
       displayName: 'Collect code coverage'
       inputs:
-          codeCoverageTool: Cobertura
           summaryFileLocation: coverage/*.xml
