@@ -16,8 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.REPO_PACKAGE_PAT }}
       - uses: actions/setup-node@v4
         with:
           node-version-file: .tool-versions
@@ -27,3 +25,6 @@ jobs:
           git config user.email 'satvik-s@users.noreply.github.com'
           git checkout -b sshukla/temp-version-bump
           npm version ${{ inputs.version_update_type }}
+          git add .
+          git commit -m "bump version"
+          git push -u origin HEAD
