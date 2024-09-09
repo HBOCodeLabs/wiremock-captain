@@ -12,19 +12,27 @@ on:
           - major
 
 jobs:
-  create-pull-request:
+  create-branch:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .tool-versions
-      - name: Create commits
+      - name: Setup git
         run: |
           git config user.name 'Satvik'
           git config user.email 'satvik-s@users.noreply.github.com'
-          git checkout -b sshukla/temp-version-bump
           npm version ${{ inputs.version_update_type }}
-          git add .
-          git commit -m "bump version"
+      - name: Get release tag
+        id: get-release-tag
+        shell: bash
+        run: echo "release-tag=v$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+      - name: Push changes
+        run: |
+          git checkout -b sshukla/version-bump-$VERSION
           git push -u origin HEAD
+        env:
+          VERSION: ${{ steps.get-release-tag.outputs.release-tag }}
