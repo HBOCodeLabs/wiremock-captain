@@ -14,6 +14,8 @@ on:
 jobs:
   create-branch:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -23,6 +25,7 @@ jobs:
         run: |
           git config user.name 'Satvik'
           git config user.email 'satvik-s@users.noreply.github.com'
+          npm version ${{ inputs.version_update_type }}
       - name: Get release tag
         id: get-release-tag
         shell: bash
@@ -30,7 +33,6 @@ jobs:
       - name: Push changes
         run: |
           git checkout -b sshukla/version-bump-$VERSION
-          npm version ${{ inputs.version_update_type }}
           git push -u origin HEAD
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_PAT }}
