@@ -22,11 +22,10 @@ steps:
       displayName: 'Collect test results'
       condition: succeededOrFailed()
       inputs:
-          testRunner: JUnit
+          testResultsFormat: JUnit
           testResultsFiles: 'reports/*.xml'
 
-    - task: PublishCodeCoverageResults@1
+    - task: PublishCodeCoverageResults@2
       displayName: 'Collect code coverage'
       inputs:
-          codeCoverageTool: Cobertura
           summaryFileLocation: coverage/*.xml
