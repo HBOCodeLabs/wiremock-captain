@@ -35,5 +35,4 @@ jobs:
           git checkout -b sshukla/version-bump-$VERSION
           git push -u origin HEAD
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_PAT }}
           VERSION: ${{ steps.get-release-tag.outputs.release-tag }}
