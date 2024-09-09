@@ -36,8 +36,8 @@
     "precommit"
   ],
   "engines": {
-    "node": ">=18.20.2",
-    "npm": ">=10.5.0"
+    "node": ">=20.17.0",
+    "npm": ">=10.8.2"
   },
   "dependencies": {
     "axios": "1.7.7"
