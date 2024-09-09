@@ -11,9 +11,9 @@ pool:
 
 steps:
     - task: NodeTool@0
-      displayName: 'Use Node 16'
+      displayName: 'Use Node 20'
       inputs:
-          versionSpec: '16.x'
+          versionSpec: '20.x'
           checkLatest: true
 
     - template: templates/build.yaml
