@@ -1,0 +1,29 @@
+name: Version bump
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_update_type:
+        type: choice
+        description: Version update type
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.REPO_PACKAGE_PAT }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Create commits
+        run: |
+          git config user.name 'Satvik'
+          git config user.email 'satvik-s@users.noreply.github.com'
+          git checkout -b sshukla/temp-version-bump
+          npm version ${{ inputs.version_update_type }}
