@@ -27,6 +27,9 @@ export interface IWireMockFeatures {
     requestEndpointFeature?: EndpointFeature;
     requestHeaderFeatures?: Record<string, MatchingAttributes>;
     requestQueryParamFeatures?: Record<string, MatchingAttributes>;
+    requestFormParameterFeatures?: Record<string, MatchingAttributes>;
+    requestIgnoreArrayOrder?: boolean;
+    requestIgnoreExtraElements?: boolean;
     responseBodyType?: BodyType;
     responseDelay?: WireMockDelay;
     /**

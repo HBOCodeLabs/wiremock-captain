@@ -26,7 +26,6 @@
 
 - **A strategy that works.**  WireMock Captain is actively used to test many microservices that support a major commercial product.
 
-
 ## How it works
 
 A typical flow goes like this:
@@ -43,7 +42,6 @@ A typical flow goes like this:
   <p />
 </div>
 
-
 **Note**: Jest and TypeScript are not required; other equivalent tools can be easily substituted.
 
 The library can be used to mock multiple APIs with complex request-response schemas. For more examples, see the
@@ -52,40 +50,41 @@ The library can be used to mock multiple APIs with complex request-response sche
 If you are using the [Jest](https://jestjs.io/) framework, you can also use the `expect`
 wrapper to do equality and other checks.
 
-
 ## Running the demo
 
 Here's how to set up WireMock Captain.  The demo project can be copy+pasted as a starting point for your own project.
 
-1. Install the Docker platform, if you have not already done so.  Instructions are here: https://docs.docker.com/get-docker
+1. Install the Docker platform, if you have not already done so.  Instructions are here: <https://docs.docker.com/get-docker>
 
 2. Clone the WireMock Captain repo:
 
    ```shell
-   $ git clone https://github.com/HBOCodeLabs/wiremock-captain.git
+   git clone https://github.com/HBOCodeLabs/wiremock-captain.git
    ```
 
 3. Build the WireMock project:
 
    ```shell
-   $ cd wiremock-captain
-   $ npm install
-   $ npm run build
+   cd wiremock-captain
+   npm install
+   npm run build
    ```
 
 4. Now build the `express-app` demo project (which depends on step 3):
+
    ```shell
-   $ cd wiremock-captain/examples/express-app
-   $ npm install
-   $ npm run build
+   cd wiremock-captain/examples/express-app
+   npm install
+   npm run build
    ```
 
 5. Launch the `express-app` tests:
+
    ```shell
    $ cd wiremock-captain/examples/express-app
 
    # Start the WireMock simulator
-   $ docker run -itd --rm -p 8080:8080 --name mocked-service wiremock/wiremock:2.32.0
+   $ docker run -itd --rm -p 8080:8080 --name mocked-service wiremock/wiremock:3.9.1
 
    # Start the service in development mode
    $ npm run dev
@@ -98,12 +97,12 @@ If the tests passed, that means the docker instance used to mock the API at `htt
 during testing. If the mocks were not set up correctly or the docker instance was not running, the test would have
 failed.
 
-
 ## Authoring your own tests
+
 Assuming the wiremock docker instance is already running using the following command:
 
 ```bash
-docker run -itd --rm --name wiremock-container -p 8080:8080 wiremock/wiremock:2.32.0 --record-mappings --verbose
+docker run -itd --rm --name wiremock-container -p 8080:8080 wiremock/wiremock:3.9.1 --record-mappings --verbose
 ```
 
 Typical usage looks like this:
@@ -140,6 +139,7 @@ describe('Integration with WireMock', () => {
 For more examples, look [here](https://github.com/HBOCodeLabs/wiremock-captain/tree/main/docs/examples)
 
 ## Debugging
+
 - open terminal and run `docker attach mocked-service`
 - run the tests in separate terminal
 - watch the logs in the wiremock container to find out possible issues/bugs

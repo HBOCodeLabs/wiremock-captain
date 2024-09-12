@@ -16,7 +16,7 @@ To run the API in `production` environment:
 To run the API in `development` environment:
 - Start WireMock server instance in docker using the following command:
 ```
-docker run -itd --rm --name spotify-server -p 8085:8080 wiremock/wiremock:2.32.0 --record-mappings --verbose
+docker run -itd --rm --name spotify-server -p 8085:8080 wiremock/wiremock:3.9.1 --record-mappings --verbose
 ```
 - Run `nvm use`
 - Run `npm ci`
@@ -26,7 +26,7 @@ docker run -itd --rm --name spotify-server -p 8085:8080 wiremock/wiremock:2.32.0
 To run the tests:
 - Start WireMock server instance in docker using the following command:
 ```
-docker run -itd --rm --name spotify-server -p 8085:8080 wiremock/wiremock:2.32.0 --record-mappings --verbose
+docker run -itd --rm --name spotify-server -p 8085:8080 wiremock/wiremock:3.9.1 --record-mappings --verbose
 ```
 - Run `nvm use`
 - Run `npm ci`

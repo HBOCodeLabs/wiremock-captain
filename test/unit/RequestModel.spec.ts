@@ -47,7 +47,13 @@ describe('RequestModel', () => {
             expect(mockedRequest).toEqual({
                 method: 'GET',
                 url: '/test-endpoint',
-                bodyPatterns: [{ equalToJson: { testKey: 'testValue' } }],
+                bodyPatterns: [
+                    {
+                        equalToJson: { testKey: 'testValue' },
+                        ignoreArrayOrder: false,
+                        ignoreExtraElements: false,
+                    },
+                ],
             });
         });
 
@@ -138,7 +144,7 @@ describe('RequestModel', () => {
             });
         });
 
-        test('builds with method, endpoint, and queryParams', () => {
+        test('builds with method, endpoint, queryParams, and formParameters', () => {
             const testModule = require('../../src/RequestModel');
             const mockedRequest = testModule.createWireMockRequest({
                 method: 'GET',
@@ -147,6 +153,9 @@ describe('RequestModel', () => {
                     a: 'test-val',
                     b: 1,
                 },
+                formParameters: {
+                    c: true,
+                },
             });
             expect(mockedRequest).toEqual({
                 method: 'GET',
@@ -154,6 +163,9 @@ describe('RequestModel', () => {
                 queryParameters: {
                     a: { equalTo: 'test-val' },
                     b: { equalTo: 1 },
+                },
+                formParameters: {
+                    c: { equalTo: true },
                 },
             });
         });
