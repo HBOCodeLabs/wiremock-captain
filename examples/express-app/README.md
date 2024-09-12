@@ -18,6 +18,6 @@ npm run dev
 Running the tests:
 
 ```bash
-docker run -itd --rm -p 8080:8080 --name mocked-service wiremock/wiremock:2.32.0 --verbose
+docker run -itd --rm -p 8080:8080 --name mocked-service wiremock/wiremock:3.9.1 --verbose
 npm run test
 ```

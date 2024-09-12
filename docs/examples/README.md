@@ -1,8 +1,9 @@
-## Examples
+# Examples
 
 If the purpose is to only mock a single API over and over, `WireMockAPI` would be the better option over `WireMock`.
 
 In that case, the usage would look like:
+
 ```typescript
 import { WireMockAPI } from 'wiremock-captain';
 
@@ -39,14 +40,16 @@ describe('Integration with WireMock', () => {
 
 The above allows for skipping specifiying `endpoint` and `method` when creating mocks multiple times.
 
-### Basic use case
+## Basic use case
+
 ```typescript
 const mockedRequest: IWireMockRequest = { method: 'GET', endpoint: '/test' };
 const mockedResponse: IWireMockResponse = { status: 200 };
 await mock.register(mockedRequest, mockedResponse);
 ```
 
-### Do a regex match for the path
+## Do a regex match for the path
+
 ```typescript
 const mockedRequest: IWireMockRequest = { method: 'GET', endpoint: '/test' };
 const mockedResponse: IWireMockResponse = { status: 200 };
@@ -54,7 +57,21 @@ const features: IWireMockFeatures = { requestEndpointFeature: EndpointFeature.Ur
 await mock.register(mockedRequest, mockedResponse, features);
 ```
 
-### Do a path match when query paramters are present
+## Do a JSON body match but ignore order of elements
+
+```typescript
+const mockedRequest: IWireMockRequest = {
+    method: 'POST',
+    endpoint: '/test',
+    body: [{ a: 1 }, { b: 2 }],
+};
+const mockedResponse: IWireMockResponse = { status: 200 };
+const features: IWireMockFeatures = { requestIgnoreArrayOrder: true };
+await mock.register(mockedRequest, mockedResponse, features);
+```
+
+## Do a path match when query paramters are present
+
 ```typescript
 const mockedRequest: IWireMockRequest = { method: 'GET', endpoint: '/test' };
 const mockedResponse: IWireMockResponse = { status: 200 };
@@ -65,7 +82,8 @@ await mock.register(mockedRequest, mockedResponse, features);
 The above will match only on the path for any query parameters. To match the path and query
 parameters use the above and specify `queryParameters` when creating the mock request.
 
-### Do an equality match on one of the header and regex non-match of another
+## Do an equality match on one of the header and regex non-match of another
+
 ```typescript
 const headers = { Accept: 'json', Authorization: 'test-auth' };
 const mockedRequest: IWireMockRequest = { method: 'GET', endpoint: '/test', headers };
@@ -91,7 +109,7 @@ const features: IWireMockFeatures = {
 await mock.register(mockedRequest, mockedResponse, features);
 ```
 
-### Return binary data (e.g. API with protobuf support)
+## Return binary data (e.g. API with protobuf support)
 
 ```typescript
 const mockedRequest: IWireMockRequest = {
@@ -119,13 +137,14 @@ await mock.register(
 );
 ```
 
-### Override a mapping
+## Override a mapping
 
 By default, if a request matches to two different stub mappings, the one created more recently will be
 the one wiremock uses. To have more control in similar scenarios, make use of `priority` while making
 a new mapping (lower the value, higher the priority).
 
 The following example will always return `201` status code because that mapping has higher priority
+
 ```typescript
 const headers = { Accept: 'json', Authorization: 'test-auth' };
 const mockedRequest: IWireMockRequest = { method: 'GET', endpoint: '/test', headers };
@@ -137,7 +156,7 @@ await mock.register(mockedRequest, mockedResponseHighPriority, featuresHighPrior
 await mock.register(mockedRequest, mockedResponseLowPriority, featuresLowPriority);
 ```
 
-### Stateful mocks
+## Stateful mocks
 
 `Scenario` can be leveraged to allow stateful mocks. To do so, provide `scenario` in
 `IWireMockFeatures` while building the mock. The starting state will always be `Started`.
@@ -170,7 +189,7 @@ await mock.register(
 In the above example, the first request made will respond with status code `201` while
 the second and all subsequent requests will respond with status `200`.
 
-### Delayed response
+## Delayed response
 
 The following mock will delay all responses matching
 the stub by 300 milliseconds
@@ -195,7 +214,7 @@ await mock.register(
 );
 ```
 
-### Webhook and callback
+## Webhook and callback
 
 The following mock will make an HTTP GET call to `http://some-service/webhook-api`
 every time the given stub is matched
@@ -223,7 +242,7 @@ it to work, an additional webhook `.jar` extension is required to be available
 to the WireMock docker instance. Visit [here](https://wiremock.org/docs/docker/)
 or `<root>/scripts/setup.sh` for examples
 
-### Response fault
+## Response fault
 
 The following mock will return an empty response (no status code, no body)
 when matched. This can be used to test for socket timeouts, connection resets,
@@ -247,8 +266,10 @@ await mock.register(
 );
 ```
 
-### Usage with jest
+## Usage with jest
+
 Jest `expect` works well with `WireMock-Captain` and can used for various kinds of checks
+
 ```typescript
 const requestBody = {
     key: 'value'

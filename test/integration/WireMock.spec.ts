@@ -151,6 +151,27 @@ describe('Integration with WireMock', () => {
                 expect(body).toEqual(responseBody);
             });
 
+            test('sets up a stub mapping in wiremock server w/ array order ignored', async () => {
+                const testEndpoint = '/test-endpoint';
+                const responseBody = { test: 'testValue' };
+                await mock.register(
+                    {
+                        method: 'POST',
+                        endpoint: testEndpoint,
+                        body: [{ a: 1 }, { b: 2 }],
+                    },
+                    {
+                        status: 200,
+                        body: responseBody,
+                    },
+                    { requestIgnoreArrayOrder: true },
+                );
+
+                const response = await axios.post(wiremockUrl + testEndpoint, [{ b: 2 }, { a: 1 }]);
+                const body = response.data;
+                expect(body).toEqual(responseBody);
+            });
+
             test('sets up a stub mapping in wiremock server w/ GET webhook', async () => {
                 // This promise is resolved by the express "webhook" server
                 webhookPromise = new Promise((resolve: (r: jest.Mock) => void) => {

@@ -10,7 +10,7 @@ export function createWireMockRequest(
     request: IWireMockRequest,
     features?: IWireMockFeatures,
 ): IRequestMock {
-    const { body, cookies, headers, method, queryParameters, endpoint } = request;
+    const { body, cookies, headers, method, queryParameters, endpoint, formParameters } = request;
     const endpointFeature: string = features?.requestEndpointFeature ?? EndpointFeature.Default;
 
     const mock: IRequestMock = {
@@ -22,6 +22,11 @@ export function createWireMockRequest(
         const bodyFeature: string = features?.requestBodyFeature ?? MatchingAttributes.EqualToJson;
         const mockBody: { [key: string]: unknown } = {};
         mockBody[bodyFeature] = body;
+
+        if (bodyFeature === MatchingAttributes.EqualToJson) {
+            mockBody['ignoreArrayOrder'] = features?.requestIgnoreArrayOrder ?? false;
+            mockBody['ignoreExtraElements'] = features?.requestIgnoreExtraElements ?? false;
+        }
         mock.bodyPatterns = [mockBody];
     }
 
@@ -37,6 +42,13 @@ export function createWireMockRequest(
         mock.queryParameters = getMockedObject(
             queryParameters,
             features?.requestQueryParamFeatures,
+        );
+    }
+
+    if (formParameters) {
+        mock.formParameters = getMockedObject(
+            formParameters,
+            features?.requestFormParameterFeatures,
         );
     }
 
