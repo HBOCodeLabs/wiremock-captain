@@ -5,13 +5,7 @@ import axios from 'axios';
 import * as express from 'express';
 import { Server } from 'http';
 
-import {
-    DelayType,
-    MatchingAttributes,
-    ResponseTransformer,
-    WireMock,
-    WireMockFault,
-} from '../../src';
+import { DelayType, ResponseTransformer, WireMock, WireMockFault } from '../../src';
 
 const WEBHOOK_BASE_URL = 'http://host.docker.internal';
 const WEBHOOK_PORT = 9876;
