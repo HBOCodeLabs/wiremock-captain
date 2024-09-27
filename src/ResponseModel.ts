@@ -56,5 +56,9 @@ export function createWireMockResponse(
         default:
     }
 
+    if (features?.responseTransformers && features.responseTransformers.length > 0) {
+        mockedResponse.transformers = features.responseTransformers;
+    }
+
     return mockedResponse;
 }

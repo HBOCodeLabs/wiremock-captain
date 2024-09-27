@@ -45,6 +45,7 @@ export type IResponseMock =
           fixedDelayMilliseconds?: number;
           delayDistribution?: Record<string, number | string>;
           chunkedDribbleDelay?: Record<string, number>;
+          transformers?: string[];
 
           [key: string]: unknown;
       }

@@ -7,6 +7,7 @@ import {
     IWireMockScenario,
     IWireMockWebhook,
     MatchingAttributes,
+    ResponseTransformer,
     WireMockDelay,
     WireMockFault,
 } from './externalTypes';
@@ -41,4 +42,5 @@ export interface IWireMockFeatures {
      */
     stubPriority?: number;
     webhook?: IWireMockWebhook;
+    responseTransformers?: ResponseTransformer[];
 }

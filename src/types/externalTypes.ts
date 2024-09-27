@@ -78,6 +78,10 @@ export enum WireMockFault {
     RANDOM_DATA_THEN_CLOSE = 'RANDOM_DATA_THEN_CLOSE',
 }
 
+export enum ResponseTransformer {
+    RESPONSE_TEMPLATE = 'response-template',
+}
+
 export { Method };
 
 export type WireMockDelay = IChunkedDribbleDelay | IFixedDelay | ILogNormalDelay | IUniformDelay;
