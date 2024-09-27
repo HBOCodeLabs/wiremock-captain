@@ -186,8 +186,10 @@ describe('Integration with WireMock', () => {
                 for (let i = 0; i < 5; i++) {
                     try {
                         await axios.get(wiremockUrl + testEndpoint);
-                        // eslint-disable-next-line no-empty
-                    } catch (error) {}
+                        // eslint-disable-next-line unused-imports/no-unused-vars
+                    } catch (error) {
+                        /* empty */
+                    }
                 }
                 expect(await mock.getUnmatchedRequests()).toHaveLength(5);
             });
