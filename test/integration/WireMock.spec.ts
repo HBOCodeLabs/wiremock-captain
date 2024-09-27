@@ -116,7 +116,6 @@ describe('Integration with WireMock', () => {
                         body: '{{request.path.[0]}}',
                     },
                     {
-                        requestBodyFeature: MatchingAttributes.MatchesJsonPath,
                         responseTransformers: [ResponseTransformer.RESPONSE_TEMPLATE],
                     },
                 );
