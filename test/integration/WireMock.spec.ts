@@ -5,7 +5,7 @@ import axios from 'axios';
 import * as express from 'express';
 import { Server } from 'http';
 
-import { DelayType, WireMock, WireMockFault } from '../../src';
+import { DelayType, ResponseTransformer, WireMock, WireMockFault } from '../../src';
 
 const WEBHOOK_BASE_URL = 'http://host.docker.internal';
 const WEBHOOK_PORT = 9876;
@@ -96,6 +96,27 @@ describe('Integration with WireMock', () => {
                 expect(jestMock).toHaveBeenCalledWith(
                     expect.objectContaining({ body: JSON.stringify(requestBody) }),
                 );
+            });
+
+            test('sets up a stub mapping with response templating and expects response to have request path', async () => {
+                const testEndpoint = '/test-endpoint';
+                await mock.register(
+                    {
+                        method: 'GET',
+                        endpoint: '/test-endpoint',
+                    },
+                    {
+                        status: 200,
+                        body: '{{request.path.[0]}}',
+                    },
+                    {
+                        responseTransformers: [ResponseTransformer.RESPONSE_TEMPLATE],
+                    },
+                );
+
+                const response = await axios.get(wiremockUrl + testEndpoint);
+                const body = response.data;
+                expect(body).toEqual('test-endpoint');
             });
 
             test('sets up a stub mapping in wiremock server and expects mapping to be called w/ delay', async () => {
@@ -456,8 +477,10 @@ describe('Integration with WireMock', () => {
                 for (let i = 0; i < 5; i++) {
                     try {
                         await axios.post(wiremockUrl + testEndpoint);
-                        // eslint-disable-next-line no-empty
-                    } catch (error) {}
+                        // eslint-disable-next-line unused-imports/no-unused-vars
+                    } catch (error) {
+                        /* empty */
+                    }
                 }
                 expect(await mock.getUnmatchedRequests()).toHaveLength(5);
             });

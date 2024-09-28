@@ -266,6 +266,29 @@ await mock.register(
 );
 ```
 
+## Response templating
+
+To create a response based on input from the request, use request templating.
+More [here](https://wiremock.org/docs/response-templating/)
+
+```typescript
+await mock.register(
+    {
+        method: 'GET',
+        endpoint: '/test-endpoint',
+    },
+    {
+        status: 200,
+        body: '{{request.path.[0]}}',
+    },
+    {
+        responseTransformers: [ResponseTransformer.RESPONSE_TEMPLATE],
+    },
+);
+```
+
+The above will send `test-endpoint` as response body.
+
 ## Usage with jest
 
 Jest `expect` works well with `WireMock-Captain` and can used for various kinds of checks

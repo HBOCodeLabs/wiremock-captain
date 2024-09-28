@@ -1,7 +1,7 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { BodyType, DelayType } from '../../src';
+import { BodyType, DelayType, ResponseTransformer } from '../../src';
 
 describe('ResponseModel', () => {
     beforeEach(() => {
@@ -148,6 +148,23 @@ describe('ResponseModel', () => {
                     lower: 5,
                     upper: 10,
                 },
+            });
+        });
+
+        test('should build response with response transformers', () => {
+            const testModule = require('../../src/ResponseModel');
+            const mockedResponse = testModule.createWireMockResponse(
+                {
+                    status: 200,
+                },
+                {
+                    responseTransformers: [ResponseTransformer.RESPONSE_TEMPLATE],
+                },
+            );
+            expect(mockedResponse).toEqual({
+                status: 200,
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                transformers: ['response-template'],
             });
         });
     });
