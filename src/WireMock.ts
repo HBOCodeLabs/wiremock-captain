@@ -29,9 +29,13 @@ const HEADERS = { 'Content-Type': 'application/json' };
 
 export class WireMock {
     protected readonly baseUrl: string;
+    protected featuresDefault?: IWireMockFeatures;
 
-    public constructor(baseUrl: string) {
+    public constructor(baseUrl: string, features?: IWireMockFeatures) {
         this.baseUrl = baseUrl;
+        if (features != undefined){
+            this.featuresDefault = features;
+        }
     }
 
     /**
@@ -46,42 +50,51 @@ export class WireMock {
         response: IWireMockResponse,
         features?: IWireMockFeatures,
     ): Promise<IMockedRequestResponse> {
-        const mockedRequest = createWireMockRequest(request, features);
-        const mockedResponse = createWireMockResponse(response, features);
+        let featuresToUse;
+        
+        if(this.featuresDefault){
+            featuresToUse = this.featuresDefault;
+        }
+        else if(features){
+            featuresToUse = features;
+        }
+
+        const mockedRequest = createWireMockRequest(request, featuresToUse);
+        const mockedResponse = createWireMockResponse(response, featuresToUse);
         let mock: IMockType = {
             request: mockedRequest,
             response: mockedResponse,
         };
 
-        if (features?.stubPriority) {
-            mock.priority = features.stubPriority;
+        if (featuresToUse?.stubPriority) {
+            mock.priority = featuresToUse.stubPriority;
         }
 
-        if (features?.scenario) {
-            mock = { ...mock, ...features.scenario };
+        if (featuresToUse?.scenario) {
+            mock = { ...mock, ...featuresToUse.scenario };
         }
 
-        if (features?.webhook) {
+        if (featuresToUse?.webhook) {
             mock.postServeActions = [
                 {
                     name: 'webhook',
                     parameters: {
-                        method: features.webhook.method,
-                        url: features.webhook.url,
-                        ...(features.webhook.headers && { headers: features.webhook.headers }),
-                        ...(features.webhook.body && {
-                            body: getWebhookBody(features.webhook.body),
+                        method: featuresToUse.webhook.method,
+                        url: featuresToUse.webhook.url,
+                        ...(featuresToUse.webhook.headers && { headers: featuresToUse.webhook.headers }),
+                        ...(featuresToUse.webhook.body && {
+                            body: getWebhookBody(featuresToUse.webhook.body),
                         }),
-                        ...(features.webhook.delay && {
-                            delay: getWebhookDelayBody(features.webhook.delay),
+                        ...(featuresToUse.webhook.delay && {
+                            delay: getWebhookDelayBody(featuresToUse.webhook.delay),
                         }),
                     },
                 },
             ];
         }
 
-        if (features?.fault) {
-            mock.response = { fault: features.fault };
+        if (featuresToUse?.fault) {
+            mock.response = { fault: featuresToUse.fault };
         }
 
         const wiremockResponse = await axios.post(this.makeUrl(WIREMOCK_MAPPINGS_URL), mock, {
