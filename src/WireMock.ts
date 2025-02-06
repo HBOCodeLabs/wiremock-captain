@@ -59,35 +59,37 @@ export class WireMock {
             response: mockedResponse,
         };
 
-        if (features?.stubPriority) {
-            mock.priority = features.stubPriority;
+        if (mergedFeatures?.stubPriority) {
+            mock.priority = mergedFeatures.stubPriority;
         }
 
-        if (features?.scenario) {
-            mock = { ...mock, ...features.scenario };
+        if (mergedFeatures?.scenario) {
+            mock = { ...mock, ...mergedFeatures.scenario };
         }
 
-        if (features?.webhook) {
+        if (mergedFeatures?.webhook) {
             mock.postServeActions = [
                 {
                     name: 'webhook',
                     parameters: {
-                        method: features.webhook.method,
-                        url: features.webhook.url,
-                        ...(features.webhook.headers && { headers: features.webhook.headers }),
-                        ...(features.webhook.body && {
-                            body: getWebhookBody(features.webhook.body),
+                        method: mergedFeatures.webhook.method,
+                        url: mergedFeatures.webhook.url,
+                        ...(mergedFeatures.webhook.headers && {
+                            headers: mergedFeatures.webhook.headers,
                         }),
-                        ...(features.webhook.delay && {
-                            delay: getWebhookDelayBody(features.webhook.delay),
+                        ...(mergedFeatures.webhook.body && {
+                            body: getWebhookBody(mergedFeatures.webhook.body),
+                        }),
+                        ...(mergedFeatures.webhook.delay && {
+                            delay: getWebhookDelayBody(mergedFeatures.webhook.delay),
                         }),
                     },
                 },
             ];
         }
 
-        if (features?.fault) {
-            mock.response = { fault: features.fault };
+        if (mergedFeatures?.fault) {
+            mock.response = { fault: mergedFeatures.fault };
         }
 
         const wiremockResponse = await axios.post(this.makeUrl(WIREMOCK_MAPPINGS_URL), mock, {
