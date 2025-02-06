@@ -12,9 +12,12 @@ describe('ResponseModel', () => {
     describe('createWireMockResponse', () => {
         test('builds with statusCode', () => {
             const testModule = require('../../src/ResponseModel');
-            const mockedResponse = testModule.createWireMockResponse({
-                status: 200,
-            });
+            const mockedResponse = testModule.createWireMockResponse(
+                {
+                    status: 200,
+                },
+                {},
+            );
             expect(mockedResponse).toEqual({
                 status: 200,
                 headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -23,10 +26,13 @@ describe('ResponseModel', () => {
 
         test('builds with statusCode and body', () => {
             const testModule = require('../../src/ResponseModel');
-            const mockedResponse = testModule.createWireMockResponse({
-                status: 200,
-                body: { testKey: 'test-value' },
-            });
+            const mockedResponse = testModule.createWireMockResponse(
+                {
+                    status: 200,
+                    body: { testKey: 'test-value' },
+                },
+                {},
+            );
             expect(mockedResponse).toEqual({
                 status: 200,
                 headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -52,10 +58,13 @@ describe('ResponseModel', () => {
 
         test('builds with statusCode and headers', () => {
             const testModule = require('../../src/ResponseModel');
-            const mockedResponse = testModule.createWireMockResponse({
-                status: 200,
-                headers: { Accept: 'json' },
-            });
+            const mockedResponse = testModule.createWireMockResponse(
+                {
+                    status: 200,
+                    headers: { Accept: 'json' },
+                },
+                {},
+            );
             expect(mockedResponse).toEqual({
                 status: 200,
                 headers: { Accept: 'json', 'Content-Type': 'application/json; charset=utf-8' },

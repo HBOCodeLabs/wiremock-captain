@@ -29,9 +29,14 @@ const HEADERS = { 'Content-Type': 'application/json' };
 
 export class WireMock {
     protected readonly baseUrl: string;
+    protected readonly features: IWireMockFeatures;
 
-    public constructor(baseUrl: string) {
+    public constructor(
+        baseUrl: string,
+        features?: Omit<IWireMockFeatures, 'scenario' | 'stubPriority'>,
+    ) {
         this.baseUrl = baseUrl;
+        this.features = features ?? {};
     }
 
     /**
@@ -46,42 +51,45 @@ export class WireMock {
         response: IWireMockResponse,
         features?: IWireMockFeatures,
     ): Promise<IMockedRequestResponse> {
-        const mockedRequest = createWireMockRequest(request, features);
-        const mockedResponse = createWireMockResponse(response, features);
+        const mergedFeatures = this.mergeWireMockFeatures(features);
+        const mockedRequest = createWireMockRequest(request, mergedFeatures);
+        const mockedResponse = createWireMockResponse(response, mergedFeatures);
         let mock: IMockType = {
             request: mockedRequest,
             response: mockedResponse,
         };
 
-        if (features?.stubPriority) {
-            mock.priority = features.stubPriority;
+        if (mergedFeatures?.stubPriority) {
+            mock.priority = mergedFeatures.stubPriority;
         }
 
-        if (features?.scenario) {
-            mock = { ...mock, ...features.scenario };
+        if (mergedFeatures?.scenario) {
+            mock = { ...mock, ...mergedFeatures.scenario };
         }
 
-        if (features?.webhook) {
+        if (mergedFeatures?.webhook) {
             mock.postServeActions = [
                 {
                     name: 'webhook',
                     parameters: {
-                        method: features.webhook.method,
-                        url: features.webhook.url,
-                        ...(features.webhook.headers && { headers: features.webhook.headers }),
-                        ...(features.webhook.body && {
-                            body: getWebhookBody(features.webhook.body),
+                        method: mergedFeatures.webhook.method,
+                        url: mergedFeatures.webhook.url,
+                        ...(mergedFeatures.webhook.headers && {
+                            headers: mergedFeatures.webhook.headers,
                         }),
-                        ...(features.webhook.delay && {
-                            delay: getWebhookDelayBody(features.webhook.delay),
+                        ...(mergedFeatures.webhook.body && {
+                            body: getWebhookBody(mergedFeatures.webhook.body),
+                        }),
+                        ...(mergedFeatures.webhook.delay && {
+                            delay: getWebhookDelayBody(mergedFeatures.webhook.delay),
                         }),
                     },
                 },
             ];
         }
 
-        if (features?.fault) {
-            mock.response = { fault: features.fault };
+        if (mergedFeatures?.fault) {
+            mock.response = { fault: mergedFeatures.fault };
         }
 
         const wiremockResponse = await axios.post(this.makeUrl(WIREMOCK_MAPPINGS_URL), mock, {
@@ -208,5 +216,12 @@ export class WireMock {
 
     protected makeUrl(endpoint: string): string {
         return new URL(endpoint, this.baseUrl).href;
+    }
+
+    private mergeWireMockFeatures(features?: IWireMockFeatures): IWireMockFeatures {
+        return {
+            ...this.features, // Base features as default values
+            ...features, // Override with parameter values
+        };
     }
 }
