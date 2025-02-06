@@ -12,10 +12,13 @@ describe('RequestModel', () => {
     describe('createWireMockRequest', () => {
         test('builds with method and endpoint', () => {
             const testModule = require('../../src/RequestModel');
-            const mockedRequest = testModule.createWireMockRequest({
-                method: 'GET',
-                endpoint: '/test-endpoint',
-            });
+            const mockedRequest = testModule.createWireMockRequest(
+                {
+                    method: 'GET',
+                    endpoint: '/test-endpoint',
+                },
+                {},
+            );
             expect(mockedRequest).toEqual({
                 method: 'GET',
                 url: '/test-endpoint',
@@ -39,11 +42,14 @@ describe('RequestModel', () => {
 
         test('builds with method, endpoint, and body', () => {
             const testModule = require('../../src/RequestModel');
-            const mockedRequest = testModule.createWireMockRequest({
-                method: 'GET',
-                endpoint: '/test-endpoint',
-                body: { testKey: 'testValue' },
-            });
+            const mockedRequest = testModule.createWireMockRequest(
+                {
+                    method: 'GET',
+                    endpoint: '/test-endpoint',
+                    body: { testKey: 'testValue' },
+                },
+                {},
+            );
             expect(mockedRequest).toEqual({
                 method: 'GET',
                 url: '/test-endpoint',
@@ -76,11 +82,14 @@ describe('RequestModel', () => {
 
         test('builds with method, endpoint, and cookies', () => {
             const testModule = require('../../src/RequestModel');
-            const mockedRequest = testModule.createWireMockRequest({
-                method: 'GET',
-                endpoint: '/test-endpoint',
-                cookies: { profile: 'test-user' },
-            });
+            const mockedRequest = testModule.createWireMockRequest(
+                {
+                    method: 'GET',
+                    endpoint: '/test-endpoint',
+                    cookies: { profile: 'test-user' },
+                },
+                {},
+            );
             expect(mockedRequest).toEqual({
                 method: 'GET',
                 url: '/test-endpoint',
@@ -111,11 +120,14 @@ describe('RequestModel', () => {
 
         test('builds with method, endpoint, and headers', () => {
             const testModule = require('../../src/RequestModel');
-            const mockedRequest = testModule.createWireMockRequest({
-                method: 'GET',
-                endpoint: '/test-endpoint',
-                headers: { Accept: 'json' },
-            });
+            const mockedRequest = testModule.createWireMockRequest(
+                {
+                    method: 'GET',
+                    endpoint: '/test-endpoint',
+                    headers: { Accept: 'json' },
+                },
+                {},
+            );
             expect(mockedRequest).toEqual({
                 method: 'GET',
                 url: '/test-endpoint',
@@ -146,17 +158,20 @@ describe('RequestModel', () => {
 
         test('builds with method, endpoint, queryParams, and formParameters', () => {
             const testModule = require('../../src/RequestModel');
-            const mockedRequest = testModule.createWireMockRequest({
-                method: 'GET',
-                endpoint: '/test-endpoint',
-                queryParameters: {
-                    a: 'test-val',
-                    b: 1,
+            const mockedRequest = testModule.createWireMockRequest(
+                {
+                    method: 'GET',
+                    endpoint: '/test-endpoint',
+                    queryParameters: {
+                        a: 'test-val',
+                        b: 1,
+                    },
+                    formParameters: {
+                        c: true,
+                    },
                 },
-                formParameters: {
-                    c: true,
-                },
-            });
+                {},
+            );
             expect(mockedRequest).toEqual({
                 method: 'GET',
                 url: '/test-endpoint',

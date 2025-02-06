@@ -8,13 +8,13 @@ import { IWireMockResponse } from './types/IWireMockResponse';
 
 export function createWireMockResponse(
     response: IWireMockResponse,
-    features?: IWireMockFeatures,
+    features: IWireMockFeatures,
 ): IResponseMock {
     const { body, headers, status } = response;
     const mockedResponse: IResponseMock = {
         status,
     };
-    const bodyType: string = features?.responseBodyType ?? BodyType.Default;
+    const bodyType: string = features.responseBodyType ?? BodyType.Default;
 
     if (body) {
         mockedResponse[bodyType] = body;
@@ -27,7 +27,7 @@ export function createWireMockResponse(
         ...headers,
     };
 
-    const delay = features?.responseDelay;
+    const delay = features.responseDelay;
 
     switch (delay?.type) {
         case DelayType.CHUNKED_DRIBBLE:
@@ -56,7 +56,7 @@ export function createWireMockResponse(
         default:
     }
 
-    if (features?.responseTransformers && features.responseTransformers.length > 0) {
+    if (features.responseTransformers && features.responseTransformers.length > 0) {
         mockedResponse.transformers = features.responseTransformers;
     }
 

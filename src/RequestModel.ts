@@ -8,10 +8,10 @@ import { IWireMockRequest } from './types/IWireMockRequest';
 
 export function createWireMockRequest(
     request: IWireMockRequest,
-    features?: IWireMockFeatures,
+    features: IWireMockFeatures,
 ): IRequestMock {
     const { body, cookies, headers, method, queryParameters, endpoint, formParameters } = request;
-    const endpointFeature: string = features?.requestEndpointFeature ?? EndpointFeature.Default;
+    const endpointFeature: string = features.requestEndpointFeature ?? EndpointFeature.Default;
 
     const mock: IRequestMock = {
         method,
@@ -19,36 +19,33 @@ export function createWireMockRequest(
     mock[endpointFeature] = endpoint;
 
     if (body) {
-        const bodyFeature: string = features?.requestBodyFeature ?? MatchingAttributes.EqualToJson;
+        const bodyFeature: string = features.requestBodyFeature ?? MatchingAttributes.EqualToJson;
         const mockBody: { [key: string]: unknown } = {};
         mockBody[bodyFeature] = body;
 
         if (bodyFeature === MatchingAttributes.EqualToJson) {
-            mockBody['ignoreArrayOrder'] = features?.requestIgnoreArrayOrder ?? false;
-            mockBody['ignoreExtraElements'] = features?.requestIgnoreExtraElements ?? false;
+            mockBody['ignoreArrayOrder'] = features.requestIgnoreArrayOrder ?? false;
+            mockBody['ignoreExtraElements'] = features.requestIgnoreExtraElements ?? false;
         }
         mock.bodyPatterns = [mockBody];
     }
 
     if (cookies) {
-        mock.cookies = getMockedObject(cookies, features?.requestCookieFeatures);
+        mock.cookies = getMockedObject(cookies, features.requestCookieFeatures);
     }
 
     if (headers) {
-        mock.headers = getMockedObject(headers, features?.requestHeaderFeatures);
+        mock.headers = getMockedObject(headers, features.requestHeaderFeatures);
     }
 
     if (queryParameters) {
-        mock.queryParameters = getMockedObject(
-            queryParameters,
-            features?.requestQueryParamFeatures,
-        );
+        mock.queryParameters = getMockedObject(queryParameters, features.requestQueryParamFeatures);
     }
 
     if (formParameters) {
         mock.formParameters = getMockedObject(
             formParameters,
-            features?.requestFormParameterFeatures,
+            features.requestFormParameterFeatures,
         );
     }
 

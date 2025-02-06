@@ -29,9 +29,14 @@ const HEADERS = { 'Content-Type': 'application/json' };
 
 export class WireMock {
     protected readonly baseUrl: string;
+    protected readonly features: IWireMockFeatures;
 
-    public constructor(baseUrl: string) {
+    public constructor(
+        baseUrl: string,
+        features?: Omit<IWireMockFeatures, 'scenario' | 'stubPriority'>,
+    ) {
         this.baseUrl = baseUrl;
+        this.features = features ?? {};
     }
 
     /**
@@ -46,8 +51,9 @@ export class WireMock {
         response: IWireMockResponse,
         features?: IWireMockFeatures,
     ): Promise<IMockedRequestResponse> {
-        const mockedRequest = createWireMockRequest(request, features);
-        const mockedResponse = createWireMockResponse(response, features);
+        const mergedFeatures = this.mergeWireMockFeatures(features);
+        const mockedRequest = createWireMockRequest(request, mergedFeatures);
+        const mockedResponse = createWireMockResponse(response, mergedFeatures);
         let mock: IMockType = {
             request: mockedRequest,
             response: mockedResponse,
@@ -208,5 +214,12 @@ export class WireMock {
 
     protected makeUrl(endpoint: string): string {
         return new URL(endpoint, this.baseUrl).href;
+    }
+
+    private mergeWireMockFeatures(features?: IWireMockFeatures): IWireMockFeatures {
+        return {
+            ...this.features, // Base features as default values
+            ...features, // Override with parameter values
+        };
     }
 }

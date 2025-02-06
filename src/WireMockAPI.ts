@@ -8,7 +8,7 @@ import { WireMock } from './WireMock';
 export class WireMockAPI extends WireMock {
     protected readonly endpoint: string;
     protected readonly method: Method;
-    protected readonly features: IWireMockFeatures | undefined;
+    override readonly features: IWireMockFeatures;
 
     public constructor(
         baseUrl: string,
@@ -19,7 +19,7 @@ export class WireMockAPI extends WireMock {
         super(baseUrl);
         this.endpoint = endpoint;
         this.method = method;
-        this.features = features;
+        this.features = features ?? {};
     }
 
     /**
