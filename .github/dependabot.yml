@@ -12,9 +12,12 @@ updates:
     groups:
       lint:
         patterns:
+          - '@eslint/js'
           - 'eslint*'
           - 'prettier'
-          - 'husky'
-          - 'lint-staged'
-          - '@typescript-eslint*'
           - 'pretty-quick'
+          - 'tslib'
+          - 'typescript'
+          - 'typescript-eslint'
+    ignore:
+      - dependency-name: '@types/node'

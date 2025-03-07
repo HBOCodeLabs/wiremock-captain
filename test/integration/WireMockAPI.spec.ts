@@ -186,7 +186,7 @@ describe('Integration with WireMock', () => {
                 for (let i = 0; i < 5; i++) {
                     try {
                         await axios.get(wiremockUrl + testEndpoint);
-                        // eslint-disable-next-line unused-imports/no-unused-vars
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     } catch (error) {
                         /* empty */
                     }
@@ -238,19 +238,16 @@ describe('Integration with WireMock', () => {
                     },
                 );
 
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
+                // @ts-expect-error known skip
                 expect((await mock.getAllScenarios())[0].state).toEqual('Started');
                 let resp = await axios.post(wiremockUrl + testEndpoint);
                 expect(resp.status).toEqual(200);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
+                // @ts-expect-error known skip
                 expect((await mock.getAllScenarios())[0].state).toEqual('test-state');
                 resp = await axios.post(wiremockUrl + testEndpoint);
                 expect(resp.status).toEqual(201);
                 await mock.resetAllScenarios();
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
+                // @ts-expect-error known skip
                 expect((await mock.getAllScenarios())[0].state).toEqual('Started');
             });
         });

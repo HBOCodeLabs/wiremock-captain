@@ -20,7 +20,7 @@ export function createWireMockRequest(
 
     if (body) {
         const bodyFeature: string = features.requestBodyFeature ?? MatchingAttributes.EqualToJson;
-        const mockBody: { [key: string]: unknown } = {};
+        const mockBody: Record<string, unknown> = {};
         mockBody[bodyFeature] = body;
 
         if (bodyFeature === MatchingAttributes.EqualToJson) {
@@ -62,9 +62,10 @@ function getMockedObject(
     dict: Record<string, KeyValue>,
     dictMatchingAttributes?: Record<string, MatchingAttributes>,
 ): Record<string, unknown> {
-    const mockObject: { [key: string]: unknown } = {};
+    const mockObject: Record<string, unknown> = {};
     for (const key of Object.keys(dict)) {
         mockObject[key] = mapPropertyToAttribute(
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             dict[key]!,
             dictMatchingAttributes?.[key] ?? MatchingAttributes.EqualTo,
         );
