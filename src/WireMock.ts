@@ -1,8 +1,6 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import axios, { AxiosResponse } from 'axios';
-
 import { createWireMockRequest } from './RequestModel';
 import { createWireMockResponse } from './ResponseModel';
 import {
@@ -91,18 +89,19 @@ export class WireMock {
         if (mergedFeatures?.fault) {
             mock.response = { fault: mergedFeatures.fault };
         }
-
-        const wiremockResponse = await axios.post(this.makeUrl(WIREMOCK_MAPPINGS_URL), mock, {
+        const wiremockResponse = await fetch(this.makeUrl(WIREMOCK_MAPPINGS_URL), {
+            method: 'POST',
             headers: HEADERS,
+            body: JSON.stringify(mock),
         });
 
-        return wiremockResponse.data;
+        return (await wiremockResponse.json()) as IMockedRequestResponse;
     }
 
     /**
      * Removes all the existing stubs and logs of incoming requests
      */
-    public clearAll(): Promise<AxiosResponse[]> {
+    public clearAll(): Promise<Response[]> {
         return Promise.all([this.clearAllMappings(), this.clearAllRequests()]);
     }
 
@@ -110,30 +109,42 @@ export class WireMock {
      * Removes all the non-default mappings (not defined in backing store)
      * and logs of incoming requests
      */
-    public clearAllExceptDefault(): Promise<AxiosResponse[]> {
+    public clearAllExceptDefault(): Promise<Response[]> {
         return Promise.all([this.resetMappings(), this.clearAllRequests()]);
     }
 
     /**
      * Removes all existing stubs
      */
-    public async clearAllMappings(): Promise<AxiosResponse> {
-        return await axios.delete(this.makeUrl(WIREMOCK_MAPPINGS_URL));
+    public async clearAllMappings(): Promise<Response> {
+        const response = await fetch(this.makeUrl(WIREMOCK_MAPPINGS_URL), {
+            method: 'DELETE',
+        });
+
+        return response;
     }
 
     /**
      * Removes log of all past incoming requests
      */
-    public async clearAllRequests(): Promise<AxiosResponse> {
-        return await axios.delete(this.makeUrl(WIREMOCK_REQUESTS_URL));
+    public async clearAllRequests(): Promise<Response> {
+        const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL), {
+            method: 'DELETE',
+        });
+
+        return response;
     }
 
     /**
      * Deletes a stub mapping
      * @param id ID of the stub to be deleted. Can be obtained when from response of `register()`
      */
-    public async deleteMapping(id: string): Promise<AxiosResponse> {
-        return await axios.delete(this.makeUrl(WIREMOCK_MAPPINGS_URL + '/' + id));
+    public async deleteMapping(id: string): Promise<Response> {
+        const response = await fetch(this.makeUrl(`${WIREMOCK_MAPPINGS_URL}/${id}`), {
+            method: 'DELETE',
+        });
+
+        return response;
     }
 
     /**
@@ -141,8 +152,11 @@ export class WireMock {
      * @returns Collection of all mappings for the wiremock instance
      */
     public async getAllMappings(): Promise<unknown[]> {
-        const response = await axios.get(this.makeUrl(WIREMOCK_MAPPINGS_URL));
-        const responseJson = response.data as IMappingGetResponse;
+        const response = await fetch(this.makeUrl(WIREMOCK_MAPPINGS_URL), {
+            method: 'GET',
+        });
+
+        const responseJson: IMappingGetResponse = (await response.json()) as IMappingGetResponse;
         return responseJson.mappings;
     }
 
@@ -150,8 +164,8 @@ export class WireMock {
      * @returns List of all requests made to the mocked instance
      */
     public async getAllRequests(): Promise<unknown[]> {
-        const response = await axios.get(this.makeUrl(WIREMOCK_REQUESTS_URL));
-        const responseJson = response.data as IRequestGetResponse;
+        const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL));
+        const responseJson: IRequestGetResponse = (await response.json()) as IRequestGetResponse;
         return responseJson.requests;
     }
 
@@ -159,8 +173,8 @@ export class WireMock {
      * @returns List of all scenarios in place for the mocked instance
      */
     public async getAllScenarios(): Promise<unknown[]> {
-        const response = await axios.get(this.makeUrl(WIREMOCK_SCENARIO_URL));
-        const responseJson = response.data as IScenarioGetResponse;
+        const response = await fetch(this.makeUrl(WIREMOCK_SCENARIO_URL));
+        const responseJson: IScenarioGetResponse = (await response.json()) as IScenarioGetResponse;
         return responseJson.scenarios;
     }
 
@@ -170,8 +184,9 @@ export class WireMock {
      * @returns Single object mapping corresponding to the input `id`
      */
     public async getMapping(id: string): Promise<unknown> {
-        const response = await axios.get(this.makeUrl(WIREMOCK_MAPPINGS_URL + '/' + id));
-        return await response.data;
+        const response = await fetch(this.makeUrl(`${WIREMOCK_MAPPINGS_URL}/${id}`));
+        const responseData = await response.json();
+        return responseData;
     }
 
     /**
@@ -181,8 +196,8 @@ export class WireMock {
      * @returns List of wiremock requests made to the endpoint with given method
      */
     public async getRequestsForAPI(method: Method, endpointUrl: string): Promise<unknown[]> {
-        const response = await axios.get(this.makeUrl(WIREMOCK_REQUESTS_URL));
-        const body = response.data as IRequestGetResponse;
+        const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL));
+        const body: IRequestGetResponse = (await response.json()) as IRequestGetResponse;
         return (
             body.requests
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -195,23 +210,29 @@ export class WireMock {
      * @returns List of wiremock requests made that did not match any mapping
      */
     public async getUnmatchedRequests(): Promise<unknown[]> {
-        const response = await axios.get(this.makeUrl(WIREMOCK_REQUESTS_URL + '/unmatched'));
-        const body = response.data as IRequestGetResponse;
+        const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL + '/unmatched'));
+        const body: IRequestGetResponse = (await response.json()) as IRequestGetResponse;
         return body.requests;
     }
 
     /**
      * Resets all the scenarios to the original state
      */
-    public async resetAllScenarios(): Promise<AxiosResponse> {
-        return await axios.post(this.makeUrl(WIREMOCK_SCENARIO_URL + '/reset'));
+    public async resetAllScenarios(): Promise<Response> {
+        const response = await fetch(this.makeUrl(WIREMOCK_SCENARIO_URL + '/reset'), {
+            method: 'POST',
+        });
+        return response;
     }
 
     /**
      * Restores stub mappings to the defaults defined back in the backing store
      */
-    public async resetMappings(): Promise<AxiosResponse> {
-        return await axios.post(this.makeUrl(WIREMOCK_MAPPINGS_URL + '/reset'));
+    public async resetMappings(): Promise<Response> {
+        const response = await fetch(this.makeUrl(WIREMOCK_MAPPINGS_URL + '/reset'), {
+            method: 'POST',
+        });
+        return response;
     }
 
     protected makeUrl(endpoint: string): string {
