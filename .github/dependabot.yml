@@ -18,3 +18,5 @@ updates:
           - 'lint-staged'
           - '@typescript-eslint*'
           - 'pretty-quick'
+    ignore:
+      - dependency-name: '@types/node'

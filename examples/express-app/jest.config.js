@@ -10,4 +10,7 @@ module.exports = {
   testRegex: '(/test/integration/.*|(\\.|/)(test|spec))\\.(ts)x?$',
   coverageDirectory: 'coverage',
   collectCoverageFrom: ['src/**/*.{ts,tsx,js,jsx}', '!src/**/*.d.ts'],
+  moduleNameMapper: {
+    axios: 'axios/dist/node/axios.cjs',
+  },
 };
