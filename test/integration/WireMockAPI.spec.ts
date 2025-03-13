@@ -9,10 +9,10 @@ describe('Integration with WireMock', () => {
     const wiremockUrl = 'http://localhost:8080';
     const testEndpoint = '/test-endpoint';
     const testMethod = 'POST';
-    const mock = new WireMockAPI(wiremockUrl, testEndpoint, testMethod);
+    const wireMockAPI = new WireMockAPI(wiremockUrl, testEndpoint, testMethod);
 
     beforeEach(async () => {
-        await mock.clearAllExceptDefault();
+        await wireMockAPI.clearAllExceptDefault();
     });
 
     describe('WireMockAPI', () => {
@@ -25,7 +25,7 @@ describe('Integration with WireMock', () => {
                     },
                 };
                 const responseBody = { test: 'testValue' };
-                await mock.register(
+                await wireMockAPI.register(
                     {
                         body: requestBody,
                     },
@@ -38,7 +38,7 @@ describe('Integration with WireMock', () => {
                 const response = await axios.post(wiremockUrl + testEndpoint, requestBody);
                 const body = response.data;
                 expect(body).toEqual(responseBody);
-                const calls = await mock.getRequestsForAPI();
+                const calls = await wireMockAPI.getRequestsForAPI();
 
                 const jestMock = jest.fn();
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,7 +52,7 @@ describe('Integration with WireMock', () => {
 
             test('sets up a stub mapping in wiremock server without body', async () => {
                 const responseBody = { test: 'testValue' };
-                await mock.register(
+                await wireMockAPI.register(
                     {},
                     {
                         status: 200,
@@ -63,7 +63,7 @@ describe('Integration with WireMock', () => {
                 const response = await axios.post(wiremockUrl + testEndpoint);
                 const body = response.data;
                 expect(body).toEqual(responseBody);
-                await mock.getRequestsForAPI();
+                await wireMockAPI.getRequestsForAPI();
             });
 
             test('sets up a stub mapping in wiremock server with priority', async () => {
@@ -74,7 +74,7 @@ describe('Integration with WireMock', () => {
                     },
                 };
                 const responseBody = { test: 'testValue' };
-                const mockedStub = await mock.register(
+                const mockedStub = await wireMockAPI.register(
                     {
                         body: requestBody,
                     },
@@ -88,7 +88,7 @@ describe('Integration with WireMock', () => {
                 const response = await axios.post(wiremockUrl + testEndpoint, requestBody);
                 const body = response.data;
                 expect(body).toEqual(responseBody);
-                const calls = await mock.getRequestsForAPI();
+                const calls = await wireMockAPI.getRequestsForAPI();
 
                 const jestMock = jest.fn();
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -109,7 +109,7 @@ describe('Integration with WireMock', () => {
                 };
                 const responseBodyLowPriority = { test: 'testValue' };
                 const responseBodyHighPriority = { test: 'biggerTestValue' };
-                await mock.register(
+                await wireMockAPI.register(
                     {
                         body: requestBody,
                     },
@@ -119,7 +119,7 @@ describe('Integration with WireMock', () => {
                     },
                     { stubPriority: 1 },
                 );
-                await mock.register(
+                await wireMockAPI.register(
                     {
                         body: requestBody,
                     },
@@ -132,7 +132,7 @@ describe('Integration with WireMock', () => {
                 const response = await axios.post(wiremockUrl + testEndpoint, requestBody);
                 const body = response.data;
                 expect(body).toEqual(responseBodyHighPriority);
-                const calls = await mock.getRequestsForAPI();
+                const calls = await wireMockAPI.getRequestsForAPI();
 
                 const jestMock = jest.fn();
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -149,17 +149,17 @@ describe('Integration with WireMock', () => {
             test('sets up a stub mapping and deletes it', async () => {
                 const responseBody = { test: 'testValue' };
 
-                expect(await mock.getAllMappings()).toHaveLength(0);
-                const { id } = await mock.register(
+                expect(await wireMockAPI.getAllMappings()).toHaveLength(0);
+                const { id } = await wireMockAPI.register(
                     {},
                     {
                         status: 200,
                         body: responseBody,
                     },
                 );
-                expect(await mock.getAllMappings()).toHaveLength(1);
-                await mock.deleteMapping(id);
-                expect(await mock.getAllMappings()).toHaveLength(0);
+                expect(await wireMockAPI.getAllMappings()).toHaveLength(1);
+                await wireMockAPI.deleteMapping(id);
+                expect(await wireMockAPI.getAllMappings()).toHaveLength(0);
             });
         });
 
@@ -167,21 +167,21 @@ describe('Integration with WireMock', () => {
             test('sets up a stub mapping and returns it with get mappings', async () => {
                 const responseBody = { test: 'testValue' };
 
-                expect(await mock.getAllMappings()).toHaveLength(0);
-                await mock.register(
+                expect(await wireMockAPI.getAllMappings()).toHaveLength(0);
+                await wireMockAPI.register(
                     {},
                     {
                         status: 200,
                         body: responseBody,
                     },
                 );
-                expect(await mock.getAllMappings()).toHaveLength(1);
+                expect(await wireMockAPI.getAllMappings()).toHaveLength(1);
             });
         });
 
         describe('getRequests', () => {
             test('returns number of unmatched requests', async () => {
-                await mock.register({}, { status: 200 });
+                await wireMockAPI.register({}, { status: 200 });
 
                 for (let i = 0; i < 5; i++) {
                     try {
@@ -191,16 +191,16 @@ describe('Integration with WireMock', () => {
                         /* empty */
                     }
                 }
-                expect(await mock.getUnmatchedRequests()).toHaveLength(5);
+                expect(await wireMockAPI.getUnmatchedRequests()).toHaveLength(5);
             });
         });
 
         describe('getScenarios', () => {
             test('should return scenarios', async () => {
-                expect(await mock.getAllScenarios()).toHaveLength(0);
-                await mock.register({}, { status: 400 });
-                expect(await mock.getAllScenarios()).toHaveLength(0);
-                await mock.register(
+                expect(await wireMockAPI.getAllScenarios()).toHaveLength(0);
+                await wireMockAPI.register({}, { status: 400 });
+                expect(await wireMockAPI.getAllScenarios()).toHaveLength(0);
+                await wireMockAPI.register(
                     {},
                     { status: 200 },
                     {
@@ -210,13 +210,13 @@ describe('Integration with WireMock', () => {
                         },
                     },
                 );
-                expect(await mock.getAllScenarios()).toHaveLength(1);
+                expect(await wireMockAPI.getAllScenarios()).toHaveLength(1);
             });
         });
 
         describe('resetScenarios', () => {
             test('should return scenarios', async () => {
-                await mock.register(
+                await wireMockAPI.register(
                     {},
                     { status: 200 },
                     {
@@ -227,7 +227,7 @@ describe('Integration with WireMock', () => {
                         },
                     },
                 );
-                await mock.register(
+                await wireMockAPI.register(
                     {},
                     { status: 201 },
                     {
@@ -239,16 +239,16 @@ describe('Integration with WireMock', () => {
                 );
 
                 // @ts-expect-error known skip
-                expect((await mock.getAllScenarios())[0].state).toEqual('Started');
+                expect((await wireMockAPI.getAllScenarios())[0].state).toEqual('Started');
                 let resp = await axios.post(wiremockUrl + testEndpoint);
                 expect(resp.status).toEqual(200);
                 // @ts-expect-error known skip
-                expect((await mock.getAllScenarios())[0].state).toEqual('test-state');
+                expect((await wireMockAPI.getAllScenarios())[0].state).toEqual('test-state');
                 resp = await axios.post(wiremockUrl + testEndpoint);
                 expect(resp.status).toEqual(201);
-                await mock.resetAllScenarios();
+                await wireMockAPI.resetAllScenarios();
                 // @ts-expect-error known skip
-                expect((await mock.getAllScenarios())[0].state).toEqual('Started');
+                expect((await wireMockAPI.getAllScenarios())[0].state).toEqual('Started');
             });
         });
     });
