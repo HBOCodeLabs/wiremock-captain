@@ -117,11 +117,9 @@ export class WireMock {
      * Removes all existing stubs
      */
     public async clearAllMappings(): Promise<Response> {
-        const response = await fetch(this.makeUrl(WIREMOCK_MAPPINGS_URL), {
+        return await fetch(this.makeUrl(WIREMOCK_MAPPINGS_URL), {
             method: 'DELETE',
         });
-
-        return response;
     }
 
     /**
@@ -164,7 +162,7 @@ export class WireMock {
      * @returns List of all requests made to the mocked instance
      */
     public async getAllRequests(): Promise<unknown[]> {
-        const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL));
+        const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL), { method: 'GET' });
         const responseJson: IRequestGetResponse = (await response.json()) as IRequestGetResponse;
         return responseJson.requests;
     }
@@ -173,7 +171,7 @@ export class WireMock {
      * @returns List of all scenarios in place for the mocked instance
      */
     public async getAllScenarios(): Promise<unknown[]> {
-        const response = await fetch(this.makeUrl(WIREMOCK_SCENARIO_URL));
+        const response = await fetch(this.makeUrl(WIREMOCK_SCENARIO_URL), { method: 'GET' });
         const responseJson: IScenarioGetResponse = (await response.json()) as IScenarioGetResponse;
         return responseJson.scenarios;
     }
@@ -184,9 +182,10 @@ export class WireMock {
      * @returns Single object mapping corresponding to the input `id`
      */
     public async getMapping(id: string): Promise<unknown> {
-        const response = await fetch(this.makeUrl(`${WIREMOCK_MAPPINGS_URL}/${id}`));
-        const responseData = await response.json();
-        return responseData;
+        const response = await fetch(this.makeUrl(`${WIREMOCK_MAPPINGS_URL}/${id}`), {
+            method: 'GET',
+        });
+        return await response.json();
     }
 
     /**
@@ -196,7 +195,7 @@ export class WireMock {
      * @returns List of wiremock requests made to the endpoint with given method
      */
     public async getRequestsForAPI(method: Method, endpointUrl: string): Promise<unknown[]> {
-        const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL));
+        const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL), { method: 'GET' });
         const body: IRequestGetResponse = (await response.json()) as IRequestGetResponse;
         return (
             body.requests
@@ -210,7 +209,9 @@ export class WireMock {
      * @returns List of wiremock requests made that did not match any mapping
      */
     public async getUnmatchedRequests(): Promise<unknown[]> {
-        const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL + '/unmatched'));
+        const response = await fetch(this.makeUrl(WIREMOCK_REQUESTS_URL + '/unmatched'), {
+            method: 'GET',
+        });
         const body: IRequestGetResponse = (await response.json()) as IRequestGetResponse;
         return body.requests;
     }
