@@ -1,7 +1,7 @@
 // Copyright (c) WarnerMedia Direct, LLC. All rights reserved. Licensed under the MIT license.
 // See the LICENSE file for license information.
 
-import { DelayType, WireMockFault } from '../../src';
+import { DelayType, MatchingAttributes, WireMockFault } from '../../src';
 
 describe('WireMock', () => {
     const mockData = {};
@@ -132,12 +132,25 @@ describe('WireMock', () => {
             const wireMockUrl = 'https://testservice/';
             const mock = new wireMock.WireMock(wireMockUrl);
             const resp = await mock.register(
-                {},
+                {
+                    metadata: {
+                        metadataKey: 'metadataValue',
+                    },
+                },
                 {},
                 {
                     stubPriority: 1,
                     scenario: { scenarioName: 'test-scenario', requiredScenarioState: 'Started' },
                 },
+            );
+            expect(mockFn).toHaveBeenCalledWith(
+                wireMockUrl + '__admin/mappings',
+                expect.objectContaining({
+                    // eslint-disable-next-line no-useless-escape
+                    body: expect.stringContaining('\"metadataKey\":\"metadataValue\"'),
+                    headers: { 'Content-Type': 'application/json' },
+                    method: 'POST',
+                }),
             );
             expect(mockFn).toHaveBeenCalledWith(
                 wireMockUrl + '__admin/mappings',
@@ -322,6 +335,51 @@ describe('WireMock', () => {
                 method: 'GET',
             });
             expect(getCalls.length).toEqual(1);
+        });
+    });
+
+    describe('findMappingByMetadata', () => {
+        test('should make find by metadata request', async () => {
+            const wireMock = require('../../src/WireMock');
+            const wireMockUrl = 'https://testservice/';
+            const mock = new wireMock.WireMock(wireMockUrl);
+            const matchObject = { key: 'value' };
+            const matchType = MatchingAttributes.MatchesJsonPath;
+
+            await mock.findMappingByMetadata(matchObject, matchType);
+            expect(mockFn).toHaveBeenCalledWith(wireMockUrl + '__admin/mappings/find-by-metadata', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    matchesJsonPath: {
+                        key: 'value',
+                    },
+                }),
+            });
+        });
+    });
+
+    describe('removeMappingByMetadata', () => {
+        test('should make remove by metadata request', async () => {
+            const wireMock = require('../../src/WireMock');
+            const wireMockUrl = 'https://testservice/';
+            const mock = new wireMock.WireMock(wireMockUrl);
+            const matchObject = { key: 'value' };
+            const matchType = MatchingAttributes.MatchesJsonPath;
+
+            await mock.removeMappingByMetadata(matchObject, matchType);
+            expect(mockFn).toHaveBeenCalledWith(
+                wireMockUrl + '__admin/mappings/remove-by-metadata',
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        matchesJsonPath: {
+                            key: 'value',
+                        },
+                    }),
+                },
+            );
         });
     });
 });

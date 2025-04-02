@@ -15,6 +15,7 @@ import { IWireMockFeatures } from './types/IWireMockFeatures';
 import { IWireMockRequest } from './types/IWireMockRequest';
 import { IWireMockResponse } from './types/IWireMockResponse';
 import { filterRequest, getWebhookBody, getWebhookDelayBody } from './utils';
+import { MatchingAttributes } from './types/externalTypes';
 
 // endpoint where wiremock stores mocks
 const WIREMOCK_MAPPINGS_URL = '__admin/mappings';
@@ -89,6 +90,11 @@ export class WireMock {
         if (mergedFeatures?.fault) {
             mock.response = { fault: mergedFeatures.fault };
         }
+
+        if (request.metadata) {
+            mock.metadata = request.metadata;
+        }
+
         const wiremockResponse = await fetch(this.makeUrl(WIREMOCK_MAPPINGS_URL), {
             method: 'POST',
             headers: HEADERS,
@@ -234,6 +240,42 @@ export class WireMock {
             method: 'POST',
         });
         return response;
+    }
+
+    /**
+     * Finds a mapping by metadata.
+     * @param matchObject - The object containing metadata to match.
+     * @param matchType - The type of matching attributes.
+     * @returns The found mappings.
+     */
+    public async findMappingByMetadata(
+        matchObject: Record<string, unknown>,
+        matchType: MatchingAttributes,
+    ): Promise<unknown[]> {
+        const response = await fetch(this.makeUrl(WIREMOCK_MAPPINGS_URL + '/find-by-metadata'), {
+            method: 'POST',
+            headers: HEADERS,
+            body: JSON.stringify({ [matchType]: matchObject }),
+        });
+        return ((await response.json()) as IMappingGetResponse).mappings;
+    }
+
+    /**
+     * Removes a mapping by metadata.
+     * @param matchObject - The object containing metadata to match.
+     * @param matchType - The type of matching attributes.
+     * @returns The result of the removal operation.
+     */
+    public async removeMappingByMetadata(
+        matchObject: Record<string, unknown>,
+        matchType: MatchingAttributes,
+    ): Promise<unknown> {
+        const response = await fetch(this.makeUrl(WIREMOCK_MAPPINGS_URL + '/remove-by-metadata'), {
+            method: 'POST',
+            headers: HEADERS,
+            body: JSON.stringify({ [matchType]: matchObject }),
+        });
+        return await response.json();
     }
 
     protected makeUrl(endpoint: string): string {
