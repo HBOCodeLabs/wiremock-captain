@@ -11,4 +11,5 @@ export interface IWireMockRequest {
     method: Method;
     queryParameters?: Record<string, KeyValue>;
     formParameters?: Record<string, KeyValue>;
+    metadata?: Record<string, unknown>;
 }

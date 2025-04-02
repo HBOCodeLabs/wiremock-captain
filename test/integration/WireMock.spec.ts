@@ -5,7 +5,13 @@ import axios from 'axios';
 import * as express from 'express';
 import { Server } from 'http';
 
-import { DelayType, ResponseTransformer, WireMock, WireMockFault } from '../../src';
+import {
+    DelayType,
+    MatchingAttributes,
+    ResponseTransformer,
+    WireMock,
+    WireMockFault,
+} from '../../src';
 
 const WEBHOOK_BASE_URL = 'http://host.docker.internal';
 const WEBHOOK_PORT = 9876;
@@ -565,6 +571,94 @@ describe('Integration with WireMock', () => {
                 await wireMock.resetAllScenarios();
                 // @ts-expect-error known skip
                 expect((await wireMock.getAllScenarios())[0].state).toEqual('Started');
+            });
+        });
+
+        describe('findMappingByMetadata', () => {
+            test('should create a mock with metadata and find it by metadata', async () => {
+                const testEndpoint = '/test-endpoint';
+                const requestBody = { key: 'value' };
+                const responseBody = { test: 'testValue' };
+                const metadata = { metaKey: 'metaValue' };
+
+                // Register a mock with metadata
+                await wireMock.register(
+                    {
+                        method: 'POST',
+                        endpoint: testEndpoint,
+                        body: requestBody,
+                        metadata: metadata,
+                    },
+                    {
+                        status: 200,
+                        body: responseBody,
+                    },
+                );
+
+                // Find the mock by metadata
+                const foundMappings = await wireMock.findMappingByMetadata(
+                    {
+                        expression: '$.metaKey',
+                        contains: 'metaValue',
+                    },
+                    MatchingAttributes.MatchesJsonPath,
+                );
+
+                // Verify that the found mappings contain the registered mock
+                expect(foundMappings).toHaveLength(1);
+            });
+        });
+
+        describe('removeMappingByMetadata', () => {
+            test('should create a mock with metadata and remove it by metadata', async () => {
+                const testEndpoint = '/test-endpoint';
+                const requestBody = { key: 'value' };
+                const responseBody = { test: 'testValue' };
+                const metadata = { metaKey: 'metaValue' };
+
+                // Register a mock with metadata
+                await wireMock.register(
+                    {
+                        method: 'POST',
+                        endpoint: testEndpoint,
+                        body: requestBody,
+                        metadata: metadata,
+                    },
+                    {
+                        status: 200,
+                        body: responseBody,
+                    },
+                );
+
+                // Verify that the mock exists
+                const foundMappingsBefore = await wireMock.findMappingByMetadata(
+                    {
+                        expression: '$.metaKey',
+                        contains: 'metaValue',
+                    },
+                    MatchingAttributes.MatchesJsonPath,
+                );
+                expect(foundMappingsBefore).toHaveLength(1);
+
+                // Remove the mock by metadata
+                await wireMock.removeMappingByMetadata(
+                    {
+                        expression: '$.metaKey',
+                        contains: 'metaValue',
+                    },
+                    MatchingAttributes.MatchesJsonPath,
+                );
+
+                // Verify that the mock has been removed
+                const foundMappingsAfter = await wireMock.findMappingByMetadata(
+                    {
+                        expression: '$.metaKey',
+                        contains: 'metaValue',
+                    },
+                    MatchingAttributes.MatchesJsonPath,
+                );
+
+                expect(foundMappingsAfter).toHaveLength(0);
             });
         });
     });

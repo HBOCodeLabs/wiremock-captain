@@ -38,7 +38,7 @@ describe('Integration with WireMock', () => {
 });
 ```
 
-The above allows for skipping specifiying `endpoint` and `method` when creating mocks multiple times.
+The above allows for skipping specifying `endpoint` and `method` when creating mocks multiple times.
 
 ## Basic use case
 
@@ -46,6 +46,105 @@ The above allows for skipping specifiying `endpoint` and `method` when creating 
 const mockedRequest: IWireMockRequest = { method: 'GET', endpoint: '/test' };
 const mockedResponse: IWireMockResponse = { status: 200 };
 await mock.register(mockedRequest, mockedResponse);
+```
+
+## Clear all mappings except default
+
+To clear all mappings except the default ones, use the `clearAllExceptDefault` method. This method removes all non-default mappings and logs of incoming requests.
+
+```typescript
+await mock.clearAllExceptDefault();
+```
+
+## Reset all scenarios
+
+To reset all scenarios to their original state, use the `resetAllScenarios` method. This method restores all scenarios to their initial state.
+
+```typescript
+await mock.resetAllScenarios();
+```
+
+## Get all scenarios
+
+To get a list of all scenarios, use the `getAllScenarios` method. This method retrieves all scenarios in place for the mocked instance.
+
+```typescript
+const scenarios = await mock.getAllScenarios();
+console.log(scenarios);
+```
+
+## Get unmatched requests
+
+To get a list of unmatched requests, use the `getUnmatchedRequests` method. This method retrieves all requests that did not match any mapping.
+
+```typescript
+const unmatchedRequests = await mock.getUnmatchedRequests();
+console.log(unmatchedRequests);
+```
+
+## Find a mapping by metadata
+
+To find a mapping by metadata, use the `findMappingByMetadata` method. This method allows you to specify the metadata to match and retrieve the corresponding mappings.
+
+```typescript
+const metadata = { metaKey: 'metaValue' };
+
+// Register a mock with metadata
+await mock.register(
+    {
+        method: 'POST',
+        endpoint: '/test-endpoint',
+        body: { key: 'value' },
+        metadata: metadata,
+    },
+    {
+        status: 200,
+        body: { test: 'testValue' },
+    },
+);
+
+// Find the mock by metadata
+const foundMappings = await mock.findMappingByMetadata(
+    {
+        expression: '$.metaKey',
+        contains: 'metaValue',
+    },
+    MatchingAttributes.MatchesJsonPath,
+);
+
+// Verify that the found mappings contain the registered mock
+expect(foundMappings).toHaveLength(1);
+```
+
+## Remove a mapping by metadata
+
+To remove a mapping by metadata, use the `removeMappingByMetadata` method. This method allows you to specify the metadata to match and remove the corresponding mapping.
+
+```typescript
+const metadata = { metaKey: 'metaValue' };
+
+// Register a mock with metadata
+await mock.register(
+    {
+        method: 'POST',
+        endpoint: '/test-endpoint',
+        body: { key: 'value' },
+        metadata: metadata,
+    },
+    {
+        status: 200,
+        body: { test: 'testValue' },
+    },
+);
+
+// Remove the mock by metadata
+await mock.removeMappingByMetadata(
+    {
+        expression: '$.metaKey',
+        contains: 'metaValue',
+    },
+    MatchingAttributes.MatchesJsonPath,
+);
 ```
 
 ## Do a regex match for the path
@@ -70,7 +169,7 @@ const features: IWireMockFeatures = { requestIgnoreArrayOrder: true };
 await mock.register(mockedRequest, mockedResponse, features);
 ```
 
-## Do a path match when query paramters are present
+## Do a path match when query parameters are present
 
 ```typescript
 const mockedRequest: IWireMockRequest = { method: 'GET', endpoint: '/test' };
@@ -79,8 +178,7 @@ const features: IWireMockFeatures = { requestEndpointFeature: EndpointFeature.Ur
 await mock.register(mockedRequest, mockedResponse, features);
 ```
 
-The above will match only on the path for any query parameters. To match the path and query
-parameters use the above and specify `queryParameters` when creating the mock request.
+The above will match only on the path for any query parameters. To match the path and query parameters use the above and specify `queryParameters` when creating the mock request.
 
 ## Do an equality match on one of the header and regex non-match of another
 
@@ -139,9 +237,7 @@ await mock.register(
 
 ## Override a mapping
 
-By default, if a request matches to two different stub mappings, the one created more recently will be
-the one wiremock uses. To have more control in similar scenarios, make use of `priority` while making
-a new mapping (lower the value, higher the priority).
+By default, if a request matches to two different stub mappings, the one created more recently will be the one wiremock uses. To have more control in similar scenarios, make use of `priority` while making a new mapping (lower the value, higher the priority).
 
 The following example will always return `201` status code because that mapping has higher priority
 
@@ -158,9 +254,7 @@ await mock.register(mockedRequest, mockedResponseLowPriority, featuresLowPriorit
 
 ## Stateful mocks
 
-`Scenario` can be leveraged to allow stateful mocks. To do so, provide `scenario` in
-`IWireMockFeatures` while building the mock. The starting state will always be `Started`.
-Example:
+`Scenario` can be leveraged to allow stateful mocks. To do so, provide `scenario` in `IWireMockFeatures` while building the mock. The starting state will always be `Started`. Example:
 
 ```typescript
 await mock.register(
@@ -186,13 +280,11 @@ await mock.register(
 );
 ```
 
-In the above example, the first request made will respond with status code `201` while
-the second and all subsequent requests will respond with status `200`.
+In the above example, the first request made will respond with status code `201` while the second and all subsequent requests will respond with status `200`.
 
 ## Delayed response
 
-The following mock will delay all responses matching
-the stub by 300 milliseconds
+The following mock will delay all responses matching the stub by 300 milliseconds
 
 ```typescript
 import { DelayType } from 'WireMock-Captain';
@@ -216,8 +308,7 @@ await mock.register(
 
 ## Webhook and callback
 
-The following mock will make an HTTP GET call to `http://some-service/webhook-api`
-every time the given stub is matched
+The following mock will make an HTTP GET call to `http://some-service/webhook-api` every time the given stub is matched
 
 ```typescript
 await mock.register(
@@ -237,16 +328,11 @@ await mock.register(
 );
 ```
 
-Webhook is not supported in default WireMock image instance. To get
-it to work, an additional webhook `.jar` extension is required to be available
-to the WireMock docker instance. Visit [here](https://wiremock.org/docs/docker/)
-or `<root>/scripts/setup.sh` for examples
+Webhook is not supported in default WireMock image instance. To get it to work, an additional webhook `.jar` extension is required to be available to the WireMock docker instance. Visit [here](https://wiremock.org/docs/docker/) or `<root>/scripts/setup.sh` for examples
 
 ## Response fault
 
-The following mock will return an empty response (no status code, no body)
-when matched. This can be used to test for socket timeouts, connection resets,
-etc.
+The following mock will return an empty response (no status code, no body) when matched. This can be used to test for socket timeouts, connection resets, etc.
 
 ```typescript
 await mock.register(
@@ -268,8 +354,7 @@ await mock.register(
 
 ## Response templating
 
-To create a response based on input from the request, use request templating.
-More [here](https://wiremock.org/docs/response-templating/)
+To create a response based on input from the request, use request templating. More [here](https://wiremock.org/docs/response-templating/)
 
 ```typescript
 await mock.register(

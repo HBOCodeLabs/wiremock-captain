@@ -22,6 +22,7 @@ export interface IMockType {
     requiredScenarioState?: string;
     newScenarioState?: string;
     postServeActions?: [IWebhook];
+    metadata?: Record<string, unknown>;
 }
 
 export interface IMappingGetResponse {
